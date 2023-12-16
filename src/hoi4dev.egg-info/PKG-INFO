@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: hoi4dev
+Version: 0.1.0.0
+Summary: HOI4DEV
+Home-page: https://github.com/Magolor/
+Author: Magolor
+Author-email: magolorcz@gmail.com
+Project-URL: Author, https://github.com/Magolor/
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# HOI4DEV
+
+**Warning: This package is currently underdeveloped and does not guarantee any consistency.**
+
+## Features
+
+## TODO
+
+- [ ] Auto-documentation
+- [ ] Term tables in translation

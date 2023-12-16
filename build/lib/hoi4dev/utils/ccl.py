@@ -1,0 +1,259 @@
+from .utils import *
+import re
+from textwrap import indent
+
+def mark_ccl_string(ccl_string, patterns=[('"','"'),('#','\n')]):
+    result = []
+    l = ""
+    inside = None
+    escape = False
+    for c in ccl_string:
+        if escape:
+            l += c; escape = False
+        elif c == "\\":
+            l += c; escape = True
+        elif inside:
+            if c == inside[1]:
+                result.append((l+c,inside)); l = ""; inside = None
+            else:
+                l += c
+        else:
+            for p in patterns:
+                if c == p[0]:
+                    result.append((l,None)); l = c; inside = p
+                    break
+            else:
+                l += c
+    result.append((l,None))
+    return [w for w in result if w[0]]
+
+def tokenize_ccl_string(ccl_string):
+    sentences = mark_ccl_string(ccl_string); tokens = []
+    for sentence in sentences:
+        if sentence[1] == ('"', '"'):
+            tokens.append(sentence[0])
+        elif sentence[1] == ('#', '\n'):
+            tokens.append('\n')
+        else:
+            tokens.extend(re.findall(r'{|}|=|\n|-?\w+(?:[.]\w+)?|\S+', sentence[0]))
+    return [w for w in tokens if w and w!='\n']
+
+def ccl_type(t):
+    if t == '=':
+        return 'EQUAL'
+    if t in ['<', '>']:
+        return 'SYMBOL'
+    if t == '{':
+        return 'START'
+    if t == '}':
+        return 'END'
+    if t.strip().startswith('#'):
+        return 'COMMENT'
+    if t.strip().startswith('"') and t.strip().endswith('"'):
+        return 'STRING'
+    if t.strip().startswith('\'') and t.strip().endswith('\''):
+        return 'STRING'
+    try:
+        return int(t)
+    except:
+        pass
+    try:
+        return float(t)
+    except:
+        pass
+    return 'WORD'
+
+def ccl_eval(t):
+    k = ccl_type(t)
+    c = (eval(t) if k=='STRING' else t) if isinstance(k, str) else k
+    assert (k in ['WORD', 'STRING', c]), "Invalid item!"
+    if k == 'WORD' and c == 'yes': return True
+    if k == 'WORD' and c == 'no': return False
+    return c
+
+def ccl_repr(t):
+    if isinstance(t, bool):
+        return 'yes' if t else 'no'
+    if not isinstance(t, str):
+        return str(t)
+    if (' ' in t) or ('\t' in t) or ('\n' in t):
+        return repr(t)
+    return str(t)
+
+def CCL2List(ccl_string):
+    '''
+    Convert a CCL (Clausewitz scripting language) string to a json list format.
+    Args:
+        ccl_string: str. A CCL string.
+    Return:
+        list. A json list format.
+    
+    Please pay attention to the behavior of this function:
+    1. Assignments will be converted to dictionaries. For example, `research_speed_factor = 0.5` will be converted to `{"research_speed_factor": 0.5}`.
+    2. Comparisons will be converted to dictionary keys. For example, `value > 3` will be converted to `{"value > 3": None}`.
+    3. Keys and values are almost always (I'm not so sure) evaluated. For example, `has_dlc = "Together for Victory"` will be converted to `{"has_dlc": "Together for Victory"}` instead of `{"has_dlc": "\\"Together for Victory\\""}`. And `value = 3` will be converted to `{"value": 3}` instead of `{"value": "3"}`.
+    4. Boolean values are evaluated. For example, `is_ai = yes` will be converted to `{"is_ai": True}` instead of `{"is_ai": "yes"}. (So it is probably not recommended to use `yes` or `no` as keys)
+    5. Comments will be ignored. For example, `# This is a comment` will be ignored.
+    6. Duplicated keys does not have an impact as the converted target is a list. For example, `tag = USA` and `tag = GER` simultaneously will be converted to `[{"tag": "USA"}, {"tag": "GER"}]`.
+    7. Lists are preserved. For example, `add_ideas = { my_idea_1 my_idea_2 }` will be converted to `{"add_ideas": ["my_idea_1", "my_idea_2"]}`.
+    
+    This function is highly suspicious in terms of robustness. Please report any bugs you find.
+    '''
+    tokens = tokenize_ccl_string(ccl_string)
+    stack = [list()]
+    for i, token in enumerate(tokens):
+        if stack[-1] in ['=', '<', '>']:
+            op = stack.pop()
+            key = stack.pop()
+            key = ccl_eval(key)
+            if token == '{':
+                assert (op == '='), "Only assignment can have a dictionary as right value!"
+                stack[-1].append({key: list()})
+                stack.append(stack[-1][-1][key])
+            else:
+                if ccl_type(op)=='EQUAL':
+                    stack[-1].append({key: ccl_eval(token)})
+                else:
+                    stack[-1].append({' '.join([key, op, token]): None})
+        elif ccl_type(token) == 'END':
+            l = list()
+            while not isinstance(stack[-1], list):
+                l.append(ccl_eval(stack.pop()))
+            stack[-1].extend(l)
+            stack.pop()
+        else:
+            stack.append(token)
+    assert (len(stack) == 1), "Invalid CCL!"
+    return stack[0]
+
+def CCLList2Dict(ccl_list):
+    '''
+    Convert a json list format (generated by `CCL2List`) to a dictionary format for ease of edit.
+    Args:
+        ccl_list: list. A json list format.
+    Return:
+        dict. A json dict format.
+    
+    Please pay attention to the behavior of this function:
+    0. Please refer to the documentation of `CCL2List` for the definition of json list format.
+    1. Duplicated keys will be appended with "__D" and the number of duplications. For example, `[{"tag": "USA"}, {"tag": "GER"}, {"tag": "SOV"}]` will be converted to `{"tag": "USA", "tag__D1": "GER", "tag__D2": "SOV"}`.
+    2. Each item/domain is preassumed to be a list, unless it contains a dictionary. Mixing list and dictionary leads to an error. For example, `["states": [1, 2, 3]]` will be unchanged. But `["limit": [{"tag": "USA"}, {"tag": "GER"}, {"tag": "SOV"}]]` will be converted to `{"limit": {"tag": "USA", "tag__D1": "GER", "tag__D2": "SOV"}}`. To my knowledge, it is illegal to produce expressions like `["states": [1, 2, 3, {"tag": "USA"}]]`. Please report if you believe otherwise.
+    
+    This function is highly suspicious in terms of robustness. Please report any bugs you find.
+    '''
+    all_list = True
+    all_dict = True
+    for item in ccl_list:
+        if isinstance(item, dict):
+            for k, v in item.items():
+                if isinstance(v, list):
+                    item[k] = CCLList2Dict(v)
+            all_list = False
+        else:
+            all_dict = False
+    if not all_list:
+        assert (all_dict), "A domain can only be either a list of objects or a list of expressions!"
+        converted = {}
+        for i, item in enumerate(ccl_list):
+            for k, v in item.items():
+                if k not in converted:
+                    converted[k] = v
+                else:
+                    i = 1
+                    while f"{k}___D{i}" in converted:
+                        i += 1
+                    converted[f"{k}__D{i}"] = v
+        return converted
+    else:
+        return ccl_list
+
+def CCL2Dict(ccl_string):
+    '''
+    Convert a CCL (Clausewitz scripting language) string to a json dict format.
+    Args:
+        ccl_string: str. A CCL string.
+    Return:
+        dict. A json dict format.
+    
+    Please refer to the documentation of `CCL2List` and `CCLList2Dict` for the behavior of this function.
+    
+    This function is highly suspicious in terms of robustness. Please report any bugs you find.
+    '''
+    return CCLList2Dict(CCL2List(ccl_string))
+
+def CCLDict2List(ccl_dict):
+    '''
+    Convert a json dict format (generated by `CCL2Dict` or `CCLList2Dict`) to a list format.
+    Args:
+        ccl_dict: dict. A json dict format.
+    Return:
+        list. A json list format.
+    
+    Please pay attention to the behavior of this function:
+    1. Duplicated keys with "__D" will be merged to the same key. For example, `{"tag": "USA", "tag__D1": "GER", "tag__D2": "SOV"}` will be converted to `[{"tag": "USA"}, {"tag": "GER"}, {"tag": "SOV"}]`.
+    2. Values will not be modified whatsoever.
+    '''
+    ccl_list = list()
+    for k, v in ccl_dict.items():
+        key = k.split('__D')[0] if '__D' in k else k
+        if isinstance(v, dict):
+            ccl_list.append({key: CCLDict2List(v)})
+        elif isinstance(v, list):
+            new_list = list()
+            for i, item in enumerate(v):
+                if isinstance(item, dict):
+                    new_list.append({key: CCLDict2List(item)})
+                else:
+                    new_list.append(item)
+            ccl_list.append({key: new_list})
+        else:
+            ccl_list.append({key: v})
+    return ccl_list
+
+def List2CCL(ccl_list, tab=0, tab2space=4):
+    '''
+    Convert a json list format (generated by `CCL2List` or `CCLDict2List`) to a CCL (Clausewitz scripting language) string.
+    Args:
+        ccl_list: list. A json list format.
+        tab: int. The number of indents for the current domain. It is usually not a worry of the user.
+        tab2space: int. Tab size. Negative value means using `'\\t'` as tabs.
+    Return:
+        str. A CCL string.
+    
+    Please pay attention to the behavior of this function:
+    1. Strings will be represented as non-quoted strings unless it contains `'\\t'`, `'\\n'`, or `' '`. For example, `{"tag": "USA"}` will be converted to `tag = USA` instead of `tag = "USA"`. But `{"has_dlc": "Together for Victory"}` will be converted to `has_dlc = "Together for Victory"` instead of `has_dlc = Together for Victory`.
+    2. Boolean values will be represented as `yes` or `no`. For example, `{"is_ai": True}` will be converted to `is_ai = yes` instead of `is_ai = True`.
+    3. Values will be represented as values instead of strings. For example, `{"value": 3}` will be converted to `value = 3` instead of `value = "3"`.
+    4. Items with `None` values will be represented as keys. For example, `{"value": None}` will be converted to `value` instead of `value = None`.
+    
+    This function is highly suspicious in terms of robustness. Please report any bugs you find.
+    '''
+    values = []
+    for item in ccl_list:
+        print(item)
+        if isinstance(item, dict):
+            for k, v in item.items():
+                if isinstance(v, list):
+                    values.append(f"{ccl_repr(k)}" + " = {\n" + List2CCL(v, tab+1) + "\n}")
+                elif v is None:
+                    values.append(f"{k}")
+                else:
+                    values.append(f"{ccl_repr(k)}" + " = " + f"{ccl_repr(v)}")
+        else:
+            values.append(f"{ccl_repr(item)}")
+    return indent("\n".join(values), tab*((tab2space*' ') if tab2space>=0 else '\t'))
+
+def Dict2CCL(ccl_dict, tab=0):
+    '''
+    Convert a json dict format (generated by `CCL2Dict` or `CCLList2Dict`) to a CCL (Clausewitz scripting language) string.
+    Args:
+        ccl_dict: dict. A json dict format.
+        tab: int. The number of indents for the current domain. It is usually not a worry of the user.
+    Return:
+        str. A CCL string.
+    
+    Please refer to the documentation of `CCLDict2List` and `List2CCL` for the behavior of this function.
+    
+    This function is highly suspicious in terms of robustness. Please report any bugs you find.
+    '''
+    return List2CCL(CCLDict2List(ccl_dict), tab)
