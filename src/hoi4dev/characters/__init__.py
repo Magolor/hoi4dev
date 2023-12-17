@@ -29,7 +29,7 @@ def AddCharacter(path, translate=True):
         },
         'gender': 'female',
     },LoadJson(pjoin(path,"info.json"))])
-    # name = info['name']; info.pop('name')
+    # name = info['name'] if 'name' in info else None; info.pop('name')
     info['name'] = f"CHARACTER_{tag}_NAME"
     if 'country_leader' in info:
         info['country_leader'] = merge_dicts([{

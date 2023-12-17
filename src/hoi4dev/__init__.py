@@ -4,6 +4,7 @@ from .init import *
 from .maps import *
 from .ideologies import *
 from .ideas import *
+from .traits import *
 from .countries import *
 from .characters import *
 

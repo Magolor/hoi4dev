@@ -17,7 +17,7 @@ def AddIdea(path, translate=True):
         'removal_cost': -1,
         'modifier': {},
     },LoadJson(pjoin(path,"info.json"))])
-    name = info['name']; info.pop('name')
+    name = info['name'] if 'name' in info else None; info.pop('name')
     category = info['category']; info.pop('category')
     
     # Add idea localisation

@@ -15,7 +15,7 @@ def AddCountry(path, translate=True):
         'graphical_culture': 'eastern_european_gfx',
         'graphical_culture_2d': 'eastern_european_2d',
     },LoadJson(pjoin(path,"info.json"))])
-    name = info['name']; info.pop('name')
+    name = info['name'] if 'name' in info else None; info.pop('name')
     history = info['history']; info.pop('history')
     info['color'] = "rgb { "+' '.join([str(x) for x in info['rgb']])+ " }"; info.pop('rgb')
     if 'ruling_party' not in info:

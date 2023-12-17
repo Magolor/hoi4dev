@@ -41,7 +41,7 @@ def ReadTxtLocs(path, scope=""):
     def add(key, language, value):
         if key and language and value:
             if key.startswith('@'):
-                key = scope+"_"+key[1:]
+                key = scope+"_"+key[1:] if len(key.strip())>1 else scope
             if key not in locs:
                 locs[key] = {}
             locs[key][language] = value.strip()
