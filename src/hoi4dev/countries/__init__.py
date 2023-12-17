@@ -1,5 +1,5 @@
 from ..utils import *
-from ..translation import PopulateLocs
+from ..translation import AddLocalisation
 
 def AddCountry(path, translate=True):
     '''
@@ -10,7 +10,7 @@ def AddCountry(path, translate=True):
     Return:
         None
     '''
-    tag = path.strip('/').split('/')[-1]
+    tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
         'graphical_culture': 'eastern_european_gfx',
         'graphical_culture_2d': 'eastern_european_2d',
@@ -28,10 +28,7 @@ def AddCountry(path, translate=True):
     Edit(F(pjoin("data","common","countries","colors.json")), {tag: {'color': info['color'], 'color_ui': info['color']}})
     
     # Add country localisation
-    locs = ReadTxtLocs(pjoin(path,"locs.txt"), scope=f"COUNTRY_{tag}")
-    if translate:
-        locs = PopulateLocs(locs, languages=get_mod_config('languages'))
-    SaveLocs(locs, name=f"COUNTRY_{tag}", path=F(pjoin("data","localisation")))
+    AddLocalisation(pjoin(path,"locs.txt"), scope=f"COUNTRY_{tag}", translate=translate)
     
     # Initialize country definition
     Edit(F(pjoin("data","common","countries",f"{tag}.json")), info)
@@ -48,3 +45,21 @@ def AddCountry(path, translate=True):
         ImageSave(flag_large, F(pjoin("gfx","flags",flag_file.split('.')[0])), format='dds')
         ImageSave(flag_medium, F(pjoin("gfx","flags","medium",flag_file.split('.')[0])), format='dds')
         ImageSave(flag_small, F(pjoin("gfx","flags","small",flag_file.split('.')[0])), format='dds')
+
+def CreateDefaultCountry(path, img=ImageLoad(find_resource('imgs/default_flag.png')), info=dict()):
+    '''
+    Create a default country resource folder from the given image.
+    Args:
+        img: image.Image. A `wand` image object.
+        path: str. The path of the resource files of the country.
+        info: dict. The country definition.
+    Return:
+        None
+    '''
+    CreateFolder(path); CreateFolder(pjoin(path,"flags"))
+    ImageSave(img, pjoin(path,"flags","default"), format='png')
+    SaveJson(info, pjoin(path,"info.json"), indent=4)
+    CreateFile(pjoin(path,"locs.txt"))
+    if 'name' in info:
+        with open(pjoin(path,"locs.txt"), "w") as f:
+            f.write(f"[en.@NAME]\n{info['name']}\n")

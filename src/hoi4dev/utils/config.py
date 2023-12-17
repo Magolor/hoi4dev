@@ -33,7 +33,7 @@ def find_resource(name):
 ROOT_PATH = pjoin(expanduser("~"), ".hoi4dev")
 CONFIG_PATH = pjoin(expanduser("~"), ".hoi4dev", "config.json")
 def init_config(**kwargs):
-    CreateFile(CONFIG_PATH); SaveJson(merge_dicts([LoadJson(find_resource('configs/default.json')), kwargs]), CONFIG_PATH, indent=4)
+    CreateFile(CONFIG_PATH); SaveJson(merge_dicts([LoadJson(find_resource('configs/paths.json')), kwargs]), CONFIG_PATH, indent=4)
 def get_config(key=None):
     config = LoadJson(CONFIG_PATH); return config if key is None else (config[key] if key in config else None)
 def set_config(key, value):

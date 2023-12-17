@@ -2,3 +2,4 @@
 .STATE
 *.pyc
 __pycache__
+push.bash

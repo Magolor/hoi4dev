@@ -56,13 +56,14 @@ def ReadTxtLocs(path, scope=""):
     add(key, language, text)
     return locs
 
-def SaveLocs(locs, name, path):
+def SaveLocs(locs, name, path, clear=True):
     '''
     Save localisation to separate `.yml` files.
     Args:
         locs: dict. The localisation to save.
         name: str. The name of the localisation file.
         path: str. The path of the localisation folder.
+        clear: bool. Whether to clear the localisation file before saving.
     Return:
         None
     '''
@@ -70,7 +71,10 @@ def SaveLocs(locs, name, path):
         for language, value in value.items():
             hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
             yml_file = pjoin(path, hoi4_lang, "replace", f"{name}_l_{hoi4_lang}.yml")
-            if not ExistFile(yml_file):
+            if clear or (not ExistFile(yml_file)):
                 CopyFile(find_resource('localisations/empty.yml'), yml_file)
             with open(yml_file, 'a', encoding='utf-8') as f:
-                f.write("\t" + f"{key}:0 {repr(value)}\n")
+                s = repr(value)
+                if s.startswith("'") and s.endswith("'"):
+                    s = '"' + s[1:-1].replace('"','\\"') + '"'
+                f.write("\t" + f"{key}:0 {s}\n")

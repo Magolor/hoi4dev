@@ -1,4 +1,4 @@
-from .utils import *
+from .config import *
 
 from wand import image
 from math import cos, sin, radians
@@ -61,13 +61,13 @@ def ImageFind(path, priority=['png','dds','tga'], find_default=True):
     if ExistFile(path):
         return ImageLoad(path)
     for p in priority:
-        if ExistFile('.'.join(path, p)):
-            return ImageLoad(pjoin(path, p))
+        if ExistFile('.'.join([path, p])):
+            return ImageLoad('.'.join([path, p]))
     if find_default:
         default_path = '/'.join(path.split('/')[:-1])+'/'+'default'
         for p in priority:
-            if ExistFile(pjoin(default_path, p)):
-                return ImageLoad(pjoin(default_path, p))
+            if ExistFile('.'.join([default_path, p])):
+                return ImageLoad('.'.join([default_path, p]))
     return None
 
 def ImageCopy(src_path, tgt_path, priority=['png','dds','tga'], find_default=True, format=None, flip=False):
@@ -89,6 +89,18 @@ def ImageCopy(src_path, tgt_path, priority=['png','dds','tga'], find_default=Tru
     else:
         raise FileNotFoundError(f"Image not found: \"{src_path}\"!")
 
+def CreateBlankImage(w, h, color='transparent'):
+    '''
+    Create a blank image with the given size and color (transparent by default).
+    Args:
+        w: int. Width.
+        h: int. Height.
+        color: str. Color (transparent by default).
+    Return:
+        image.Image. A `wand` image object.
+    '''
+    return image.Image(width=w, height=h, background=image.Color(color))
+
 def ImageExtend(img, w, h):
     '''
     Extend image to the given size. The extended image will be centered and filled with transparent color.
@@ -101,7 +113,7 @@ def ImageExtend(img, w, h):
     
     Notice that if `(w,h)` is smaller than `(img.width,img.height)`, the image will be cropped.
     '''
-    bg = image.Image(width=w, height=h, background=image.Color('transparent'))
+    bg = CreateBlankImage(w,h)
     bg.composite(img, int((w-img.width)/2), int((h-img.height)/2))
     return bg
 
@@ -111,8 +123,8 @@ def ImageZoom(img, r=1, w=-1, h=-1, behavior='max'):
     Args:
         img: image.Image. A `wand` image object.
         r: float. Ratio.
-        w: int. Width.
-        h: int. Height.
+        w: int. Width. If a float is given, it will be converted to int first.
+        h: int. Height. If a float is given, it will be converted to int first.
         behavior: str. 'max' or 'min'.
     Return:
         image.Image. The zoomed image.
@@ -131,7 +143,7 @@ def ImageZoom(img, r=1, w=-1, h=-1, behavior='max'):
         (5, 3) zoom with `w=30, h=30, behavior='max'` will result in (50, 30) and then cropped to (30, 30).
         (5, 3) zoom with `w=30, h=30, behavior='min'` will result in (30, 18) and then extended to (30, 30).
     '''
-    cloned = img.clone()
+    cloned = img.clone(); w = int(w); h = int(h)
     if r != 1:
         cloned.resize(int(cloned.width*r), int(cloned.height*r))
         assert ((w!=-1 and h!=-1) or (w==-1 and h==-1)), "When the ratio `r` is given, `w` and `h` should be either not set, or both set!"
@@ -168,7 +180,37 @@ def ImageRotate(img, angle):
     '''
     rot_w = int(img.width*abs(cos(radians(angle))) + img.height*abs(sin(radians(angle))))
     rot_h = int(img.width*abs(sin(radians(angle))) + img.height*abs(cos(radians(angle))))
-    bg = image.Image(width=rot_w, height=rot_h, background=image.Color('transparent'))
+    bg = CreateBlankImage(rot_w, rot_h)
     bg.composite(img, int((rot_w-img.width)/2), int((rot_h-img.height)/2))
     bg.rotate(angle, background=image.Color('transparent'))
     return bg
+
+def CreateAdvisorImage(img):
+    '''
+    Convert a portrait image to an advisor image. The default HOI4 advisor template is used.
+    Args:
+        img: image.Image. A `wand` image object.
+    Return:
+        image.Image. The advisor image.
+    '''
+    w, h = get_mod_config('img_scales')['advisor_portrait']
+    bg = CreateBlankImage(w,h)
+    ft = ImageLoad(find_resource('imgs/advisor_template.dds'))
+    adv = ImageZoom(img, w=w*0.62, h=h*0.62)
+    bg.composite(ImageRotate(adv, 355.8), top=4, left=4)
+    bg.composite(ft, gravity='center')
+    return bg
+
+def SetLoadingScreenImages(imgs, main=None):
+    '''
+    Set loading screen images.
+    Args:
+        imgs: list[img.Image]. A list of images, each of which is a `wand` image object.
+        main: img.Image. The main image. A `wand` image object. If not specified, will use the 5th image in `imgs` which is the default behavior of HoI4.
+    Return:
+        None
+    '''
+    all_imgs = (imgs[:4] + [main] + imgs[4:]) if main is not None else imgs
+    CreateFolder(F(pjoin("gfx","loadingscreens")))
+    for i, img in enumerate(all_imgs):
+        ImageSave(img, F(pjoin("gfx","loadingscreens",f"load_{i+1}")), format='dds')

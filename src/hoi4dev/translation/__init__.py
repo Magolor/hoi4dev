@@ -19,3 +19,20 @@ def PopulateLocs(locs, languages=["zh", "en", "ru"], translation=LLMTranslate):
             if (languages[0] in values) and (language not in values):
                 locs[key][language] = translation(values[languages[0]], src_lang=languages[0], tgt_lang=language)
     return locs
+
+from ..utils import *
+
+def AddLocalisation(locs_file, scope="", translate=True):
+    '''
+    Convert the localisation file to a `yml` file and add it to the mod.
+    Args:
+        locs_file: str. The path of the localisation file.
+        scope: str. The scope of the localisation file.
+        translate: bool. Whether to translate the localisation file.
+    Return:
+        None
+    '''
+    locs = ReadTxtLocs(locs_file, scope=scope)
+    if translate:
+        locs = PopulateLocs(locs, languages=get_mod_config('languages'))
+    SaveLocs(locs, name=scope, path=F(pjoin("data","localisation")))

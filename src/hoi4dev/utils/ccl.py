@@ -3,6 +3,17 @@ from .config import *
 import re
 from textwrap import indent
 
+def is_ccl(file):
+    if file.endswith('.txt'):
+        return True
+    if file.endswith('.gfx'):
+        return True
+    if file.endswith('.gui'):
+        return True
+    if file.endswith('.json'):
+        return False
+    raise TypeError(f"Invalid file type: \"{file}\" (must be `.txt`/`.gfx`/`.gui` or `.json`)!")
+
 def ReadTxt(file):
     '''
     Read a text file.
@@ -310,17 +321,16 @@ def CCLConvert(src_path, tgt_path):
     Return:
         str. tgt_path.
     '''
-    if src_path.endswith('.txt') and tgt_path.endswith('.txt'):
+    if (is_ccl(src_path)) and (is_ccl(tgt_path)):
         CopyFile(src_path, tgt_path); return tgt_path
-    if src_path.endswith('.json') and tgt_path.endswith('.json'):
+    if (not is_ccl(src_path)) and (not is_ccl(tgt_path)):
         SaveJson(LoadJson(src_path), tgt_path, indent=4); return tgt_path
-    if src_path.endswith('.txt') and tgt_path.endswith('.json'):
+    if (is_ccl(src_path)) and (not is_ccl(tgt_path)):
         assert (ExistFile(src_path)), f"File not found: \"{src_path}\"!"
         ccl_string = ReadTxt(src_path)
         SaveJson(CCL2Dict(ccl_string), tgt_path, indent=4); return tgt_path
-    if src_path.endswith('.json') and tgt_path.endswith('.txt'):
+    if (not is_ccl(src_path)) and (is_ccl(tgt_path)):
         SaveTxt(Dict2CCL(LoadJson(src_path)), tgt_path); return tgt_path
-    raise TypeError(f"Invalid file type: \"{src_path}\" and \"{tgt_path}\" (must be `.txt` or `.json`)!")
 
 def CCLConvertBatch(src_path, tgt_path, format='json'):
     '''
@@ -328,7 +338,7 @@ def CCLConvertBatch(src_path, tgt_path, format='json'):
     Args:
         src_path: str. Path to the source directory.
         tgt_path: str. Path to the target directory.
-        format: str. Only 'json' or 'txt'.
+        format: str. Only 'json' or CCL: 'txt'/'gfx'/'gui'.
     Return:
         List[str]. List of converted file paths.
     '''
@@ -344,9 +354,7 @@ def Edit(file, dict, d=False):
     Return:
         None
     '''
-    if file.endswith(".json"):
-        SaveJson(merge_dicts([LoadJson(file), dict], d=d) if ExistFile(file) else dict, file, indent=4)
-    elif file.endswith(".txt"):
+    if is_ccl(file):
         SaveTxt(Dict2CCL(merge_dicts([CCL2Dict(ReadTxt(file)), dict], d=d) if ExistFile(file) else dict), file)
     else:
-        raise TypeError(f"Invalid file type: \"{file}\" (must be `.txt` or `.json`)!")
+        SaveJson(merge_dicts([LoadJson(file), dict], d=d) if ExistFile(file) else dict, file, indent=4)

@@ -8,6 +8,8 @@ src/hoi4dev.egg-info/dependency_links.txt
 src/hoi4dev.egg-info/top_level.txt
 src/hoi4dev/characters/__init__.py
 src/hoi4dev/countries/__init__.py
+src/hoi4dev/ideas/__init__.py
+src/hoi4dev/ideologies/__init__.py
 src/hoi4dev/init/__init__.py
 src/hoi4dev/maps/__init__.py
 src/hoi4dev/maps/map2graph.py
