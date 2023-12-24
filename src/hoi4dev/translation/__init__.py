@@ -7,11 +7,11 @@ def PopulateLocs(locs, languages=["zh", "en", "ru"], translation=LLMTranslate):
     '''
     Filling the missing localisations with auto-translation.
     Args:
-        locs: dict. The localisation dictionary.
+        locs: Dict. The localisation dictionary.
         languages: List[str]. The list of languages to be populated. The first language in the list will be used as the source language.
         translation: function. The translation function. `LMTranslate` or `LLMTranslate`. Default is `LLMTranslate`.
     Return:
-        locs: dict. The populated localisation dictionary.
+        locs: Dict. The populated localisation dictionary.
     '''
     locs = deepcopy(locs)
     for key, values in locs.items():
@@ -32,7 +32,7 @@ def AddLocalisation(locs_file, scope="", translate=True):
     Return:
         None
     '''
-    locs = ReadTxtLocs(locs_file, scope=scope)
+    locs = ReadTxtLocs(locs_file, scope=scope) if ExistFile(locs_file) else {}
     if translate:
         locs = PopulateLocs(locs, languages=get_mod_config('languages'))
     SaveLocs(locs, name=scope, path=F(pjoin("data","localisation")))

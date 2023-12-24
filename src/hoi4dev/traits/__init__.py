@@ -14,8 +14,9 @@ def AddTrait(path, translate=True):
     info = merge_dicts([{
         'random': False,
         'sprite': 1,
+        "ai_will_do": {"factor": 1},
     },LoadJson(pjoin(path,"info.json"))])
-    name = info['name'] if 'name' in info else None; info.pop('name')
+    name = info.pop('name', None)
     
     # Add trait localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"TRAIT_{tag}", translate=translate)
@@ -28,7 +29,7 @@ def CreateDefaultTrait(path, info=dict()):
     Create a default trait resource folder from the given image.
     Args:
         path: str. The path of the resource files of the trait.
-        info: dict. The trait definition.
+        info: Dict. The trait definition.
     Return:
         None
     '''

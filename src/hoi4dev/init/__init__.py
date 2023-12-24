@@ -6,14 +6,14 @@ def CreateMod(name, **kwargs):
     Initialize a new mod.
     Args:
         name: str. The name of the mod.
-        **kwrags: dict. Other arguments.
+        **kwrags: Dict. Other arguments.
     Return:
         str. The path of the mod.
     
     For example, the arguments could include:
     - version: str. Version of the mod.
     - languages: List[str]. Supported languages of the mod. The first language will be used as the main language (default language, source of translation, etc.).
-    - img_scales: dict. Image scales of the mod. Like {'loadingscreen': (1920,1080), ...}.
+    - img_scales: Dict. Image scales of the mod. Like {'loadingscreen': (1920,1080), ...}.
     - copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.
     - replace_paths: list. List of files to be replaced.
     - clear: bool. Whether to clear the mod folder before creating the mod. Notice that even if `clear` is false, the mod's MAIN_DIRECTORIES (which include `common`, `gfx`, `history`, `interface`, `music`, `sound`) will still be cleared for consistency.
@@ -26,7 +26,6 @@ def CreateMod(name, **kwargs):
         CreateFolder(root)
         for p in MAIN_DIRECTORIES:
             ClearFolder(pjoin(root, p), rm=True)
-    CreateFolder(pjoin(root, 'data'))
     
     if "copies" in kwargs:
         CopyFolder(kwargs["copies"], root, rm=True)
@@ -42,17 +41,22 @@ def CreateMod(name, **kwargs):
     SaveJson(LoadJson(find_resource('configs/copy.json')), pjoin(root, 'hoi4dev_settings', 'copy.json'), indent=4)
     SaveJson(LoadJson(find_resource('configs/manpower.json')), pjoin(root, 'hoi4dev_settings', 'manpower.json'), indent=4)
     SaveJson(LoadJson(find_resource('configs/buildings.json')), pjoin(root, 'hoi4dev_settings', 'buildings.json'), indent=4)
+    SaveJson({}, pjoin(root, 'hoi4dev_settings', 'term_table.json'), indent=4)
+    CreateFolder(pjoin(root, 'hoi4dev_settings', 'imgs'))
+    for file in ListFiles(find_resource('imgs/defaults')):
+        src = pjoin(find_resource('imgs/defaults'), file); tgt = pjoin(root, 'hoi4dev_settings', 'imgs', file)
+        if not ExistFile(tgt): ImageCopy(src, tgt, format='png')
     
     with open(pjoin(mods_path, f'{name}.mod'), 'w') as f:
         f.write("\n".join(
             [f"version=\"{settings['version']}\""] +
             [ "tags = {"] +
-            [ ("\t"+tag) for tag in settings['tags'] ] +
+            [ ("\t"+f"\"{tag}\"") for tag in settings['tags'] ] +
             [ "}" ] +
             [ f"name=\"{settings['title']}\"" ] +
             [ "picture=\"thumbnail.png\""] +
             [ f"supported_version=\"{settings['hoi4_version']}\""] +
-            [ f"replace_path={p}" for p in settings['replace_paths'] ] +
+            [ f"replace_path=\"{p}\"" for p in settings['replace_paths'] ] +
             [ f"path=\"{root}\""]
         ))
     

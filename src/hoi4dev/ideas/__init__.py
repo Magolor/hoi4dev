@@ -13,11 +13,11 @@ def AddIdea(path, translate=True):
     tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
         'category': 'country',
-        'picture': f"IDEA_{tag}",
+        'picture': f"GFX_IDEA_{tag}",
         'removal_cost': -1,
         'modifier': {},
     },LoadJson(pjoin(path,"info.json"))])
-    name = info['name'] if 'name' in info else None; info.pop('name')
+    name = info.pop('name', None)
     category = info['category']; info.pop('category')
     
     # Add idea localisation
@@ -30,19 +30,21 @@ def AddIdea(path, translate=True):
     scales = get_mod_config('img_scales'); w, h = scales['idea']
     icon = ImageZoom(ImageFind(pjoin(path,"default")), w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
-    Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"IDEA_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
+    Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_IDEA_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
 
 def CreateDefaultIdea(path, img, info=dict()):
     '''
     Create a default idea resource folder from the given image.
     Args:
-        path: str. The path of the resource files of the idea.
+        path: str. The path of the target resource folder of the idea.
         img: image.Image. A `wand` image object.
-        info: dict. The idea definition.
+        info: Dict. The idea definition.
     Return:
         None
     '''
     CreateFolder(path)
+    if img is None:
+        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_idea.png")))
     ImageSave(img, pjoin(path,"default"), format='png')
     SaveJson(info, pjoin(path,"info.json"), indent=4)
     CreateFile(pjoin(path,"locs.txt"))

@@ -60,19 +60,23 @@ def SaveLocs(locs, name, path, clear=True):
     '''
     Save localisation to separate `.yml` files.
     Args:
-        locs: dict. The localisation to save.
+        locs: Dict. The localisation to save.
         name: str. The name of the localisation file.
         path: str. The path of the localisation folder.
         clear: bool. Whether to clear the localisation file before saving.
     Return:
         None
     '''
+    languages = set([language for value in locs.values() for language in value.keys()])
+    for language in languages:
+        hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
+        yml_file = pjoin(path, hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
+        if clear or (not ExistFile(yml_file)):
+            CopyFile(find_resource(f'localisations/empty_l_{hoi4_lang}.yml'), yml_file)
     for key, value in locs.items():
         for language, value in value.items():
             hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
-            yml_file = pjoin(path, hoi4_lang, "replace", f"{name}_l_{hoi4_lang}.yml")
-            if clear or (not ExistFile(yml_file)):
-                CopyFile(find_resource('localisations/empty.yml'), yml_file)
+            yml_file = pjoin(path, hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
             with open(yml_file, 'a', encoding='utf-8') as f:
                 s = repr(value)
                 if s.startswith("'") and s.endswith("'"):

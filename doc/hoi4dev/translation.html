@@ -71,11 +71,11 @@
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    Filling the missing localisations with auto-translation.</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Args:</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        locs: dict. The localisation dictionary.</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        locs: Dict. The localisation dictionary.</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">        languages: List[str]. The list of languages to be populated. The first language in the list will be used as the source language.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">        translation: function. The translation function. `LMTranslate` or `LLMTranslate`. Default is `LLMTranslate`.</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Return:</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        locs: dict. The populated localisation dictionary.</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        locs: Dict. The populated localisation dictionary.</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    &#39;&#39;&#39;</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">locs</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">locs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -119,11 +119,11 @@
 </span><span id="PopulateLocs-8"><a href="#PopulateLocs-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="PopulateLocs-9"><a href="#PopulateLocs-9"><span class="linenos"> 9</span></a><span class="sd">    Filling the missing localisations with auto-translation.</span>
 </span><span id="PopulateLocs-10"><a href="#PopulateLocs-10"><span class="linenos">10</span></a><span class="sd">    Args:</span>
-</span><span id="PopulateLocs-11"><a href="#PopulateLocs-11"><span class="linenos">11</span></a><span class="sd">        locs: dict. The localisation dictionary.</span>
+</span><span id="PopulateLocs-11"><a href="#PopulateLocs-11"><span class="linenos">11</span></a><span class="sd">        locs: Dict. The localisation dictionary.</span>
 </span><span id="PopulateLocs-12"><a href="#PopulateLocs-12"><span class="linenos">12</span></a><span class="sd">        languages: List[str]. The list of languages to be populated. The first language in the list will be used as the source language.</span>
 </span><span id="PopulateLocs-13"><a href="#PopulateLocs-13"><span class="linenos">13</span></a><span class="sd">        translation: function. The translation function. `LMTranslate` or `LLMTranslate`. Default is `LLMTranslate`.</span>
 </span><span id="PopulateLocs-14"><a href="#PopulateLocs-14"><span class="linenos">14</span></a><span class="sd">    Return:</span>
-</span><span id="PopulateLocs-15"><a href="#PopulateLocs-15"><span class="linenos">15</span></a><span class="sd">        locs: dict. The populated localisation dictionary.</span>
+</span><span id="PopulateLocs-15"><a href="#PopulateLocs-15"><span class="linenos">15</span></a><span class="sd">        locs: Dict. The populated localisation dictionary.</span>
 </span><span id="PopulateLocs-16"><a href="#PopulateLocs-16"><span class="linenos">16</span></a><span class="sd">    &#39;&#39;&#39;</span>
 </span><span id="PopulateLocs-17"><a href="#PopulateLocs-17"><span class="linenos">17</span></a>    <span class="n">locs</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">locs</span><span class="p">)</span>
 </span><span id="PopulateLocs-18"><a href="#PopulateLocs-18"><span class="linenos">18</span></a>    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">locs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -147,7 +147,7 @@
 <h6 id="return">Return:</h6>
 
 <blockquote>
-  <p>locs: dict. The populated localisation dictionary.</p>
+  <p>locs: Dict. The populated localisation dictionary.</p>
 </blockquote>
 </div>
 

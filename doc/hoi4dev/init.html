@@ -74,14 +74,14 @@
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    Args:</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="sd">        name: str. The name of the mod.</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">        **kwrags: dict. Other arguments.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">        **kwrags: Dict. Other arguments.</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">    Return:</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">        str. The path of the mod.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">    </span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">    For example, the arguments could include:</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="sd">    - version: str. Version of the mod.</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="sd">    - languages: List[str]. Supported languages of the mod. The first language will be used as the main language (default language, source of translation, etc.).</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    - img_scales: dict. Image scales of the mod. Like {&#39;loadingscreen&#39;: (1920,1080), ...}.</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    - img_scales: Dict. Image scales of the mod. Like {&#39;loadingscreen&#39;: (1920,1080), ...}.</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">    - copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">    - replace_paths: list. List of files to be replaced.</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">    - clear: bool. Whether to clear the mod folder before creating the mod. Notice that even if `clear` is false, the mod&#39;s MAIN_DIRECTORIES (which include `common`, `gfx`, `history`, `interface`, `music`, `sound`) will still be cleared for consistency.</span>
@@ -201,14 +201,14 @@
 </span><span id="CreateMod-7"><a href="#CreateMod-7"><span class="linenos"> 7</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="CreateMod-8"><a href="#CreateMod-8"><span class="linenos"> 8</span></a><span class="sd">    Args:</span>
 </span><span id="CreateMod-9"><a href="#CreateMod-9"><span class="linenos"> 9</span></a><span class="sd">        name: str. The name of the mod.</span>
-</span><span id="CreateMod-10"><a href="#CreateMod-10"><span class="linenos">10</span></a><span class="sd">        **kwrags: dict. Other arguments.</span>
+</span><span id="CreateMod-10"><a href="#CreateMod-10"><span class="linenos">10</span></a><span class="sd">        **kwrags: Dict. Other arguments.</span>
 </span><span id="CreateMod-11"><a href="#CreateMod-11"><span class="linenos">11</span></a><span class="sd">    Return:</span>
 </span><span id="CreateMod-12"><a href="#CreateMod-12"><span class="linenos">12</span></a><span class="sd">        str. The path of the mod.</span>
 </span><span id="CreateMod-13"><a href="#CreateMod-13"><span class="linenos">13</span></a><span class="sd">    </span>
 </span><span id="CreateMod-14"><a href="#CreateMod-14"><span class="linenos">14</span></a><span class="sd">    For example, the arguments could include:</span>
 </span><span id="CreateMod-15"><a href="#CreateMod-15"><span class="linenos">15</span></a><span class="sd">    - version: str. Version of the mod.</span>
 </span><span id="CreateMod-16"><a href="#CreateMod-16"><span class="linenos">16</span></a><span class="sd">    - languages: List[str]. Supported languages of the mod. The first language will be used as the main language (default language, source of translation, etc.).</span>
-</span><span id="CreateMod-17"><a href="#CreateMod-17"><span class="linenos">17</span></a><span class="sd">    - img_scales: dict. Image scales of the mod. Like {&#39;loadingscreen&#39;: (1920,1080), ...}.</span>
+</span><span id="CreateMod-17"><a href="#CreateMod-17"><span class="linenos">17</span></a><span class="sd">    - img_scales: Dict. Image scales of the mod. Like {&#39;loadingscreen&#39;: (1920,1080), ...}.</span>
 </span><span id="CreateMod-18"><a href="#CreateMod-18"><span class="linenos">18</span></a><span class="sd">    - copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.</span>
 </span><span id="CreateMod-19"><a href="#CreateMod-19"><span class="linenos">19</span></a><span class="sd">    - replace_paths: list. List of files to be replaced.</span>
 </span><span id="CreateMod-20"><a href="#CreateMod-20"><span class="linenos">20</span></a><span class="sd">    - clear: bool. Whether to clear the mod folder before creating the mod. Notice that even if `clear` is false, the mod&#39;s MAIN_DIRECTORIES (which include `common`, `gfx`, `history`, `interface`, `music`, `sound`) will still be cleared for consistency.</span>
@@ -275,7 +275,7 @@
 <ul>
 <li>version: str. Version of the mod.</li>
 <li>languages: List[str]. Supported languages of the mod. The first language will be used as the main language (default language, source of translation, etc.).</li>
-<li>img_scales: dict. Image scales of the mod. Like {'loadingscreen': (1920,1080), ...}.</li>
+<li>img_scales: Dict. Image scales of the mod. Like {'loadingscreen': (1920,1080), ...}.</li>
 <li>copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.</li>
 <li>replace_paths: list. List of files to be replaced.</li>
 <li>clear: bool. Whether to clear the mod folder before creating the mod. Notice that even if <code>clear</code> is false, the mod's MAIN_DIRECTORIES (which include <code>common</code>, <code>gfx</code>, <code>history</code>, <code>interface</code>, <code>music</code>, <code>sound</code>) will still be cleared for consistency.</li>

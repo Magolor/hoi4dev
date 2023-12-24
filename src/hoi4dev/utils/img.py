@@ -1,6 +1,7 @@
 from .config import *
 
 from wand import image
+from wand.color import Color
 from math import cos, sin, radians
 
 def ImageLoad(path):
@@ -12,17 +13,19 @@ def ImageLoad(path):
         image.Image. A `wand` image object. None if not found.
     '''
     try:
-        return image.Image(filename=path)
+        img = image.Image(filename=path)
+        return img
     except TypeError as e:
+        print(e)
         return None
 
-def ImageSave(img, path, format=None, flip=False):
+def ImageSave(img, path, format=None, flip_tga=True):
     '''
     Save image to the given path with specified format.
     Args:
         path: str. If it contains suffix, the suffix will be replaced with `format`, otherwise the suffix will be appended.
         format: str. Like 'dds', 'tga', 'png', etc. If not set, will use the suffix of `path`.
-        flip: bool. Flip image if it is a `tga` file.
+        flip_tga: bool. Flip image if it is a `tga` file (specialized for HoI4 country flags).
     Return:
         None
     
@@ -34,7 +37,7 @@ def ImageSave(img, path, format=None, flip=False):
     if format == 'dds':
         cloned.compression = 'dxt5'
     elif format == 'tga':
-        if flip:
+        if flip_tga:
             cloned.flip()
     elif format == 'png':
         pass
@@ -48,7 +51,7 @@ def ImageFind(path, priority=['png','dds','tga'], find_default=True):
     '''
     Find image in the given path with specified priority.
     Args:
-        path: str. Path to the image file.
+        path: str. Path to the image file without suffix.
         priority: list. Priority of suffixes.
         find_default: bool. If True, will find file named `default` and search in it.
     Return:
@@ -70,7 +73,7 @@ def ImageFind(path, priority=['png','dds','tga'], find_default=True):
                 return ImageLoad('.'.join([default_path, p]))
     return None
 
-def ImageCopy(src_path, tgt_path, priority=['png','dds','tga'], find_default=True, format=None, flip=False):
+def ImageCopy(src_path, tgt_path, priority=['png','dds','tga'], find_default=True, format=None, flip_tga=False):
     '''
     Copy image from `src_path` to `tgt_path` with specified priority and save format.
     Args:
@@ -79,13 +82,13 @@ def ImageCopy(src_path, tgt_path, priority=['png','dds','tga'], find_default=Tru
         priority: list. Priority of suffixes.
         find_default: bool. If True, will find file named `default` and search in it.
         format: str. Like 'dds', 'tga', 'png', etc.
-        flip: bool. Flip image if it is a `tga` file.
+        flip_tga: bool. Flip image if it is a `tga` file (specialized for HoI4 country flags).
     Return:
         None
     '''
     img = ImageFind(src_path, priority=priority, find_default=find_default)
     if img is not None:
-        ImageSave(img, tgt_path, format=format, flip=flip)
+        ImageSave(img, tgt_path, format=format, flip_tga=flip_tga)
     else:
         raise FileNotFoundError(f"Image not found: \"{src_path}\"!")
 

@@ -41,7 +41,7 @@ def ImageSave(img, path, format='dds', flip=False):
     else:
         pass
     if not path.endswith(f".{format}"):
-        path = '.'.join(path.split('.')[:-1])+f".{format}"
+        path = AsFormat(path, format)
     cloned.save(filename=path)
 
 def ImageFind(path, priority=['png','dds','tga'], find_default=True):
