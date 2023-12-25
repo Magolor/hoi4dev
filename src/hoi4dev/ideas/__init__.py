@@ -13,7 +13,7 @@ def AddIdea(path, translate=True):
     tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
         'category': 'country',
-        'picture': f"GFX_IDEA_{tag}",
+        'picture': tag,
         'removal_cost': -1,
         'modifier': {},
     },LoadJson(pjoin(path,"info.json"))])
@@ -30,7 +30,7 @@ def AddIdea(path, translate=True):
     scales = get_mod_config('img_scales'); w, h = scales['idea']
     icon = ImageZoom(ImageFind(pjoin(path,"default")), w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
-    Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_IDEA_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
+    Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
 
 def CreateDefaultIdea(path, img, info=dict()):
     '''

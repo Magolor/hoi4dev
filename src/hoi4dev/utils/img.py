@@ -188,19 +188,32 @@ def ImageRotate(img, angle):
     bg.rotate(angle, background=image.Color('transparent'))
     return bg
 
+def CreateLeaderImage(img):
+    '''
+    Convert an image to a leader image.
+    Args:
+        img: image.Image. A `wand` image object.
+    Return:
+        image.Image. The leader image.
+    '''
+    w_l, h_l = get_mod_config('img_scales')['leader_portrait']
+    return ImageZoom(img, w=w_l, h=h_l)
+
 def CreateAdvisorImage(img):
     '''
-    Convert a portrait image to an advisor image. The default HOI4 advisor template is used.
+    Convert a portrait image to an advisor image. The default HOI4 advisor template and size is used.
     Args:
         img: image.Image. A `wand` image object.
     Return:
         image.Image. The advisor image.
     '''
-    w, h = get_mod_config('img_scales')['advisor_portrait']
-    bg = CreateBlankImage(w,h)
+    w_l, h_l = get_mod_config('img_scales')['leader_portrait']
+    w_a, h_a = get_mod_config('img_scales')['advisor_portrait']
+    bg = CreateBlankImage(w_a,h_a)
     ft = ImageLoad(find_resource('imgs/advisor_template.dds'))
-    adv = ImageZoom(img, w=w*0.62, h=h*0.62)
-    bg.composite(ImageRotate(adv, 355.8), top=4, left=4)
+    adv = ImageZoom(ImageZoom(img, w=w_l, h=h_l), h=h_a)
+    rot = ImageZoom(ImageRotate(adv, 355.5), r=0.72)
+    bg.composite(rot, top=4, left=4)
     bg.composite(ft, gravity='center')
     return bg
 

@@ -357,17 +357,18 @@ def CCLConvertBatch(src_path, tgt_path, format='json'):
     '''
     return [CCLConvert(pjoin(src_path, f), AsFormat(pjoin(tgt_path, f), format)) for f in ListFiles(src_path)]
 
-def Edit(file, dict, d=False):
+def Edit(file, dict, d=False, clear=True):
     '''
     Edit a CCL/json file by merging it with a dictionary.
     Args:
         file: str. Path to the CCL/json file.
         dict: Dict. A json dict format.
         d: bool. If True, identical keys will be duplicated.
+        clear: bool. If True, the original file will be cleared before editing.
     Return:
         None
     '''
     if is_ccl(file):
-        SaveTxt(Dict2CCL(merge_dicts([CCL2Dict(ReadTxt(file)), dict], d=d) if ExistFile(file) else dict), file)
+        SaveTxt(Dict2CCL(merge_dicts([{} if clear else CCL2Dict(ReadTxt(file)), dict], d=d) if ExistFile(file) else dict), file)
     else:
-        SaveJson(merge_dicts([LoadJson(file), dict], d=d) if ExistFile(file) else dict, file, indent=4)
+        SaveJson(merge_dicts([{} if clear else LoadJson(file), dict], d=d) if ExistFile(file) else dict, file, indent=4)

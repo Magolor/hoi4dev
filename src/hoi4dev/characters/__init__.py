@@ -57,9 +57,8 @@ def AddCharacter(path, translate=True):
         portrait = ImageFind(pjoin(path,"portraits",portrait_file))
         if portrait is None:
             portrait = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_portrait.png")))
-        scales = get_mod_config('img_scales'); w_l, h_l = scales['leader_portrait']
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
-        ImageSave(ImageZoom(portrait, w=w_l, h=h_l), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
+        ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
         ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')
 
 def CreateDefaultCharacter(path, img, info=dict()):

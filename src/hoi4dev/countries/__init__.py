@@ -22,10 +22,10 @@ def AddCountry(path, translate=True):
     #     info['ruling_party'] = max(info['popularities'], key=lambda k: info['popularities'][k])
     
     # Add country tag
-    Edit(F(pjoin("data","common","country_tags","00_countries.json")), {tag: f"countries/{tag}.txt"})
+    Edit(F(pjoin("data","common","country_tags","00_countries.json")), {tag: f"countries/{tag}.txt"}, clear=False)
     
     # Add country color
-    Edit(F(pjoin("data","common","countries","colors.json")), {tag: {'color': info['color'], 'color_ui': info['color']}})
+    Edit(F(pjoin("data","common","countries","colors.json")), {tag: {'color': info['color'], 'color_ui': info['color']}}, clear=False)
     
     # Add country localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"COUNTRY_{tag}", translate=translate)
