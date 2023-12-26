@@ -21,7 +21,7 @@ def ReadTxtLocs(path, scope=""):
     Return:
         dict. A dictionary of localisation.
     
-    The localisation file is a plain text file. Special commands like `[language.key]` can set the language and key of the following lines. Key started with `@` will replace `@` with the current scope name. The lines will be stripped.
+    The localisation file is a plain text file. Special commands like `[language.key]` can set the language and key of the following lines. Key with `@` will replace `@` with the current scope name with `_` (unless ends with `@`). The lines will be stripped.
     For example, under "ABC" scope:
     ```
     [en.key01]
@@ -41,7 +41,7 @@ def ReadTxtLocs(path, scope=""):
     def add(key, language, value):
         if key and language and value:
             if key.startswith('@'):
-                key = scope+"_"+key[1:] if len(key.strip())>1 else scope
+                key = key.replace('@', scope+'_').strip('_')
             if key not in locs:
                 locs[key] = {}
             locs[key][language] = value.strip()

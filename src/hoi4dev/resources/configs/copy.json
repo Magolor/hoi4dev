@@ -7,11 +7,15 @@
         "gfx/interface/counters/divisions_small",
         "gfx/interface/ideas",
         "gfx/interface/focuses",
+        "gfx/interface/equipments",
         "gfx/flags/medium",
         "gfx/flags/small",
         "interface/ideas",
         "interface/focuses",
-        "data/focus_trees"
+        "interface/equipments",
+        "interface/technologies",
+        "data/focus_trees",
+        "data/common/units/equipment"
     ],
     "CopyFile": [
         "common/ai_equipment/_documentation.info",

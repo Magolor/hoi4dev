@@ -8,5 +8,7 @@ from .traits import *
 from .countries import *
 from .characters import *
 from .focuses import *
+from .equipments import *
+from .technologies import *
 
 __version__ = '0.1.0.0'

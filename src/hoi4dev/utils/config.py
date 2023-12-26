@@ -2,13 +2,17 @@ from .utils import *
 import pkg_resources
 from os.path import expanduser
 
-def find_dup(key, ccl_dict):
-    if key not in ccl_dict:
-        return key
+def dup_gen(key):
+    yield key
     i = 1
-    while f"{key}__D{i}" in ccl_dict:
+    while True:
+        yield f"{key}__D{i}"
         i += 1
-    return f"{key}__D{i}"
+
+def find_dup(key, ccl_dict):
+    for key in dup_gen(key):
+        if key not in ccl_dict:
+            return key
 
 def find_ori(key):
     return key.split('__D')[0] if '__D' in key else key

@@ -71,7 +71,8 @@ def tokenize_ccl_string(ccl_string):
             tokens.append('\n')
         else:
             # tokens.extend(re.findall(r'{|}|=|\n|-?\w+(?:[.]\w+)?|\S+', sentence[0]))
-            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:-]\w+)*'?|\S+", sentence[0]))
+            # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
+            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
     return [w for w in tokens if w and w!='\n']
 
 def ccl_type(t):
@@ -114,11 +115,14 @@ def ccl_repr(t):
         return 'yes' if t else 'no'
     if not isinstance(t, str):
         return str(t)
+    if t=='':
+        return '""'
     if (
         ((' ' in t) or ('\t' in t) or ('\n' in t) or ("'" in t) or ("/" in t))
     and (not (t.startswith('rgb') or t.startswith('hsv')))
     and (not ('^' in t))
     and (not (re.match(r'^\d{2}:\d{2}$', t) is not None))
+    and (not (t.endswith('%')))
     ):
         s = repr(t)
         if s.startswith("'") and s.endswith("'"):

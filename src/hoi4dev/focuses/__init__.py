@@ -78,7 +78,7 @@ def CreateDefaultNationalFocus(path, img, info=dict()):
         with open(pjoin(path,"locs.txt"), "w") as f:
             f.write(f"[en.@NAME]\n{info['name']}\n")
 
-class Node:
+class FocusNode:
     def __init__(self, path):
         self.d = LoadJson(path)
         self.parent = None
@@ -98,14 +98,14 @@ class Node:
         return {k:v for k,v in self.d.items() if k not in ['x','y','px','py','pw','dx','dy','dw','parent']} | {'x':self.d['px'],'y':self.d['py']}
 
 def topo_sort(nodes):
-    b = {p:0 for p in nodes}
-    q = [p for p in nodes if len(p.children)==b[p]]; s = 0
+    b = {k:0 for k in nodes}
+    q = [p for k, p in nodes.items() if len(p.children)==b[k]]; s = 0
     while s < len(q):
-        p = q[s]; s += 1; f = p.d['parent']
-        if f:
-            b[f] += 1
-            if b[f] == len(nodes[f].children):
-                q.append(f)
+        p = q[s]; s += 1; k = p.d['parent'] if 'parent' in p.d else None
+        if k:
+            b[k] += 1
+            if b[k] == len(p.parent.children):
+                q.append(p.parent)
     return list(reversed(q))
 
 def CompileFocusTree(path):
@@ -117,7 +117,7 @@ def CompileFocusTree(path):
         None
     '''
     tree = path.strip('/').split('/')[-1].upper()
-    nodes = {Prefix(file):Node(pjoin(path,file)) for file in ListFiles(path) if file.endswith('.json') and file!='info.json'}
+    nodes = {Prefix(file):FocusNode(pjoin(path,file)) for file in ListFiles(path) if file.endswith('.json') and file!='info.json'}
     roots = []
     for k,n in nodes.items():
         if n.d['parent']:
@@ -125,7 +125,7 @@ def CompileFocusTree(path):
             n.parent.children.append(n)
         else:
             roots.append(n)
-    nodes_list = topo_sort(list(nodes.values()))
+    nodes_list = topo_sort(nodes)
     for p in nodes_list:
         for c in p.children:
             c.depth = p.depth + 1

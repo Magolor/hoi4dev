@@ -50,4 +50,4 @@ def CreateDefaultIdea(path, img, info=dict()):
     CreateFile(pjoin(path,"locs.txt"))
     if 'name' in info:
         with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@NAME]\n{info['name']}\n")
+            f.write(f"[en.@]\n{info['name']}\n")
