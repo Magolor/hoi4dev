@@ -18,6 +18,8 @@ def AddCountry(path, translate=True):
     name = info.pop('name', None)
     history = info['history']; info.pop('history')
     info['color'] = "rgb { "+' '.join([str(x) for x in info['rgb']])+ " }"; info.pop('rgb')
+    if 'oob' not in history:
+        history['oob'] = tag
     # if 'ruling_party' not in info:
     #     info['ruling_party'] = max(info['popularities'], key=lambda k: info['popularities'][k])
     

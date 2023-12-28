@@ -15,7 +15,9 @@
         "interface/equipments",
         "interface/technologies",
         "data/focus_trees",
-        "data/common/units/equipment"
+        "data/common/units/equipment",
+        "data/common/units/names_divisions",
+        "data/history/units"
     ],
     "CopyFile": [
         "common/ai_equipment/_documentation.info",

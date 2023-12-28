@@ -230,3 +230,15 @@ def SetLoadingScreenImages(imgs, main=None):
     CreateFolder(F(pjoin("gfx","loadingscreens")))
     for i, img in enumerate(all_imgs):
         ImageSave(img, F(pjoin("gfx","loadingscreens",f"load_{i+1}")), format='dds')
+    if (main is not None) or (len(all_imgs)>=5):
+        main_image = all_imgs[4] if main is None else main
+        # La Resistance
+        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
+        # Together for Victory
+        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_tfv")), format='dds')
+        # Death or Dishonor
+        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_dod")), format='dds')
+        # By Blood Alone
+        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
+        # Waking the Tiger
+        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_tiger")), format='dds')

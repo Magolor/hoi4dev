@@ -10,5 +10,6 @@ from .characters import *
 from .focuses import *
 from .equipments import *
 from .technologies import *
+from .divisions import *
 
 __version__ = '0.1.0.0'
