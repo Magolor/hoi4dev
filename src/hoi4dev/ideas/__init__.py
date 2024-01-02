@@ -28,26 +28,9 @@ def AddIdea(path, translate=True):
     
     # Add idea icons
     scales = get_mod_config('img_scales'); w, h = scales['idea']
-    icon = ImageZoom(ImageFind(pjoin(path,"default")), w=w, h=h)
+    icon = ImageFind(pjoin(path,"default"))
+    if icon is None:
+        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+    icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
-
-def CreateDefaultIdea(path, img, info=dict()):
-    '''
-    Create a default idea resource folder from the given image.
-    Args:
-        path: str. The path of the target resource folder of the idea.
-        img: image.Image. A `wand` image object.
-        info: Dict. The idea definition.
-    Return:
-        None
-    '''
-    CreateFolder(path)
-    if img is None:
-        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_idea.png")))
-    ImageSave(img, pjoin(path,"default"), format='png')
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@]\n{info['name']}\n")

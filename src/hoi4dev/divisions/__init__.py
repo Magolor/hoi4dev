@@ -53,4 +53,37 @@ def AddDivisions(path):
             division_templates.append(division_template)
         SaveJson(merge_dicts(names_groups, d=True), F(pjoin("data", "common", "units", "names_divisions", f"{key}.json")), indent=4)
         SaveJson(merge_dicts(division_templates, d=True), F(pjoin("data", "history", "units", f"{key}.json")), indent=4)
-        
+
+def AddInitialArmy(path):
+    '''
+    Add initial army for a country to the mod.
+    Args:
+        path: str. The path of the resource files of the country. The resources should include the 'units.json' file.
+    Return:
+        None
+    Notice that the country's unit history should be compiled before adding initial army. That is, the `data/history/units/<tag>.json` should exist.
+    '''
+    tag = path.strip('/').split('/')[-1].upper()
+    if not ExistFile(pjoin(path,"units.json")):
+        return
+    history = LoadJson(F(pjoin("data","history","units",f"{tag}.json")))
+    mapping = {}
+    for key in history:
+        if find_ori(key)=='division_template':
+            mapping[history[key]['division_names_group']] = history[key]['name']
+    units = LoadJson(pjoin(path,"units.json"))
+    initial_army = []
+    for key in units:
+        for i, div in enumerate(units[key]):
+            division_names_group = f"NAMES_GROUP_{tag}_{key.upper()}"
+            initial_army.append({'division': {
+                "division_name": {
+                    "is_name_ordered": True,
+                    "name_order": i+1,
+                },
+                "division_template": mapping[division_names_group],
+            } | div})
+    Edit(
+        F(pjoin("data","history","units",f"{tag}.json")),
+        {'$units': merge_dicts(initial_army, d=True)}, d=True, clear=False
+    )

@@ -23,19 +23,3 @@ def AddTrait(path, translate=True):
     
     # Initialize trait definition
     Edit(F(pjoin("data","common","country_leader",f"TRAIT_{tag}.json")), {'leader_traits': {f"TRAIT_{tag}": info}})
-
-def CreateDefaultTrait(path, info=dict()):
-    '''
-    Create a default trait resource folder from the given image.
-    Args:
-        path: str. The path of the resource files of the trait.
-        info: Dict. The trait definition.
-    Return:
-        None
-    '''
-    CreateFolder(path)
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@]\n{info['name']}\n")

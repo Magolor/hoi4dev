@@ -61,7 +61,7 @@ def SaveLocs(locs, name, path, clear=True):
     Save localisation to separate `.yml` files.
     Args:
         locs: Dict. The localisation to save.
-        name: str. The name of the localisation file.
+        name: str. The name of the localisation file (you do not need to add `_l_{language}.yml`).
         path: str. The path of the localisation folder.
         clear: bool. Whether to clear the localisation file before saving.
     Return:

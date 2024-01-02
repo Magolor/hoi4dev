@@ -25,25 +25,9 @@ def AddArchetype(path, translate=True):
     # Initialize archetype definition
     Edit(F(pjoin("data","common","units","equipment",f"ARCHETYPE_{tag}.json")), {'equipments': {f"ARCHETYPE_{tag}": info}})
 
-def CreateDefaultArchetype(path, info=dict()):
-    '''
-    Create a default archetype resource folder from the given image.
-    Args:
-        path: str. The path of the target resource folder of the archetype.
-        info: Dict. The archetype definition.
-    Return:
-        None
-    '''
-    CreateFolder(path)
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@NAME]\n{info['name']}\n")
-
 def AddEquipment(path, translate=True, debug=False):
     '''
-    Add an equipment to the mod.
+    Add an equipment to the mod. Notice that the equipment will not take effect until it is compiled using `AddEquipments` function.
     Args:
         path: str. The path of the resource files of the equipment. The resources should include the equipment icon, the equipment definition and the localisation.
         translate: bool. Whether to translate the localisation of the equipment.
@@ -61,6 +45,11 @@ def AddEquipment(path, translate=True, debug=False):
         - breakthrough
         - defense
         - armor_value
+        - air_defence
+        - air_ground_attack
+        - air_bombing
+        - naval_strike_attack
+        - naval_strike_targetting
     - Directly inherited:
         - archetype
         - lend_lease_cost
@@ -71,6 +60,9 @@ def AddEquipment(path, translate=True, debug=False):
         - maximum_speed
         - entrenchment
         - recon
+        - air_range
+        - air_agility
+        - air_superiority
     - Add by 1:
         - priority
         - visual_level
@@ -89,8 +81,8 @@ def AddEquipment(path, translate=True, debug=False):
     # Scaling of stats
     if 'parent' in info:
         alpha = info.pop('alpha_global', 0.0)
-        data = LoadJson(F(pjoin("data","common","units","equipment",f"{info['parent']}.json")))['equipments'][info['parent']]
-        info = merge_dicts([{
+        data = LoadJson(F(pjoin("data","equipments",f"{info['parent']}.json")))['equipments'][info['parent']]
+        info = {k:v for k,v in merge_dicts([{
             'archetype': data['archetype'],
             'priority': data['priority']+1,
             'visual_level': data['visual_level']+1,
@@ -101,20 +93,30 @@ def AddEquipment(path, translate=True, debug=False):
             'is_convertable': data['is_convertable'],
             'reliability': data['reliability'],
             
-            'soft_attack': data['soft_attack']*(1+alpha),
-            'hard_attack': data['hard_attack']*(1+alpha),
-            'air_attack': data['air_attack']*(1+alpha),
-            'ap_attack': data['ap_attack']*(1+alpha),
-            'breakthrough': data['breakthrough']*(1+alpha),
+            'soft_attack': data['soft_attack']*(1+alpha) if 'soft_attack' in data else None,
+            'hard_attack': data['hard_attack']*(1+alpha) if 'hard_attack' in data else None,
+            'air_attack': data['air_attack']*(1+alpha) if 'air_attack' in data else None,
+            'ap_attack': data['ap_attack']*(1+alpha) if 'ap_attack' in data else None,
+            'breakthrough': data['breakthrough']*(1+alpha) if 'breakthrough' in data else None,
             
-            'defense': data['defense']*(1+alpha),
-            'armor_value': data['armor_value']*(1+alpha),
-            'hardness': data['hardness'],
+            'defense': data['defense']*(1+alpha) if 'defense' in data else None,
+            'armor_value': data['armor_value']*(1+alpha) if 'armor_value' in data else None,
+            'hardness': data['hardness'] if 'hardness' in data else None,
+            
+            'air_defence': data['air_defence']*(1+alpha) if 'air_defence' in data else None,
+            'air_ground_attack': data['air_ground_attack']*(1+alpha) if 'air_ground_attack' in data else None,
+            'air_bombing': data['air_bombing']*(1+alpha) if 'air_bombing' in data else None,
+            'naval_strike_attack': data['naval_strike_attack']*(1+alpha) if 'naval_strike_attack' in data else None,
+            'naval_strike_targetting': data['naval_strike_targetting']*(1+alpha) if 'naval_strike_targetting' in data else None,
+            
+            'air_range': data['air_range'] if 'air_range' in data else None,
+            'air_agility': data['air_agility'] if 'air_agility' in data else None,
+            'air_superiority': data['air_superiority'] if 'air_superiority' in data else None,
             
             'maximum_speed': data['maximum_speed'],
-            'entrenchment': data['entrenchment'],
-            'recon': data['recon'],
-        },info])
+            'entrenchment': data['entrenchment'] if 'entrenchment' in data else None,
+            'recon': data['recon'] if 'recon' in data else None,
+        },info]).items() if v is not None}
     if 'alpha' in info:
         for stat in info['alpha']:
             if stat in info:
@@ -132,17 +134,21 @@ def AddEquipment(path, translate=True, debug=False):
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"EQUIPMENT_{tag}", translate=translate)
     
     # Initialize equipment definition
-    Edit(F(pjoin("data","common","units","equipment",f"EQUIPMENT_{tag}.json")), {'equipments': {f"EQUIPMENT_{tag}": info}})
+    Edit(F(pjoin("data","equipments",f"EQUIPMENT_{tag}.json")), {'equipments': {f"EQUIPMENT_{tag}": info}})
     
     # Add equipment pictures
     scales = get_mod_config('img_scales'); w, h = scales['equipment_medium']
-    icon = ImageZoom(ImageFind(pjoin(path,"default")), w=w, h=h)
+    icon = ImageFind(pjoin(path,"default"))
+    if icon is None:
+        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+    icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","equipments",f"EQUIPMENT_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}})
 
 class EquipmentNode:
-    def __init__(self, path):
+    def __init__(self, path, name):
         self.d = LoadJson(pjoin(path,"info.json"))
+        self.name = name
         self.path = path
         self.parent = None
         self.children = []
@@ -160,7 +166,7 @@ def topo_sort(nodes):
 
 def AddEquipments(path, translate=True, debug=False):
     '''
-    Add all the equipments.
+    Add all the equipments and compile them.
     Args:
         path: str. The path of the resource folder of all the equipments.
         translate: bool. Whether to translate the localisation of the equipment.
@@ -168,7 +174,7 @@ def AddEquipments(path, translate=True, debug=False):
     Return:
         None
     '''
-    nodes = {f"EQUIPMENT_{folder}":EquipmentNode(pjoin(path,folder)) for folder in ListFolders(path)}
+    nodes = {f"EQUIPMENT_{folder}":EquipmentNode(pjoin(path,folder),f"EQUIPMENT_{folder}") for folder in ListFolders(path)}
     for k,n in nodes.items():
         if 'parent' in n.d:
             n.parent = nodes[n.d['parent']]
@@ -176,23 +182,5 @@ def AddEquipments(path, translate=True, debug=False):
     nodes_list = topo_sort(nodes)
     for p in nodes_list:
         AddEquipment(p.path, translate=translate, debug=debug)
-
-def CreateDefaultEquipment(path, img, info=dict()):
-    '''
-    Create a default equipment resource folder from the given image.
-    Args:
-        path: str. The path of the target resource folder of the equipment.
-        img: image.Image. A `wand` image object.
-        info: Dict. The equipment definition.
-    Return:
-        None
-    '''
-    CreateFolder(path)
-    if img is None:
-        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
-    ImageSave(img, pjoin(path,"default"), format='png')
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@short]\n{info['name']}\n")
+    equipments = [LoadJson(F(pjoin("data","equipments",f"{p.name}.json"))) for p in nodes_list]
+    Edit(F(pjoin("data","common","units","equipment",f"new_equipments.json")), merge_dicts(equipments))

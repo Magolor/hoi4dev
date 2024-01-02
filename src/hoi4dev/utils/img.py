@@ -188,6 +188,20 @@ def ImageRotate(img, angle):
     bg.rotate(angle, background=image.Color('transparent'))
     return bg
 
+def ImageShift(img, dw=0, dh=0):
+    '''
+    Shift image by the given offset. The image will be extended to (w+dw,h+dh) and the shifted image will be filled with transparent color.
+    Args:
+        img: image.Image. A `wand` image object.
+        dw: int. Offset along width. Positive value means shift right.
+        dh: int. Offset along height. Positive value means shift down.
+    Return:
+        image.Image. The shifted image.
+    '''
+    ext = ImageExtend(img, w=img.width+abs(dw)*2, h=img.height+abs(dh)*2)
+    ext.crop(left=max(-dw,0), top=max(-dh,0), width=img.width+abs(dw), height=img.height+abs(dh))
+    return ext
+
 def CreateLeaderImage(img):
     '''
     Convert an image to a leader image.
@@ -217,6 +231,22 @@ def CreateAdvisorImage(img):
     bg.composite(ft, gravity='center')
     return bg
 
+def CreateCountryEventImage(img):
+    '''
+    Convert a image to a country event image. The default HOI4 country event template and size is used.
+    Args:
+        img: image.Image. A `wand` image object.
+    Return:
+        image.Image. The country event image.
+    '''
+    w, h = get_mod_config('img_scales')['country_event']
+    bg = ImageLoad(find_resource('imgs/country_event_template.dds'))
+    evt = ImageZoom(img, w=w, h=h)
+    rot = ImageZoom(ImageRotate(evt, 355.5), r=0.90)
+    sft = ImageShift(rot, dw=-2)
+    bg.composite(sft, gravity='center')
+    return bg
+
 def SetLoadingScreenImages(imgs, main=None):
     '''
     Set loading screen images.
@@ -226,19 +256,27 @@ def SetLoadingScreenImages(imgs, main=None):
     Return:
         None
     '''
-    all_imgs = (imgs[:4] + [main] + imgs[4:]) if main is not None else imgs
+    if main is None and len(imgs)<5:
+        raise ValueError("No main image!")
+    if main is None:
+        main = imgs[4]
+    else:
+        imgs = imgs[:4] + [main] + imgs[4:]
     CreateFolder(F(pjoin("gfx","loadingscreens")))
-    for i, img in enumerate(all_imgs):
-        ImageSave(img, F(pjoin("gfx","loadingscreens",f"load_{i+1}")), format='dds')
-    if (main is not None) or (len(all_imgs)>=5):
-        main_image = all_imgs[4] if main is None else main
-        # La Resistance
-        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
-        # Together for Victory
-        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_tfv")), format='dds')
-        # Death or Dishonor
-        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_dod")), format='dds')
-        # By Blood Alone
-        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
-        # Waking the Tiger
-        ImageSave(main_image, F(pjoin("gfx","loadingscreens","load_tiger")), format='dds')
+    w_l, h_l = get_mod_config('img_scales')['loadingscreen']
+    w_m, h_m = get_mod_config('img_scales')['mainscreen']
+    for i, img in enumerate(imgs):
+        ImageSave(ImageZoom(img, w=w_l, h=h_l), F(pjoin("gfx","loadingscreens",f"load_{i+1}")), format='dds')
+    main_img = ImageZoom(main, w=w_m, h=h_m)
+    # Should the main image be saved with a 'loadingscreens' ratio?
+    # ImageSave(main_img, F(pjoin("gfx","loadingscreens",f"load_5")), format='dds')
+    # La Resistance
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
+    # Together for Victory
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_tfv")), format='dds')
+    # Death or Dishonor
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_dod")), format='dds')
+    # By Blood Alone
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
+    # Waking the Tiger
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_tiger")), format='dds')

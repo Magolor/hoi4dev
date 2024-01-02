@@ -40,30 +40,13 @@ def AddCountry(path, translate=True):
     
     # Add country flags
     for flag_file in ListFiles(pjoin(path,"flags")):
-        flag = ImageFind(pjoin(path,"flags",flag_file)); scales = get_mod_config('img_scales')
+        flag = ImageFind(pjoin(path,"flags",flag_file))
+        if flag is None:
+            flag = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
+        scales = get_mod_config('img_scales')
         if flag is None:
             flag = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
         flag_name = f"{tag}{'_'+Prefix(flag_file) if Prefix(flag_file)!='default' else ''}"
         w_l, h_l = scales['flag_large']; flag_large = ImageZoom(flag, w=w_l, h=h_l); ImageSave(flag_large, F(pjoin("gfx","flags",flag_name)), format='tga')
         w_m, h_m = scales['flag_medium']; flag_medium = ImageZoom(flag, w=w_m, h=h_m); ImageSave(flag_medium, F(pjoin("gfx","flags","medium",flag_name)), format='tga')
         w_s, h_s = scales['flag_small']; flag_small = ImageZoom(flag, w=w_s, h=h_s); ImageSave(flag_small, F(pjoin("gfx","flags","small",flag_name)), format='tga')
-
-def CreateDefaultCountry(path, img=None, info=dict()):
-    '''
-    Create a default country resource folder from the given image.
-    Args:
-        img: image.Image. A `wand` image object.
-        path: str. The path of the target resource folder of the country.
-        info: Dict. The country definition.
-    Return:
-        None
-    '''
-    CreateFolder(path); CreateFolder(pjoin(path,"flags"))
-    if img is None:
-        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
-    ImageSave(img, pjoin(path,"flags","default"), format='png')
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@NAME]\n{info['name']}\n")

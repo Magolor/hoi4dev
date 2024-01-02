@@ -59,7 +59,10 @@ def AddTechnology(path, translate=True):
     
     # Add technology icons (notice that the gfx should always be named '_medium' even if the size is small)
     scales = get_mod_config('img_scales'); w, h = scales[f'equipment_{size}']
-    icon = ImageZoom(ImageFind(pjoin(path,"default")), w=w, h=h)
+    icon = ImageFind(pjoin(path,"default"))
+    if icon is None:
+        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+    icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}")), format='dds')
     Edit(F(pjoin("data","interface","technologies",f"TECHNOLOGY_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_TECHNOLOGY_{tag}_medium", "texturefile": pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}.dds")}}})
     
@@ -94,23 +97,3 @@ def AddTechnology(path, translate=True):
             },
         }], d=True)
         SaveJson(countrytechtreeview, F(pjoin("data","interface","countrytechtreeview.json")), indent=4)
-
-def CreateDefaultTechnology(path, img, info=dict()):
-    '''
-    Create a default technology resource folder from the given image.
-    Args:
-        path: str. The path of the target resource folder of the technology.
-        img: image.Image. A `wand` image object.
-        info: Dict. The technology definition.
-    Return:
-        None
-    '''
-    CreateFolder(path)
-    if img is None:
-        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
-    ImageSave(img, pjoin(path,"default"), format='png')
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@]\n{info['name']}\n")

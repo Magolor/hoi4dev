@@ -17,6 +17,9 @@ def find_dup(key, ccl_dict):
 def find_ori(key):
     return key.split('__D')[0] if '__D' in key else key
 
+def find_idx(key):
+    return int(key.split('__D')[1]) if '__D' in key else 0
+
 def merge_dicts(l, d=False):
     merged = {}
     for x in l:
@@ -25,7 +28,7 @@ def merge_dicts(l, d=False):
                 key = key[1:]; skip_d = True
             else:
                 skip_d = False
-            if d and (key in merged) and (not skip_d):
+            if d and (not skip_d):
                 merged[find_dup(key, merged)] = value
             else:
                 if (key in merged) and isinstance(merged[key], dict) and isinstance(value, dict):

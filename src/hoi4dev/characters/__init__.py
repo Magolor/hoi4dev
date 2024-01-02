@@ -60,23 +60,3 @@ def AddCharacter(path, translate=True):
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
         ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
         ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')
-
-def CreateDefaultCharacter(path, img, info=dict()):
-    '''
-    Create a default character resource folder from the given image.
-    Args:
-        path: str. The path of the target resource folder of the character.
-        img: image.Image. A `wand` image object.
-        info: Dict. The character definition.
-    Return:
-        None
-    '''
-    CreateFolder(path); CreateFolder(pjoin(path,"portraits"))
-    if img is None:
-        img = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_portrait.png")))
-    ImageSave(img, pjoin(path,"portraits","default"), format='png')
-    SaveJson(info, pjoin(path,"info.json"), indent=4)
-    CreateFile(pjoin(path,"locs.txt"))
-    if 'name' in info:
-        with open(pjoin(path,"locs.txt"), "w") as f:
-            f.write(f"[en.@NAME]\n{info['name']}\n")
