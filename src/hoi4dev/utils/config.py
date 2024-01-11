@@ -53,3 +53,5 @@ def F(path):
     return pjoin(get_config("CURRENT_MOD_PATH"), path)
 def get_mod_config(key=None):
     config = LoadJson(F(pjoin('hoi4dev_settings', 'config.json'))); return config if key is None else (config[key] if key in config else None)
+def set_mod_config(key, value):
+    config = get_mod_config(); config[key] = value; SaveJson(config, F(pjoin('hoi4dev_settings', 'config.json')), indent=4)

@@ -1,6 +1,6 @@
 from ..utils import *
 
-MAIN_DIRECTORIES = ['common', 'events', 'gfx', 'history', 'interface', 'music', 'sound']
+MAIN_DIRECTORIES = ['common', 'events', 'gfx', 'history', 'interface', 'music', 'sound', 'tutorial']
 def CreateMod(name, **kwargs):
     '''
     Initialize a new mod.
@@ -16,16 +16,10 @@ def CreateMod(name, **kwargs):
     - img_scales: Dict. Image scales of the mod. Like {'loadingscreen': (1920,1080), ...}.
     - copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.
     - replace_paths: list. List of files to be replaced.
-    - clear: bool. Whether to clear the mod folder before creating the mod. Notice that even if `clear` is false, the mod's MAIN_DIRECTORIES (which include `common`, `gfx`, `history`, `interface`, `music`, `sound`) will still be cleared for consistency.
     '''
     mods_path = get_config('HOI4_MODS_PATH')
     root = pjoin(mods_path, name)
-    if "clear" in kwargs and kwargs['clear']:
-        ClearFolder(root, rm=True)
-    else:
-        CreateFolder(root)
-        for p in MAIN_DIRECTORIES:
-            ClearFolder(pjoin(root, p), rm=True)
+    ClearFolder(root, rm=True)
     
     if "copies" in kwargs:
         CopyFolder(kwargs["copies"], root, rm=True)

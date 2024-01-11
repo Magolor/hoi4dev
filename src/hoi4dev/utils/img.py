@@ -269,7 +269,7 @@ def SetLoadingScreenImages(imgs, main=None):
         ImageSave(ImageZoom(img, w=w_l, h=h_l), F(pjoin("gfx","loadingscreens",f"load_{i+1}")), format='dds')
     main_img = ImageZoom(main, w=w_m, h=h_m)
     # Should the main image be saved with a 'loadingscreens' ratio?
-    # ImageSave(main_img, F(pjoin("gfx","loadingscreens",f"load_5")), format='dds')
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens",f"load_5")), format='dds')
     # La Resistance
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
     # Together for Victory

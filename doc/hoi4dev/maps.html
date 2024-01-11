@@ -33,6 +33,16 @@
                     <li><a href="maps/state_stats.html">state_stats</a></li>
             </ul>
 
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="function" href="#get_num_states">get_num_states</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_num_provs">get_num_provs</a>
+            </li>
+    </ul>
+
 
 
         <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev" target="_blank">
@@ -55,10 +65,54 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="o">*</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="kn">from</span> <span class="nn">.map2graph</span> <span class="kn">import</span> <span class="o">*</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span> <span class="nn">.state_stats</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="k">def</span> <span class="nf">get_num_states</span><span class="p">():</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a>    <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ListFiles</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">)))</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">)])</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a><span class="k">def</span> <span class="nf">get_num_provs</span><span class="p">():</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a>    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">LoadJson</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">,</span><span class="n">f</span><span class="p">)))[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;provinces&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ListFiles</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">)))</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">)])</span>
 </span></pre></div>
 
 
             </section>
+                <section id="get_num_states">
+                            <input id="get_num_states-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_num_states</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="get_num_states-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_num_states"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_num_states-6"><a href="#get_num_states-6"><span class="linenos">6</span></a><span class="k">def</span> <span class="nf">get_num_states</span><span class="p">():</span>
+</span><span id="get_num_states-7"><a href="#get_num_states-7"><span class="linenos">7</span></a>    <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ListFiles</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">)))</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">)])</span>
+</span></pre></div>
+
+
+    
+
+                </section>
+                <section id="get_num_provs">
+                            <input id="get_num_provs-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_num_provs</span><span class="signature pdoc-code condensed">(<span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="get_num_provs-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_num_provs"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_num_provs-9"><a href="#get_num_provs-9"><span class="linenos"> 9</span></a><span class="k">def</span> <span class="nf">get_num_provs</span><span class="p">():</span>
+</span><span id="get_num_provs-10"><a href="#get_num_provs-10"><span class="linenos">10</span></a>    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">LoadJson</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">,</span><span class="n">f</span><span class="p">)))[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;provinces&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ListFiles</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span><span class="s2">&quot;map&quot;</span><span class="p">,</span><span class="s2">&quot;converted_states&quot;</span><span class="p">)))</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">)])</span>
+</span></pre></div>
+
+
+    
+
+                </section>
     </main>
 <script>
     function escapeHTML(html) {

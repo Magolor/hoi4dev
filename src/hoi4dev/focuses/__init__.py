@@ -128,7 +128,7 @@ class FocusNode:
             c.position(x_, y+1); x_ += c.d['pw']
     
     def final(self):
-        return {k:v for k,v in self.d.items() if k not in ['x','y','px','py','pw','dx','dy','dw','dc','parent']} | {'x':self.d['px']+self.d['pw']//2,'y':self.d['py']}
+        return {k:v for k,v in self.d.items() if k not in ['x','y','px','py','pw','dx','dy','dw','dc','parent','priority']} | {'x':self.d['px']+self.d['pw']//2,'y':self.d['py']}
 
 def topo_sort(nodes):
     b = {k:0 for k in nodes}
@@ -188,4 +188,5 @@ def AddFocusTree(path, translate=True):
     for focus in ListFolders(path):
         if not focus.startswith('__'):
             AddNationalFocus(pjoin(path, focus), tree=tree, translate=translate)
-    CompileFocusTree(F(pjoin("data","focus_trees",tree)))
+    tree_path = F(pjoin("data","focus_trees",tree)); CreateFolder(tree_path)
+    CompileFocusTree(tree_path)

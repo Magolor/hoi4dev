@@ -33,6 +33,29 @@ def AddEvent(path, space, translate=True):
             c = find_idx(o)
             if 'name' not in info[o]:
                 info[o]['name'] = f"EVENT_{space}_{tag}_o{c}"
+    if 'date' in info:
+        date = info.pop('date')
+        assert ("date_scope" in info), f"Event {space}.{tag} has 'date' but no 'date_scope'."
+        date_scope = info.pop('date_scope')
+        bookmark_date = get_mod_config('bookmark_date')
+        if '~' in date:
+            start_date, end_date = [d.strip() for d in date.split('~')]
+            delta = get_num_days(start_date, end_date)
+        else:
+            start_date, delta = date.strip(), 0
+        on_action = {
+            "on_startup": {
+                "effect": {
+                    date_scope: {
+                        f"{category}_event": {
+                            "id": f"{space}.{tag}",
+                            "days": get_num_days(bookmark_date,start_date),
+                        } | ({"random_days": delta} if delta else {})
+                    }
+                }
+            }
+        }
+        SaveJson({"on_actions": on_action}, F(pjoin("data","common","on_actions",f"EVENT_{space}_{tag}_on_actions.json")), indent=4)
 
     # Add event localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"EVENT_{space}_{tag}", translate=translate)
@@ -66,7 +89,7 @@ def AddEventSpace(path, translate=True):
     for event in ListFolders(path):
         if not event.startswith('__'):
             AddEvent(pjoin(path, event), space=space, translate=translate)
-    event_space_path = F(pjoin("data","event_spaces",space))
+    event_space_path = F(pjoin("data","event_spaces",space)); CreateFolder(event_space_path)
     event_files = [file for file in ListFiles(event_space_path) if file.endswith('.json')]
     events = [LoadJson(pjoin(event_space_path,file)) for file in sorted(event_files, key=lambda x: int(Prefix(x).split('_')[-1]))]
     event_space = merge_dicts([{"add_namespace": space}] + events, d=True)

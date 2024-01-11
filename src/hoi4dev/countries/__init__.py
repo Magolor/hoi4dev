@@ -1,6 +1,23 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
+def sort_history_priority(key):
+    priority_list = [
+        'capital',
+        'set_popularities',
+        'set_politics',
+        'recruit_character',
+        'activate_advisor',
+        'add_ideas',
+        'create_faction',
+        'add_to_faction',
+        'oob',
+        'set_power_balance',
+        'add_power_balance_modifier'
+    ]
+    priority_dict = {k:len(priority_list)-i for i, k in enumerate(priority_list)}
+    return priority_dict.get(find_ori(key), 0)
+
 def AddCountry(path, translate=True):
     '''
     Add a country to the mod.
@@ -20,8 +37,11 @@ def AddCountry(path, translate=True):
     info['color'] = "rgb { "+' '.join([str(x) for x in info['rgb']])+ " }"; info.pop('rgb')
     if 'oob' not in history:
         history['oob'] = tag
-    # if 'ruling_party' not in info:
-    #     info['ruling_party'] = max(info['popularities'], key=lambda k: info['popularities'][k])
+    for key in [k for k in history.keys() if k.endswith("_batch")]:
+        for value in history[key]:
+            history[find_dup(key[:-6], history)] = value
+        history.pop(key)
+    history = {k: v for k, v in sorted(history.items(), key=lambda item: sort_history_priority(item[0]), reverse=True)}
     
     # Add country tag
     Edit(F(pjoin("data","common","country_tags","00_countries.json")), {tag: f"countries/{tag}.txt"}, clear=False)
