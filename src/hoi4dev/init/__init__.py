@@ -35,6 +35,7 @@ def CreateMod(name, **kwargs):
     SaveJson(LoadJson(find_resource('configs/copy.json')), pjoin(root, 'hoi4dev_settings', 'copy.json'), indent=4)
     SaveJson(LoadJson(find_resource('configs/manpower.json')), pjoin(root, 'hoi4dev_settings', 'manpower.json'), indent=4)
     SaveJson(LoadJson(find_resource('configs/buildings.json')), pjoin(root, 'hoi4dev_settings', 'buildings.json'), indent=4)
+    SaveJson(LoadJson(find_resource('configs/resources.json')), pjoin(root, 'hoi4dev_settings', 'resources.json'), indent=4)
     SaveJson({}, pjoin(root, 'hoi4dev_settings', 'term_table.json'), indent=4)
     CreateFolder(pjoin(root, 'hoi4dev_settings', 'imgs'))
     for file in ListFiles(find_resource('imgs/defaults')):

@@ -38,7 +38,8 @@ def AddCharacter(path, translate=True):
         }, info['country_leader']])
     if 'advisor' in info:
         info['advisor'] = merge_dicts([{
-            'idea_token': f"IDEA_CHARACTER_{tag}",
+            'idea_token': f"CHARACTER_{tag}",
+            'desc': f"CHARACTER_{tag}_DESC",
             'traits': [],
             'ledger': "all",
             'can_be_fired': True,

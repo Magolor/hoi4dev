@@ -11,6 +11,7 @@ def sort_history_priority(key):
         'add_ideas',
         'create_faction',
         'add_to_faction',
+        'set_technology',
         'oob',
         'set_power_balance',
         'add_power_balance_modifier'
@@ -34,6 +35,7 @@ def AddCountry(path, translate=True):
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)
     history = info['history']; info.pop('history')
+    ai = info.pop('ai', None)
     info['color'] = "rgb { "+' '.join([str(x) for x in info['rgb']])+ " }"; info.pop('rgb')
     if 'oob' not in history:
         history['oob'] = tag
@@ -58,9 +60,14 @@ def AddCountry(path, translate=True):
     # Initialize country history
     Edit(F(pjoin("data","history","countries",f"{tag}.json")), history)
     
+    # Add country ai
+    if ai is not None:
+        ai_strategy_plans_name = ai['name'] if 'name' in ai else 'default'
+        Edit(F(pjoin("data","common","ai_strategy_plans",f"{tag}_{ai_strategy_plans_name}.json")), {f"{tag}_{ai_strategy_plans_name}": ai})
+    
     # Add country flags
-    for flag_file in ListFiles(pjoin(path,"flags")):
-        flag = ImageFind(pjoin(path,"flags",flag_file))
+    for flag_file in [f for f in ListFiles(pjoin(path,"flags")) if f!='.DS_Store']:
+        flag = ImageFind(pjoin(path,"flags",Prefix(flag_file)))
         if flag is None:
             flag = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
         scales = get_mod_config('img_scales')

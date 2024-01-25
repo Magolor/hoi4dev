@@ -255,6 +255,7 @@ def CCLDict2List(ccl_dict):
     Please pay attention to the behavior of this function:
     1. Duplicated keys with "__D" will be merged to the same key. For example, `{"tag": "USA", "tag__D1": "GER", "tag__D2": "SOV"}` will be converted to `[{"tag": "USA"}, {"tag": "GER"}, {"tag": "SOV"}]`.
     2. Values will not be modified whatsoever.
+    3. (sus) Nested lists may be processed incorrectly.
     '''
     if isinstance(ccl_dict, list):
         assert (ccl_dict == list()), "The input should be a dictionary unless it is an empty list!"
@@ -338,6 +339,7 @@ def CCLConvert(src_path, tgt_path):
     Return:
         str. tgt_path.
     '''
+    CreateFile(tgt_path)
     if (is_ccl(src_path)) and (is_ccl(tgt_path)):
         CopyFile(src_path, tgt_path); return tgt_path
     if (not is_ccl(src_path)) and (not is_ccl(tgt_path)):

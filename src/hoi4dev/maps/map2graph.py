@@ -19,10 +19,11 @@ def ConvertStates(path):
         format = 'json',
     )
     provs_table = pd.read_csv(F("map/definition.csv"), header=None, sep=';', dtype=str)
-    provs_table.columns = ['Province ID', 'R value', 'G value', 'B value', 'Province type', 'Coastal status', 'Terrian', 'Continent']
+    provs_table.columns = ['Province ID', 'R value', 'G value', 'B value', 'Province type', 'Coastal status', 'Terrain', 'Continent']
     for state_file in [f for f in ListFiles(F("data/map/converted_states")) if f.endswith('.json')]:
         state_data = LoadJson(pjoin(F("data/map/converted_states"),state_file))
         state_data['state']['//Coastal'] = bool(provs_table.loc[state_data['state']['provinces'],'Coastal status'].any())
+        state_data['state']['//Terrain'] = provs_table.loc[state_data['state']['provinces'],'Terrain'].value_counts().index[0]
         SaveJson(state_data, pjoin(F("data/map/converted_states"),state_file), indent=4)
 
 def DeployStates():
@@ -129,7 +130,7 @@ def StateContinentsFlooding(state_tags):
     states = set([tag[0] for tag in state_tags])
     
     provs_table = pd.read_csv(F("map/definition.csv"), header=None, sep=';', dtype=str)
-    provs_table.columns = ['Province ID', 'R value', 'G value', 'B value', 'Province type', 'Coastal status', 'Terrian', 'Continent']
+    provs_table.columns = ['Province ID', 'R value', 'G value', 'B value', 'Province type', 'Coastal status', 'Terrain', 'Continent']
     while queue:
         state_id, tag, depth = queue.pop(0)
         state_data = LoadJson(pjoin(F("data/map/converted_states"),f"{state_id}.json"))

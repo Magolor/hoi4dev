@@ -25,6 +25,13 @@ def AddArchetype(path, translate=True):
     # Initialize archetype definition
     Edit(F(pjoin("data","common","units","equipment",f"ARCHETYPE_{tag}.json")), {'equipments': {f"ARCHETYPE_{tag}": info}})
 
+    # Update script_enums
+    script_enums = LoadJson(F(pjoin("data","common","script_enums.json")))
+    script_enum_equipment_bonus_type = set(script_enums['script_enum_equipment_bonus_type'])
+    script_enum_equipment_bonus_type.add(f"ARCHETYPE_{tag}")
+    script_enums['script_enum_equipment_bonus_type'] = list(script_enum_equipment_bonus_type)
+    SaveJson(script_enums, F(pjoin("data","common","script_enums.json")), indent=4)
+
 def AddEquipment(path, translate=True, debug=False):
     '''
     Add an equipment to the mod. Notice that the equipment will not take effect until it is compiled using `AddEquipments` function.
@@ -135,6 +142,13 @@ def AddEquipment(path, translate=True, debug=False):
     
     # Initialize equipment definition
     Edit(F(pjoin("data","equipments",f"EQUIPMENT_{tag}.json")), {'equipments': {f"EQUIPMENT_{tag}": info}})
+
+    # Update script_enums
+    script_enums = LoadJson(F(pjoin("data","common","script_enums.json")))
+    script_enum_equipment_bonus_type = set(script_enums['script_enum_equipment_bonus_type'])
+    script_enum_equipment_bonus_type.add(f"EQUIPMENT_{tag}")
+    script_enums['script_enum_equipment_bonus_type'] = list(script_enum_equipment_bonus_type)
+    SaveJson(script_enums, F(pjoin("data","common","script_enums.json")), indent=4)
     
     # Add equipment pictures
     scales = get_mod_config('img_scales'); w, h = scales['equipment_medium']

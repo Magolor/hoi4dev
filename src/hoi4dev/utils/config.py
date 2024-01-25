@@ -21,7 +21,7 @@ def find_idx(key):
     return int(key.split('__D')[1]) if '__D' in key else 0
 
 def merge_dicts(l, d=False):
-    merged = {}
+    merged = dict()
     for x in l:
         for key, value in x.items():
             if key.startswith('$'):
@@ -36,6 +36,31 @@ def merge_dicts(l, d=False):
                 else:
                     merged[key] = value
     return merged
+
+def replace_list(l, pattern, target):
+    replaced = list()
+    for value in l:
+        if isinstance(value, str):
+            replaced_value = value if pattern not in value else value.replace(pattern, target)
+        elif isinstance(value, dict):
+            replaced_value = replace_dict(value, pattern, target)
+        elif isinstance(value, list):
+            replaced_value = replace_list(value, pattern, target)
+        replaced.append(replaced_value)
+    return replaced
+
+def replace_dict(d, pattern, target):
+    replaced = dict()
+    for key, value in d.items():
+        replaced_key = key if pattern not in key else key.replace(pattern, target)
+        if isinstance(value, str):
+            replaced_value = value if pattern not in value else value.replace(pattern, target)
+        elif isinstance(value, dict):
+            replaced_value = replace_dict(value, pattern, target)
+        elif isinstance(value, list):
+            replaced_value = replace_list(value, pattern, target)
+        replaced[replaced_key] = replaced_value
+    return replaced
 
 RESOURCES_PATH = pjoin("resources")
 def find_resource(name):

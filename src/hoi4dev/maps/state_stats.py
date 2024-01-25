@@ -57,7 +57,7 @@ def RandomBuildings(state_category, is_coastal=False):
     Return:
         int. The manpower of the state.
     
-    The default category-to-buildings table is stored at `hoi4dev_settings/buildings.json` in the mod folder. You can modify it to change the average manpower of each category type.
+    The default category-to-buildings table is stored at `hoi4dev_settings/buildings.json` in the mod folder. You can modify it to change the average builings of each category type.
     '''
     buildings_config = LoadJson(F('hoi4dev_settings/buildings.json'))
     buildings = dict()
@@ -93,4 +93,51 @@ def GenerateBuildings(behavior='max'):
                     'add': lambda x,y: x+y,
                     'replace': lambda x,y: y
                 }[behavior](random_buildings[k], state_data['state']['history']['buildings'][k])
+        SaveJson(state_data, pjoin(F("data/map/converted_states"),state_file), indent=4)
+
+def RandomResources(state_category, state_terrain="unknown"):
+    '''
+    Generate a random resources distribution for a state.
+    Args:
+        state_category: str. The category of the state.
+        state_terrain: str. The terrain of the state.
+    Return:
+        int. The manpower of the state.
+    
+    The default category-to-resources table is stored at `hoi4dev_settings/resources.json` in the mod folder. You can modify it to change the average resources of each category type.
+    '''
+    resources_config = LoadJson(F('hoi4dev_settings/resources.json'))
+    resources = dict()
+    for resource_type, probs in resources_config['probs'][state_category].items():
+        num = random_progression(probs)
+        if num: resources[resource_type] = num*resources_config['units'][resource_type]
+    for resource_type, probs in resources_config['probs'][state_terrain].items():
+        num = random_progression(probs)
+        if num: resources[resource_type] = num*resources_config['units'][resource_type] + (resources[resource_type] if resource_type in resources else 0)
+    return resources
+
+def GenerateResources(behavior='max'):
+    '''
+    Generate random resources for all states.
+    Args:
+        behavior: str. 'max', 'add', or 'replace'. If 'max', the generated resources will be merged with the existing resources, and the maximum value will be used. If 'add', the generated resources will be merged with the existing resources, and the values will be added. If 'replace', the generated resources will replace the existing resources.
+    Return:
+        None
+    
+    Please refer to `RandomResources()` for the random generation formula.
+    '''
+    for state_file in [f for f in ListFiles(F("data/map/converted_states")) if f.endswith('.json')]:
+        state_data = LoadJson(pjoin(F("data/map/converted_states"),state_file))
+        random_resources = RandomResources(state_data['state']['state_category'], state_terrain=state_data['state']['//Terrain'])
+        if not state_data['state']['resources']:
+            state_data['state']['resources'] = dict()
+        for k in random_resources:
+            if k not in state_data['state']['resources']:
+                state_data['state']['resources'][k] = random_resources[k]
+            else:
+                state_data['state']['resources'][k] = {
+                    'max': lambda x,y: max(x,y),
+                    'add': lambda x,y: x+y,
+                    'replace': lambda x,y: y
+                }[behavior](random_resources[k], state_data['state']['resources'][k])
         SaveJson(state_data, pjoin(F("data/map/converted_states"),state_file), indent=4)

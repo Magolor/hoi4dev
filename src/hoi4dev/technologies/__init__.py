@@ -47,8 +47,8 @@ def AddTechnology(path, translate=True):
         'folder': {
             'name': f"{category}{'' if category in ['mtgnaval', 'mtgnavalsupport'] else '_'}folder",
             'position': { 'x': x, 'y': y },
-            'force_use_small_tech_layout': (size=='small'),
-        }
+        },
+        'force_use_small_tech_layout': (size=='small'),
     }, info])
     
     # Add technology localisation

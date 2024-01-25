@@ -49,20 +49,25 @@ def ReadTxtLocs(path, scope=""):
         text = ""; key = None; language = None
         for line in f.readlines():
             if line.strip().startswith('[') and line.strip().endswith(']'):
-                add(key, language, text); text = ""
-                language, key = (line.split('[')[-1].split(']')[0]).split('.',1)
+                stripped_line = line.strip().strip('[]')
+                if ('.' not in stripped_line) or (len(stripped_line.split('.',1)[0])!=2):
+                    text += line
+                else:
+                    add(key, language, text); text = ""
+                    language, key = stripped_line.split('.',1)
             else:
                 text += line
     add(key, language, text)
     return locs
 
-def SaveLocs(locs, name, path, clear=True):
+def SaveLocs(locs, name, path, replace=False, clear=True):
     '''
     Save localisation to separate `.yml` files.
     Args:
         locs: Dict. The localisation to save.
         name: str. The name of the localisation file (you do not need to add `_l_{language}.yml`).
         path: str. The path of the localisation folder.
+        replace: str. Whether to put the localisation in the `replace` folder.
         clear: bool. Whether to clear the localisation file before saving.
     Return:
         None
@@ -70,13 +75,13 @@ def SaveLocs(locs, name, path, clear=True):
     languages = set([language for value in locs.values() for language in value.keys()])
     for language in languages:
         hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
-        yml_file = pjoin(path, hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
+        yml_file = pjoin(path, "replace" if replace else hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
         if clear or (not ExistFile(yml_file)):
             CopyFile(find_resource(f'localisations/empty_l_{hoi4_lang}.yml'), yml_file)
     for key, value in locs.items():
         for language, value in value.items():
             hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
-            yml_file = pjoin(path, hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
+            yml_file = pjoin(path, "replace" if replace else hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
             with open(yml_file, 'a', encoding='utf-8') as f:
                 s = repr(value)
                 if s.startswith("'") and s.endswith("'"):

@@ -2,7 +2,10 @@
     "CreateFolder": [
         "common/decisions/categories",
         "common/units/equipment",
+        "common/units/names",
         "common/units/names_divisions",
+        "common/units/names_railway_guns",
+        "common/units/names_ships",
         "events",
         "gfx/interface/bop",
         "gfx/interface/counters/divisions_large",
@@ -26,9 +29,14 @@
         "data/event_spaces",
         "data/equipments",
         "data/common/units/equipment",
+        "data/common/units/names",
         "data/common/units/names_divisions",
+        "data/common/units/names_railway_guns",
+        "data/common/units/names_ships",
         "data/common/on_actions",
-        "data/history/units"
+        "data/history/units",
+        "history/units",
+        "tutorial"
     ],
     "CopyFile": [
         "common/ai_equipment/_documentation.info",
@@ -142,7 +150,6 @@
         "common/country_tags/zz_dynamic_countries.txt",
         "common/combat_tactics.txt",
         "common/decisions/_debug_decisions.txt",
-        "common/decisions/_generic_decisions.txt",
         "common/decisions/categories/00_decision_categories.txt",
         "common/difficulty_settings/00_difficulty.txt",
         "common/dynamic_modifiers/0_dynamic_modifiers.txt",

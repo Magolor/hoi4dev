@@ -22,17 +22,18 @@ def PopulateLocs(locs, languages=["zh", "en", "ru"], translation=LLMTranslate):
 
 from ..utils import *
 
-def AddLocalisation(locs_file, scope="", translate=True):
+def AddLocalisation(locs_file, scope="", translate=True, replace=False):
     '''
     Convert the localisation file to a `yml` file and add it to the mod.
     Args:
         locs_file: str. The path of the localisation file.
         scope: str. The scope of the localisation file.
         translate: bool. Whether to translate the localisation file.
+        replace: str. Whether to put the localisation in the `replace` folder.
     Return:
         None
     '''
     locs = ReadTxtLocs(locs_file, scope=scope) if ExistFile(locs_file) else {}
     if translate:
         locs = PopulateLocs(locs, languages=get_mod_config('languages'))
-    SaveLocs(locs, name=scope, path=F(pjoin("data","localisation")))
+    SaveLocs(locs, name=scope, path=F(pjoin("data","localisation")), replace=replace)
