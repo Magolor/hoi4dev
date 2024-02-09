@@ -85,5 +85,5 @@ def AddInitialArmy(path):
             } | div})
     Edit(
         F(pjoin("data","history","units",f"{tag}.json")),
-        {'$units': merge_dicts(initial_army, d=True)}
+        {'$units': merge_dicts(initial_army, d=True)}, d=True
     )

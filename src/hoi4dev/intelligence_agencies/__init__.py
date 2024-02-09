@@ -1,7 +1,7 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def InitIntelAgency():
+def InitIntelAgencies():
     '''
     Initialize intelligence agencies.
     Args:
@@ -41,4 +41,8 @@ def AddIntelAgency(path, translate=True):
         assert (icon is not None), "The default intelligence agency icon is not found!"
     icon = CreateIntelAgencyImage(ImageZoom(icon, w=w, h=h))
     ImageSave(icon, F(pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}")), format='dds')
-    Edit(F(pjoin("data","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_INTEL_AGENCY_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"INTEL_AGENCY_{tag}.dds")}}})
+    Edit(F(pjoin("data","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.json")), {'spriteTypes': {'spriteType': {
+        "name": f"GFX_INTEL_AGENCY_{tag}",
+        "texturefile": pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.dds"),
+        "noOfFrames": 2,
+    }}})
