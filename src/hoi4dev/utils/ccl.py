@@ -118,7 +118,7 @@ def ccl_repr(t):
     if t=='':
         return '""'
     if (
-        ((' ' in t) or ('\t' in t) or ('\n' in t) or ("'" in t) or ("/" in t))
+        ((' ' in t) or ('\t' in t) or ('\n' in t) or ("'" in t) or ("/" in t) or ('[' in t) or (']' in t))
     and (not (t.startswith('rgb') or t.startswith('hsv')))
     and (not ('^' in t))
     and (not (re.match(r'^\d{2}:\d{2}$', t) is not None))
@@ -374,6 +374,8 @@ def Edit(file, dict, d=False, clear=True):
     Return:
         None
     '''
+    if d:
+        clear = False
     if is_ccl(file):
         SaveTxt(Dict2CCL(merge_dicts([{} if clear else CCL2Dict(ReadTxt(file)), dict], d=d) if ExistFile(file) else dict), file)
     else:

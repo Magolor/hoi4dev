@@ -15,5 +15,6 @@ from .decisions import *
 from .focuses import *
 from .events import *
 from .bops import *
+from .intelligence_agencies import *
 
 __version__ = '0.1.0.0'

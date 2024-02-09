@@ -31,21 +31,27 @@ def AddCharacter(path, translate=True):
     },LoadJson(pjoin(path,"info.json"))])
     # name = info.pop('name', None)
     info['name'] = f"CHARACTER_{tag}_NAME"
-    if 'country_leader' in info:
-        info['country_leader'] = merge_dicts([{
-            'desc': f"CHARACTER_{tag}_DESC",
-            'traits': [],
-        }, info['country_leader']])
-    if 'advisor' in info:
-        info['advisor'] = merge_dicts([{
-            'idea_token': f"CHARACTER_{tag}",
-            'desc': f"CHARACTER_{tag}_DESC",
-            'traits': [],
-            'ledger': "all",
-            'can_be_fired': True,
-            'cost': 150,
-            'removal_cost': 150,
-        }, info['advisor']])
+    for key in dup_gen('country_leader'):
+        if key in info:
+            info[key] = merge_dicts([{
+                'desc': f"CHARACTER_{tag}_DESC",
+                'traits': [],
+            }, info[key]])
+        else:
+            break
+    for key in dup_gen('advisor'):
+        if key in info:
+            info[key] = merge_dicts([{
+                'idea_token': f"CHARACTER_{tag}",
+                'desc': f"CHARACTER_{tag}_DESC",
+                'traits': [],
+                'ledger': "all",
+                'can_be_fired': True,
+                'cost': 150,
+                'removal_cost': 150,
+            }, info[key]])
+        else:
+            break
     
     # Add character localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"CHARACTER_{tag}", translate=translate)
@@ -57,7 +63,8 @@ def AddCharacter(path, translate=True):
     for portrait_file in ['default', 'army', 'navy']:
         portrait = ImageFind(pjoin(path,"portraits",portrait_file))
         if portrait is None:
-            portrait = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_portrait.png")))
+            portrait = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_portrait")), find_default=False)
+            assert (portrait is not None), "The default portrait is not found!"
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
         ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
         ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')

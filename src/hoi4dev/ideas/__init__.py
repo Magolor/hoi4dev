@@ -30,7 +30,8 @@ def AddIdea(path, translate=True):
     scales = get_mod_config('img_scales'); w, h = scales['idea']
     icon = ImageFind(pjoin(path,"default"))
     if icon is None:
-        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_idea")), find_default=False)
+        assert (icon is not None), "The default idea icon is not found!"
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})

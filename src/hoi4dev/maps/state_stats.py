@@ -18,11 +18,11 @@ def RandomManpower(state_category):
     Return:
         int. The manpower of the state.
     
-    The default category-to-average-manpower table is stored at `hoi4dev_settings/manpower.json` in the mod folder. You can modify it to change the average manpower of each category type.
+    The default category-to-average-manpower table is stored at `hoi4dev_settings/configs/manpower.json` in the mod folder. You can modify it to change the average manpower of each category type.
     This formula only consider the category of the state, instaed of the size of the state.
     The manpower of the state is generated from a Gaussian distribution with 3x std hard limit.
     '''
-    manpower_config = LoadJson(F('hoi4dev_settings/manpower.json'))
+    manpower_config = LoadJson(F(pjoin("hoi4dev_settings","configs","manpower.json")))
     return hard_gaussian(manpower_config['mean'][state_category], manpower_config['std'])
 
 def GenerateManpower():
@@ -57,9 +57,9 @@ def RandomBuildings(state_category, is_coastal=False):
     Return:
         int. The manpower of the state.
     
-    The default category-to-buildings table is stored at `hoi4dev_settings/buildings.json` in the mod folder. You can modify it to change the average builings of each category type.
+    The default category-to-buildings table is stored at `hoi4dev_settings/configs/buildings.json` in the mod folder. You can modify it to change the average builings of each category type.
     '''
-    buildings_config = LoadJson(F('hoi4dev_settings/buildings.json'))
+    buildings_config = LoadJson(F(pjoin("hoi4dev_settings","configs","buildings.json")))
     buildings = dict()
     for building_type, probs in buildings_config['probs'][state_category].items():
         num = random_progression(probs)
@@ -104,9 +104,9 @@ def RandomResources(state_category, state_terrain="unknown"):
     Return:
         int. The manpower of the state.
     
-    The default category-to-resources table is stored at `hoi4dev_settings/resources.json` in the mod folder. You can modify it to change the average resources of each category type.
+    The default category-to-resources table is stored at `hoi4dev_settings/configs/resources.json` in the mod folder. You can modify it to change the average resources of each category type.
     '''
-    resources_config = LoadJson(F('hoi4dev_settings/resources.json'))
+    resources_config = LoadJson(F(pjoin("hoi4dev_settings","configs","resources.json")))
     resources = dict()
     for resource_type, probs in resources_config['probs'][state_category].items():
         num = random_progression(probs)

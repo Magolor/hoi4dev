@@ -13,7 +13,6 @@ def AddTrait(path, translate=True):
     tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
         'random': False,
-        'sprite': 1,
         "ai_will_do": {"factor": 1},
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)

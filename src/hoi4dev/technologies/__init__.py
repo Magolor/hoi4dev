@@ -61,7 +61,8 @@ def AddTechnology(path, translate=True):
     scales = get_mod_config('img_scales'); w, h = scales[f'equipment_{size}']
     icon = ImageFind(pjoin(path,"default"))
     if icon is None:
-        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+        assert (icon is not None), "The default technology icon is not found!"
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}")), format='dds')
     Edit(F(pjoin("data","interface","technologies",f"TECHNOLOGY_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_TECHNOLOGY_{tag}_medium", "texturefile": pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}.dds")}}})

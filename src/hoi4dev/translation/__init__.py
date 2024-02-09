@@ -1,5 +1,6 @@
 from .lm import LMTranslate
 from .llm import LLMTranslate
+from .manual import ManualTranslate
 
 from copy import deepcopy
 

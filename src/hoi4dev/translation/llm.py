@@ -25,7 +25,7 @@ def LLMTranslate(src, src_lang='zh', tgt_lang='en'):
     if llm is None:
         llm = LLM()
     prompt = f"Please translate the following text from {LANGUAGE_MAPPING[src_lang]['nl']} to {LANGUAGE_MAPPING[tgt_lang]['nl']}:\n"
-    term_table = LoadJson(F("hoi4dev_settings/term_table.json"))
+    term_table = LoadJson(F(pjoin("hoi4dev_settings", "configs", "term_table.json")))
     terms = list(term_table[f"{src_lang}-{tgt_lang}"].items()) if f"{src_lang}-{tgt_lang}" in term_table else list()
     useful_terms = [f"{s}: {t}" for s, t in terms if contain(src, s)]
     term_table_prompt = "Here are some terms that may be useful for reference:\n" + ("\n".join(useful_terms))

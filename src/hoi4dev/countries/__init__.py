@@ -2,22 +2,20 @@ from ..utils import *
 from ..translation import AddLocalisation
 
 def sort_history_priority(key):
-    priority_list = [
+    return sort_priority(key, [
         'capital',
         'set_popularities',
         'set_politics',
-        'recruit_character',
-        'activate_advisor',
-        'add_ideas',
         'create_faction',
         'add_to_faction',
         'set_technology',
         'oob',
+        'recruit_character',
+        'activate_advisor',
+        'add_ideas',
         'set_power_balance',
         'add_power_balance_modifier'
-    ]
-    priority_dict = {k:len(priority_list)-i for i, k in enumerate(priority_list)}
-    return priority_dict.get(find_ori(key), 0)
+    ])
 
 def AddCountry(path, translate=True):
     '''
@@ -43,7 +41,7 @@ def AddCountry(path, translate=True):
         for value in history[key]:
             history[find_dup(key[:-6], history)] = value
         history.pop(key)
-    history = {k: v for k, v in sorted(history.items(), key=lambda item: sort_history_priority(item[0]), reverse=True)}
+    history = {k: v for k, v in sorted(history.items(), key=lambda item: sort_history_priority(item[0]))}
     
     # Add country tag
     Edit(F(pjoin("data","common","country_tags","00_countries.json")), {tag: f"countries/{tag}.txt"}, clear=False)
@@ -69,10 +67,9 @@ def AddCountry(path, translate=True):
     for flag_file in [f for f in ListFiles(pjoin(path,"flags")) if f!='.DS_Store']:
         flag = ImageFind(pjoin(path,"flags",Prefix(flag_file)))
         if flag is None:
-            flag = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
+            flag = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "default_flag")), find_default=False)
+            assert (flag is not None), "The default flag is not found!"
         scales = get_mod_config('img_scales')
-        if flag is None:
-            flag = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_flag.png")))
         flag_name = f"{tag}{'_'+Prefix(flag_file) if Prefix(flag_file)!='default' else ''}"
         w_l, h_l = scales['flag_large']; flag_large = ImageZoom(flag, w=w_l, h=h_l); ImageSave(flag_large, F(pjoin("gfx","flags",flag_name)), format='tga')
         w_m, h_m = scales['flag_medium']; flag_medium = ImageZoom(flag, w=w_m, h=h_m); ImageSave(flag_medium, F(pjoin("gfx","flags","medium",flag_name)), format='tga')

@@ -32,10 +32,17 @@ def merge_dicts(l, d=False):
                 merged[find_dup(key, merged)] = value
             else:
                 if (key in merged) and isinstance(merged[key], dict) and isinstance(value, dict):
-                    merged[key] = merge_dicts([merged[key], value])
+                    merged[key] = merge_dicts([merged[key], value], d=d)
                 else:
                     merged[key] = value
     return merged
+
+def sort_priority(key, priority_list):
+    if 'OTHERS' not in priority_list:
+        priority_list.append('OTHERS')
+    priority_dict = {k:i-len(priority_list) for i, k in enumerate(priority_list)}
+    default_order = priority_dict.get('OTHERS')
+    return priority_dict.get("$"+key, priority_dict.get(find_ori(key), default_order))
 
 def replace_list(l, pattern, target):
     replaced = list()
@@ -77,6 +84,6 @@ def set_config(key, value):
 def F(path):
     return pjoin(get_config("CURRENT_MOD_PATH"), path)
 def get_mod_config(key=None):
-    config = LoadJson(F(pjoin('hoi4dev_settings', 'config.json'))); return config if key is None else (config[key] if key in config else None)
+    config = LoadJson(F(pjoin('hoi4dev_settings', 'configs', 'config.json'))); return config if key is None else (config[key] if key in config else None)
 def set_mod_config(key, value):
-    config = get_mod_config(); config[key] = value; SaveJson(config, F(pjoin('hoi4dev_settings', 'config.json')), indent=4)
+    config = get_mod_config(); config[key] = value; SaveJson(config, F(pjoin('hoi4dev_settings', 'configs', 'config.json')), indent=4)

@@ -57,6 +57,14 @@ def AddEquipment(path, translate=True, debug=False):
         - air_bombing
         - naval_strike_attack
         - naval_strike_targetting
+        - lg_armor_piercing
+        - lg_attack
+        - hg_armor_piercing
+        - hg_attack
+        - torpedo_attack
+        - anti_air_attack
+        - shore_bombardment
+        - sub_attack
     - Directly inherited:
         - archetype
         - lend_lease_cost
@@ -70,6 +78,17 @@ def AddEquipment(path, translate=True, debug=False):
         - air_range
         - air_agility
         - air_superiority
+        - naval_speed
+        - surface_detection
+        - sub_detection
+        - surface_visibility
+        - sub_visibility
+        - naval_range
+        - port_capacity_usage
+        - search_and_destroy_coordination
+        - convoy_raiding_coordination
+        - module_slots
+        - default_modules
     - Add by 1:
         - priority
         - visual_level
@@ -90,15 +109,15 @@ def AddEquipment(path, translate=True, debug=False):
         alpha = info.pop('alpha_global', 0.0)
         data = LoadJson(F(pjoin("data","equipments",f"{info['parent']}.json")))['equipments'][info['parent']]
         info = {k:v for k,v in merge_dicts([{
-            'archetype': data['archetype'],
-            'priority': data['priority']+1,
-            'visual_level': data['visual_level']+1,
+            'archetype': data['archetype'] if 'archetype' in data else None,
+            'priority': data['priority']+1 if 'priority' in data else 0,
+            'visual_level': data['visual_level']+1 if 'visual_level' in data else 0,
             
             'build_cost_ic': data['build_cost_ic']*(1+alpha),
-            'lend_lease_cost': data['lend_lease_cost'],
-            'can_license': data['can_license'],
-            'is_convertable': data['is_convertable'],
-            'reliability': data['reliability'],
+            'lend_lease_cost': data['lend_lease_cost'] if 'lend_lease_cost' in data else None,
+            'can_license': data['can_license'] if 'can_license' in data else None,
+            'is_convertable': data['is_convertable'] if 'is_convertable' in data else None,
+            'reliability': data['reliability'] if 'reliability' in data else None,
             
             'soft_attack': data['soft_attack']*(1+alpha) if 'soft_attack' in data else None,
             'hard_attack': data['hard_attack']*(1+alpha) if 'hard_attack' in data else None,
@@ -120,7 +139,27 @@ def AddEquipment(path, translate=True, debug=False):
             'air_agility': data['air_agility'] if 'air_agility' in data else None,
             'air_superiority': data['air_superiority'] if 'air_superiority' in data else None,
             
-            'maximum_speed': data['maximum_speed'],
+            'naval_speed': data['naval_speed'] if 'naval_speed' in data else None,
+            'lg_armor_piercing': data['lg_armor_piercing']*(1+alpha) if 'lg_armor_piercing' in data else None,
+            'lg_attack': data['lg_attack']*(1+alpha) if 'lg_attack' in data else None,
+            'hg_armor_piercing': data['hg_armor_piercing']*(1+alpha) if 'hg_armor_piercing' in data else None,
+            'hg_attack': data['hg_attack']*(1+alpha) if 'hg_attack' in data else None,
+            'torpedo_attack': data['torpedo_attachk']*(1+alpha) if 'torpedo_attachk' in data else None,
+            'anti_air_attack': data['anti_air_attack']*(1+alpha) if 'anti_air_attack' in data else None,
+            'shore_bombardment': data['shore_bombardment']*(1+alpha) if 'shore_bombardment' in data else None,
+            'sub_attack': data['sub_attack']*(1+alpha) if 'sub_attack' in data else None,
+            'surface_detection': data['surface_detection'] if 'surface_detection' in data else None,
+            'sub_detection': data['sub_detection'] if 'sub_detection' in data else None,
+            'surface_visibility': data['surface_visibility'] if 'surface_visibility' in data else None,
+            'sub_visibility': data['sub_visibility'] if 'sub_visibility' in data else None,
+            'naval_range': data['naval_range'] if 'naval_range' in data else None,
+            'port_capacity_usage': data['port_capacity_usage'] if 'port_capacity_usage' in data else None,
+            'search_and_destroy_coordination': data['search_and_destroy_coordination'] if 'search_and_destroy_coordination' in data else None,
+            'convoy_raiding_coordination': data['convoy_raiding_coordination'] if 'convoy_raiding_coordination' in data else None,
+            'module_slots': data['module_slots'] if 'module_slots' in data else None,
+            'default_modules': data['default_modules'] if 'default_modules' in data else None,
+            
+            'maximum_speed': data['maximum_speed'] if 'maximum_speed' in data else None,
             'entrenchment': data['entrenchment'] if 'entrenchment' in data else None,
             'recon': data['recon'] if 'recon' in data else None,
         },info]).items() if v is not None}
@@ -154,7 +193,8 @@ def AddEquipment(path, translate=True, debug=False):
     scales = get_mod_config('img_scales'); w, h = scales['equipment_medium']
     icon = ImageFind(pjoin(path,"default"))
     if icon is None:
-        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_equipment.png")))
+        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+        assert (icon is not None), "The default equipment icon is not found!"
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","equipments",f"EQUIPMENT_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}})
@@ -197,4 +237,4 @@ def AddEquipments(path, translate=True, debug=False):
     for p in nodes_list:
         AddEquipment(p.path, translate=translate, debug=debug)
     equipments = [LoadJson(F(pjoin("data","equipments",f"{p.name}.json"))) for p in nodes_list]
-    Edit(F(pjoin("data","common","units","equipment",f"new_equipments.json")), merge_dicts(equipments))
+    Edit(F(pjoin("data","common","units","equipment",f"zz_all_equipments.json")), merge_dicts(equipments))

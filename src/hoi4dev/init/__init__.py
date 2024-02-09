@@ -21,26 +21,19 @@ def CreateMod(name, **kwargs):
     root = pjoin(mods_path, name)
     ClearFolder(root, rm=True)
     
-    if "copies" in kwargs:
-        CopyFolder(kwargs["copies"], root, rm=True)
-    
     game_path = get_config('HOI4_GAME_PATH')
     for path in MAIN_DIRECTORIES:
         for folder in ListFolders(pjoin(game_path, path)):
             CreateFolder(pjoin(root, path, folder))
     
     CreateFolder(pjoin(root, 'hoi4dev_settings'))
-    settings = merge_dicts([LoadJson(find_resource('configs/default.json')), kwargs])
-    SaveJson(settings, pjoin(root, 'hoi4dev_settings', 'config.json'), indent=4)
-    SaveJson(LoadJson(find_resource('configs/copy.json')), pjoin(root, 'hoi4dev_settings', 'copy.json'), indent=4)
-    SaveJson(LoadJson(find_resource('configs/manpower.json')), pjoin(root, 'hoi4dev_settings', 'manpower.json'), indent=4)
-    SaveJson(LoadJson(find_resource('configs/buildings.json')), pjoin(root, 'hoi4dev_settings', 'buildings.json'), indent=4)
-    SaveJson(LoadJson(find_resource('configs/resources.json')), pjoin(root, 'hoi4dev_settings', 'resources.json'), indent=4)
-    SaveJson({}, pjoin(root, 'hoi4dev_settings', 'term_table.json'), indent=4)
-    CreateFolder(pjoin(root, 'hoi4dev_settings', 'imgs'))
-    for file in ListFiles(find_resource('imgs/defaults')):
-        src = pjoin(find_resource('imgs/defaults'), file); tgt = pjoin(root, 'hoi4dev_settings', 'imgs', file)
-        if not ExistFile(tgt): ImageCopy(src, tgt, format='png')
+    CopyFolder(find_resource(""), pjoin(root, "hoi4dev_settings"), rm=True)
+    
+    if "copies" in kwargs:
+        CopyFolder(kwargs["copies"], root, rm=True)
+    
+    settings = merge_dicts([LoadJson(find_resource('configs/config.json')), kwargs])
+    SaveJson(settings, pjoin(root, 'hoi4dev_settings', 'configs', 'config.json'), indent=4)
     
     with open(pjoin(mods_path, f'{name}.mod'), 'w') as f:
         f.write("\n".join(
@@ -54,6 +47,17 @@ def CreateMod(name, **kwargs):
             [ f"replace_path=\"{p}\"" for p in settings['replace_paths'] ] +
             [ f"path=\"{root}\""]
         ))
+    with open(pjoin(root, 'descriptor.mod'), 'w') as f:
+        f.write("\n".join(
+            [f"version=\"{settings['version']}\""] +
+            [ "tags = {"] +
+            [ ("\t"+f"\"{tag}\"") for tag in settings['tags'] ] +
+            [ "}" ] +
+            [ f"name=\"{settings['title']}\"" ] +
+            [ "picture=\"thumbnail.png\""] +
+            [ f"supported_version=\"{settings['hoi4_version']}\""] +
+            [ f"replace_path=\"{p}\"" for p in settings['replace_paths'] ]
+        ))
     
     return root
 
@@ -65,7 +69,7 @@ def InitMod():
     Return:
         None
     '''
-    copy_config = LoadJson(F('hoi4dev_settings/copy.json'))
+    copy_config = LoadJson(F(pjoin("hoi4dev_settings","configs","copy.json")))
     game_path = get_config('HOI4_GAME_PATH')
     for key, value in copy_config.items():
         for v in value:

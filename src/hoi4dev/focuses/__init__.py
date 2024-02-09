@@ -59,7 +59,8 @@ def AddNationalFocus(path, tree, translate=True):
     scales = get_mod_config('img_scales'); w, h = scales['focus']
     icon = ImageFind(pjoin(path,"default"))
     if icon is None:
-        icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_focus.png")))
+        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_focus")), find_default=False)
+        assert (icon is not None), "The default focus icon is not found!"
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","goals",f"FOCUS_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","focuses",f"FOCUS_{tag}.json")), {'spriteTypes': {
@@ -123,9 +124,9 @@ class FocusNode:
             self.d['px'] = self.d['x']; self.d['py'] = self.d['y']
         else:
             self.d['px'] = x+self.d['dx']; self.d['py'] = y+self.d['dy']
-        x_ = self.d['px']-self.d['dw']//2+self.d['dc']
+        x_ = self.d['px']-self.d['dw']//2+self.d['dc']; y_ = self.d['py']+1
         for c in sorted(self.children, key=lambda c: (-c.d['priority'],c.d['id'])):
-            c.position(x_, y+1); x_ += c.d['pw']
+            c.position(x_, y_); x_ += c.d['pw']
     
     def final(self):
         return {k:v for k,v in self.d.items() if k not in ['x','y','px','py','pw','dx','dy','dw','dc','parent','priority']} | {'x':self.d['px']+self.d['pw']//2,'y':self.d['py']}

@@ -18,6 +18,7 @@ src/hoi4dev/focuses/__init__.py
 src/hoi4dev/ideas/__init__.py
 src/hoi4dev/ideologies/__init__.py
 src/hoi4dev/init/__init__.py
+src/hoi4dev/intelligence_agencies/__init__.py
 src/hoi4dev/maps/__init__.py
 src/hoi4dev/maps/map2graph.py
 src/hoi4dev/maps/state_stats.py
@@ -26,6 +27,7 @@ src/hoi4dev/traits/__init__.py
 src/hoi4dev/translation/__init__.py
 src/hoi4dev/translation/llm.py
 src/hoi4dev/translation/lm.py
+src/hoi4dev/translation/manual.py
 src/hoi4dev/utils/__init__.py
 src/hoi4dev/utils/ccl.py
 src/hoi4dev/utils/config.py

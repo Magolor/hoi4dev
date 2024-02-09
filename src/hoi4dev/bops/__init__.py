@@ -53,7 +53,8 @@ def AddBoP(path, translate=True):
         S = s.upper()
         icon = ImageFind(pjoin(path,"icons",s))
         if icon is None:
-            icon = ImageLoad(F(pjoin("hoi4dev_settings", "imgs", "default_bop.png")))
+            icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "default_bop")), find_default=False)
+            assert (icon is not None), "The default balance of power icon is not found!"
         icon = ImageZoom(icon, w=w, h=h)
         ImageSave(icon, F(pjoin("gfx","interface","bop",f"BOP_{tag}_{S}_SIDE")), format='dds')
         sprites.append({'spriteType': {"name": f"GFX_BOP_{tag}_{S}_SIDE", "texturefile": pjoin("gfx","interface","bop",f"BOP_{tag}_{S}_SIDE.dds")}})

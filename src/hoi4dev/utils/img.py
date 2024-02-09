@@ -13,7 +13,7 @@ def ImageLoad(path):
         image.Image. A `wand` image object. None if not found.
     '''
     try:
-        img = image.Image(filename=path)
+        img = image.Image(filename=path, depth=32)
         return img
     except TypeError as e:
         print(e)
@@ -224,7 +224,8 @@ def CreateAdvisorImage(img):
     w_l, h_l = get_mod_config('img_scales')['leader_portrait']
     w_a, h_a = get_mod_config('img_scales')['advisor_portrait']
     bg = CreateBlankImage(w_a,h_a)
-    ft = ImageLoad(find_resource('imgs/advisor_template.dds'))
+    ft = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "advisor_template")), find_default=False)
+    assert (ft is not None), "Advisor template not found!"
     adv = ImageZoom(ImageZoom(img, w=w_l, h=h_l), h=h_a)
     rot = ImageZoom(ImageRotate(adv, 355.5), r=0.72)
     bg.composite(rot, top=4, left=4)
@@ -240,11 +241,34 @@ def CreateCountryEventImage(img):
         image.Image. The country event image.
     '''
     w, h = get_mod_config('img_scales')['country_event']
-    bg = ImageLoad(find_resource('imgs/country_event_template.dds'))
+    bg = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "country_event_template")), find_default=False)
+    assert (bg is not None), "Country event template not found!"
     evt = ImageZoom(img, w=w, h=h)
     rot = ImageZoom(ImageRotate(evt, 355.5), r=0.90)
     sft = ImageShift(rot, dw=-2)
     bg.composite(sft, gravity='center')
+    return bg
+
+def CreateIntelAgencyImage(img):
+    '''
+    Convert a image to an intelligence agency image.
+    Args:
+        img: image.Image. A `wand` image object.
+    Return:
+        image.Image. The country event image.
+    '''
+    W, H = get_mod_config('img_scales')['intel_agency_full']
+    w, h = get_mod_config('img_scales')['intel_agency']
+    bg = CreateBlankImage(W, H)
+    img = ImageZoom(img, w=w, h=h)
+    bg.composite(img, gravity='west')
+    shd = img.clone()
+    shd.shadow(1.0, 1.0, 0, 0)
+    shd = ImageExtend(ImageZoom(shd, r=1.1), w, h)
+    # Thickening the shadow
+    for _ in range(8):
+        bg.composite(shd, gravity='east')
+    bg.composite(img, gravity='east')
     return bg
 
 def SetLoadingScreenImages(imgs, main=None):
@@ -270,13 +294,21 @@ def SetLoadingScreenImages(imgs, main=None):
     main_img = ImageZoom(main, w=w_m, h=h_m)
     # Should the main image be saved with a 'loadingscreens' ratio?
     ImageSave(main_img, F(pjoin("gfx","loadingscreens",f"load_5")), format='dds')
-    # La Resistance
-    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
     # Together for Victory
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_tfv")), format='dds')
     # Death or Dishonor
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_dod")), format='dds')
-    # By Blood Alone
-    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
     # Waking the Tiger
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_tiger")), format='dds')
+    # Man the Guns
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_mtg")), format='dds')
+    # La Resistance
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
+    # Battle for the Bosporus
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_botb")), format='dds')
+    # No Step Back
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_nsb")), format='dds')
+    # By Blood Alone
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
+    # Arms Against Tyranny
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_aat")), format='dds')

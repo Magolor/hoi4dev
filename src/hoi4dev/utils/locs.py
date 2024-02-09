@@ -77,7 +77,7 @@ def SaveLocs(locs, name, path, replace=False, clear=True):
         hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
         yml_file = pjoin(path, "replace" if replace else hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
         if clear or (not ExistFile(yml_file)):
-            CopyFile(find_resource(f'localisations/empty_l_{hoi4_lang}.yml'), yml_file)
+            CopyFile(F(pjoin("hoi4dev_settings", "localisations", f"empty_l_{hoi4_lang}.yml")), yml_file, rm=True)
     for key, value in locs.items():
         for language, value in value.items():
             hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
