@@ -22,7 +22,7 @@ def AddIntelAgency(path, translate=True):
     '''
     tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
-        'names': [f"INTEL_AGENCY_{tag}"],
+        # 'names': [f"INTEL_AGENCY_{tag}"],
         'picture': f"GFX_INTEL_AGENCY_{tag}"
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)

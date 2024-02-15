@@ -11,7 +11,7 @@ def AddDivisions(path):
     Notice the division names will only take effect for the primary language, thus no translation is needed.
     '''
     division_files = [f for f in ListFiles(path) if f.endswith('.json')]
-    divisions = [LoadJson(pjoin(path, f)) for f in division_files]
+    divisions = [LoadJson(pjoin(path, f)) for f in division_files if f.endswith('.json')]
     locs_file = pjoin(path,"locs.txt")
     locs = ReadTxtLocs(locs_file) if ExistFile(locs_file) else {}
     language = get_mod_config('languages')[0]

@@ -11,7 +11,7 @@ def AddEvent(path, space, translate=True):
     Return:
         None
     '''
-    tag = path.strip('/').split('/')[-1].split('-')[0]
+    tag = path.strip('/').split('/')[-1].split('-',1)[0]
     assert (tag.isdigit()), f"Event tag should be numeric, but got {tag}."
     tag = int(tag)
     info = merge_dicts([{
@@ -131,7 +131,7 @@ def AddSuperEvent(path, translate=True):
     Return:
         None
     '''
-    tag = path.strip('/').split('/')[-1].split('-')[0]
+    tag = path.strip('/').split('/')[-1].split('-',1)[0]
     assert (tag.isdigit()), f"Event tag should be numeric, but got {tag}."
     tag = int(tag)
     info = LoadJson(pjoin(path,"info.json"))

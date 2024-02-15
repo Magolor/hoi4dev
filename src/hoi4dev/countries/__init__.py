@@ -65,14 +65,35 @@ def AddCountry(path, translate=True):
         Edit(F(pjoin("data","common","ai_strategy_plans",f"{tag}_{ai_strategy_plans_name}.json")), {f"{tag}_{ai_strategy_plans_name}": ai})
     
     # Add country flags
-    ideologies = list(set(list(get_ideologies().keys()) + ['default']))
+    ideologies = list(set(list(get_ideologies().keys())  + ['default']))
     for ideology in ideologies:
         flag = ImageFind(pjoin(path,"flags",ideology))
         if flag is None:
-            flag = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_flag")), find_default=False)
-            assert (flag is not None), "The default flag is not found!"
+            if ideology != 'default':
+                continue
+            else:
+                flag = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_flag")), find_default=False)
+                assert (flag is not None), "The default flag is not found!"
         scales = get_mod_config('img_scales')
         flag_name = f"{tag}{'_'+ideology if ideology!='default' else ''}"
         w_l, h_l = scales['flag_large']; flag_large = ImageZoom(flag, w=w_l, h=h_l); ImageSave(flag_large, F(pjoin("gfx","flags",flag_name)), format='tga')
         w_m, h_m = scales['flag_medium']; flag_medium = ImageZoom(flag, w=w_m, h=h_m); ImageSave(flag_medium, F(pjoin("gfx","flags","medium",flag_name)), format='tga')
         w_s, h_s = scales['flag_small']; flag_small = ImageZoom(flag, w=w_s, h=h_s); ImageSave(flag_small, F(pjoin("gfx","flags","small",flag_name)), format='tga')
+    
+    # Add cosmetic flags
+    cosmetic_path = pjoin(path, "flags", "cosmetic")
+    if ExistFolder(cosmetic_path):
+        for cosmetic in ListFolders(cosmetic_path):
+            for ideology in ideologies:
+                flag = ImageFind(pjoin(cosmetic_path,cosmetic,ideology))
+                if flag is None:
+                    if ideology != 'default':
+                        continue
+                    else:
+                        flag = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_flag")), find_default=False)
+                        assert (flag is not None), "The default flag is not found!"
+                scales = get_mod_config('img_scales')
+                flag_name = f"{cosmetic}{'_'+ideology if ideology!='default' else ''}"
+                w_l, h_l = scales['flag_large']; flag_large = ImageZoom(flag, w=w_l, h=h_l); ImageSave(flag_large, F(pjoin("gfx","flags",flag_name)), format='tga')
+                w_m, h_m = scales['flag_medium']; flag_medium = ImageZoom(flag, w=w_m, h=h_m); ImageSave(flag_medium, F(pjoin("gfx","flags","medium",flag_name)), format='tga')
+                w_s, h_s = scales['flag_small']; flag_small = ImageZoom(flag, w=w_s, h=h_s); ImageSave(flag_small, F(pjoin("gfx","flags","small",flag_name)), format='tga')

@@ -9,7 +9,7 @@ def AddTechnology(path, translate=True):
         translate: bool. Whether to translate the localisation of the technology.
     Return:
         None
-    Use 'category' to specify the category of the technology. The category should be one of the following (unless manually added): `infantry`, `support`, `support`, `armour`, `nsb_armour`, `artillery`, `naval`, `mtgnaval`, `mtgnavalsupport`, `air_techs`, `ba_air_techs`, `industry`, `electronics`.
+    Use 'category' to specify the category of the technology. The category should be one of the following (unless manually added): `infantry`, `support`, `armour`, `nsb_armour`, `artillery`, `naval`, `mtgnaval`, `mtgnavalsupport`, `air_techs`, `ba_air_techs`, `industry`, `electronics`.
     Notice that adding a root technology could be very tricky. When setting 'is_root' to be true, the `data/interface/countrytechtreeview.json` must be prepared in advance. The root technology should be added to the file with the following structure:
     ```json
     {
