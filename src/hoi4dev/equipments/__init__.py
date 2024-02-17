@@ -72,18 +72,24 @@ def AddEquipment(path, translate=True, debug=False):
         - is_convertable
         - reliability
         - hardness
+        - max_strength
         - maximum_speed
         - entrenchment
         - recon
         - air_range
         - air_agility
         - air_superiority
+        - weight
+        - thrust
         - naval_speed
         - surface_detection
         - sub_detection
         - surface_visibility
         - sub_visibility
         - naval_range
+        - naval_torpedo_damage_reduction_factor
+        - naval_torpedo_enemy_critical_chance_factor
+        - naval_weather_penalty_factor
         - port_capacity_usage
         - search_and_destroy_coordination
         - convoy_raiding_coordination
@@ -113,7 +119,7 @@ def AddEquipment(path, translate=True, debug=False):
             'priority': data['priority']+1 if 'priority' in data else 0,
             'visual_level': data['visual_level']+1 if 'visual_level' in data else 0,
             
-            'build_cost_ic': data['build_cost_ic']*(1+alpha),
+            'build_cost_ic': data['build_cost_ic']*(1+alpha) if 'build_cost_ic' in data else None,
             'lend_lease_cost': data['lend_lease_cost'] if 'lend_lease_cost' in data else None,
             'can_license': data['can_license'] if 'can_license' in data else None,
             'is_convertable': data['is_convertable'] if 'is_convertable' in data else None,
@@ -128,6 +134,7 @@ def AddEquipment(path, translate=True, debug=False):
             'defense': data['defense']*(1+alpha) if 'defense' in data else None,
             'armor_value': data['armor_value']*(1+alpha) if 'armor_value' in data else None,
             'hardness': data['hardness'] if 'hardness' in data else None,
+            'max_strength': data['max_strength'] if 'max_strength' in data else None,
             
             'air_defence': data['air_defence']*(1+alpha) if 'air_defence' in data else None,
             'air_ground_attack': data['air_ground_attack']*(1+alpha) if 'air_ground_attack' in data else None,
@@ -138,6 +145,8 @@ def AddEquipment(path, translate=True, debug=False):
             'air_range': data['air_range'] if 'air_range' in data else None,
             'air_agility': data['air_agility'] if 'air_agility' in data else None,
             'air_superiority': data['air_superiority'] if 'air_superiority' in data else None,
+            'weight': data['weight'] if 'weight' in data else None,
+            'thrust': data['thrust'] if 'thrust' in data else None,
             
             'naval_speed': data['naval_speed'] if 'naval_speed' in data else None,
             'lg_armor_piercing': data['lg_armor_piercing']*(1+alpha) if 'lg_armor_piercing' in data else None,
@@ -153,6 +162,9 @@ def AddEquipment(path, translate=True, debug=False):
             'surface_visibility': data['surface_visibility'] if 'surface_visibility' in data else None,
             'sub_visibility': data['sub_visibility'] if 'sub_visibility' in data else None,
             'naval_range': data['naval_range'] if 'naval_range' in data else None,
+            'naval_torpedo_damage_reduction_factor': data['naval_torpedo_damage_reduction_factor'] if 'naval_torpedo_damage_reduction_factor' in data else None,
+            'naval_torpedo_enemy_critical_chance_factor': data['naval_torpedo_enemy_critical_chance_factor'] if 'naval_torpedo_enemy_critical_chance_factor' in data else None,
+            'naval_weather_penalty_factor': data['naval_weather_penalty_factor'] if 'naval_weather_penalty_factor' in data else None,
             'port_capacity_usage': data['port_capacity_usage'] if 'port_capacity_usage' in data else None,
             'search_and_destroy_coordination': data['search_and_destroy_coordination'] if 'search_and_destroy_coordination' in data else None,
             'convoy_raiding_coordination': data['convoy_raiding_coordination'] if 'convoy_raiding_coordination' in data else None,

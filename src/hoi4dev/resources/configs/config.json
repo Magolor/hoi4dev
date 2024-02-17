@@ -20,6 +20,7 @@
         "equipment_medium": [150, 72],
         "equipment_large": [150, 150],
         "country_event": [214, 174],
+        "state_event": [214, 174],
         "news_event": [397, 153],
         "super_event": [960, 540],
         "decision": [52, 40],

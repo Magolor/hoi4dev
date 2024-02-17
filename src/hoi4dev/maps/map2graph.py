@@ -26,6 +26,21 @@ def ConvertStates(path):
         state_data['state']['//Terrain'] = provs_table.loc[state_data['state']['provinces'],'Terrain'].value_counts().index[0]
         SaveJson(state_data, pjoin(F("data/map/converted_states"),state_file), indent=4)
 
+def ConvertStrategicRegions(path):
+    '''
+    Convert the `strategicregions` folder to the `converted_strategicregions` folder.
+    Args:
+        path: str. The path to the `strategicregions` folder.
+    Return:
+        None
+    '''
+    ClearFolder(F("data/map/converted_strategicregions"), rm=True)
+    CCLConvertBatch(
+        src_path = path,
+        tgt_path = F("data/map/converted_strategicregions"),
+        format = 'json',
+    )
+
 def DeployStates():
     '''
     Deploy the `converted_states` folder to the `states` folder.
@@ -37,6 +52,20 @@ def DeployStates():
     CCLConvertBatch(
         src_path = F("data/map/converted_states"),
         tgt_path = F("history/states"),
+        format = 'txt',
+    )
+
+def DeployStrategicRegions():
+    '''
+    Deploy the `converted_strategicregions` folder to the `strategicregions` folder.
+    Args:
+        None
+    Return:
+        None
+    '''
+    CCLConvertBatch(
+        src_path = F("data/map/converted_strategicregions"),
+        tgt_path = F("map/strategicregions"),
         format = 'txt',
     )
 
