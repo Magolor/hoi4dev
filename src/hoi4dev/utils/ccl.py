@@ -59,7 +59,10 @@ def mark_ccl_string(ccl_string, patterns=[('"','"'),('#','\n')]):
                     break
             else:
                 l += c
-    result.append((l,None))
+    if inside and inside[1]=='\n':
+        result.append((l+'\n',inside))
+    else:
+        result.append((l,None))
     return [w for w in result if w[0]]
 
 def tokenize_ccl_string(ccl_string):
@@ -76,6 +79,8 @@ def tokenize_ccl_string(ccl_string):
     return [w for w in tokens if w and w!='\n']
 
 def ccl_type(t):
+    if t == '§':
+        return 'BUG' # There is one bug in HoI4 game file in `common/units/equipment/ship_hull_carrier.txt`
     if t.strip().startswith('#'):
         return 'COMMENT'
     if t == '=':
@@ -118,7 +123,7 @@ def ccl_repr(t):
     if t=='':
         return '""'
     if (
-        ((' ' in t) or ('\t' in t) or ('\n' in t) or ("'" in t) or ("/" in t) or ('[' in t) or (']' in t))
+        ((' ' in t) or ('\t' in t) or ('\n' in t) or ("'" in t) or ('"' in t) or ("/" in t) or ('[' in t) or (']' in t))
     and (not (t.startswith('rgb') or t.startswith('hsv')))
     and (not ('^' in t))
     and (not (re.match(r'^\d{2}:\d{2}$', t) is not None))
@@ -127,6 +132,7 @@ def ccl_repr(t):
         s = repr(t)
         if s.startswith("'") and s.endswith("'"):
             return '"' + s[1:-1].replace('"','\\"') + '"'
+        return s
     return str(t)
 
 def CCL2List(ccl_string):
@@ -153,6 +159,8 @@ def CCL2List(ccl_string):
     i = 0
     while i < len(tokens):
         token = tokens[i]
+        if ccl_type(token) == 'BUG':
+            i += 1; continue
         if ccl_type(token) == 'RGB':
             assert (i+1<len(tokens) and ccl_type(tokens[i+1])=='START'), "Invalid `RGB` type!"
             j = i+1
@@ -262,7 +270,7 @@ def CCLDict2List(ccl_dict):
         return list()
     ccl_list = list()
     for k, v in ccl_dict.items():
-        key = find_ori(k)
+        key = find_ori(str(k))
         if isinstance(v, dict):
             ccl_list.append({key: CCLDict2List(v)})
         elif isinstance(v, list):

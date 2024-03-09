@@ -100,6 +100,7 @@ def BuildAdjacencyGraph(force=False):
         provs = state_data['state']['provinces']
         for prov_id in provs:
             prov2state[prov_id] = state_id
+    SaveJson(prov2state, F("data/map/prov2state.json"), indent=4)
 
     def link_state(x, y, a, b):
         if (x,y)==(a,b) or min(x,y,a,b) < 0 or max(x,a)>=img.size[0] or max(y,b)>=img.size[1]: return
