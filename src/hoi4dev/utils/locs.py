@@ -60,6 +60,32 @@ def ReadTxtLocs(path, scope=""):
     add(key, language, text)
     return locs
 
+def ReadYmlLocs(path):
+    '''
+    Read localisation file.
+    Args:
+        path: str. Path to the localisation file.
+        scope: str. The scope name of all the localisations in this file.
+    Return:
+        dict. A dictionary of localisation.
+    '''
+    locs = dict()
+    with open(path, 'r') as f:
+        lang = None
+        for line in f:
+            if lang is None:
+                for k, v in LANGUAGE_MAPPING.items():
+                    if f"l_{v['hoi4']}:" in line:
+                        lang = k
+                        break
+            else:
+                pattern = r'^(\w+):(\d+)\s+(.+)$'
+                match = re.match(pattern, line)
+                key = match.group(1)
+                value = match.group(3)
+                locs[key] = {lang: value}
+    return locs
+
 def SaveLocs(locs, name, path, replace=False, clear=True):
     '''
     Save localisation to separate `.yml` files.

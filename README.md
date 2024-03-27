@@ -6,5 +6,5 @@
 
 ## TODO
 
-- [ ] Auto-documentation
-- [ ] Term tables in translation
+- [x] Auto-documentation
+- [x] Term tables in translation

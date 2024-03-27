@@ -2,9 +2,8 @@ from ..utils import *
 import openai
 try:
     from seed import LLM
-    DEBUG_NO_SEED = False
-except Exception as e:
-    DEBUG_NO_SEED = True
+except ImportError as e:
+    pass
 
 import re
 def clean_text_for_contain(text):
@@ -26,8 +25,6 @@ def LLMTranslate(src, src_lang='zh', tgt_lang='en'):
     You can use the `term_table.json` to control the terms.
     '''
     global llm
-    if DEBUG_NO_SEED:
-        return ''
     if llm is None:
         llm = LLM()
     prompt = f"Please translate the following text from {LANGUAGE_MAPPING[src_lang]['nl']} to {LANGUAGE_MAPPING[tgt_lang]['nl']}:\n"

@@ -1,7 +1,10 @@
 from ..utils import *
 
-import nltk
-from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+try:
+    import nltk
+    from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+except ImportError as e:
+    pass
 
 M2M100 = [None, None]
 CKPT_PATH = pjoin(ROOT_PATH, "ckpt")
