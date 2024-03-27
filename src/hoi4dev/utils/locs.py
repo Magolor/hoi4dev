@@ -73,17 +73,21 @@ def ReadYmlLocs(path):
     with open(path, 'r') as f:
         lang = None
         for line in f:
+            if line.strip().startswith('#'):
+                continue
             if lang is None:
                 for k, v in LANGUAGE_MAPPING.items():
                     if f"l_{v['hoi4']}:" in line:
                         lang = k
                         break
             else:
-                pattern = r'^(\w+):(\d+)\s+(.+)$'
-                match = re.match(pattern, line)
-                key = match.group(1)
-                value = match.group(3)
-                locs[key] = {lang: value}
+                pattern = r'^(\w+):(?:(\d+))?\s*(.*)$'
+                match = re.match(pattern, line.strip())
+                if match is not None:
+                    key = match.group(1)
+                    value = match.group(3) if match.group(3) else match.group(2)
+                    print(key, value)
+                    locs[key] = {lang: eval(value)}
     return locs
 
 def SaveLocs(locs, name, path, replace=False, clear=True):
