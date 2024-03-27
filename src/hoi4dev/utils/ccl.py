@@ -111,8 +111,8 @@ def ccl_eval(t):
     k = ccl_type(t)
     c = (eval(t) if k=='STRING' else t) if isinstance(k, str) else k
     assert (k in ['WORD', 'STRING', c]), "Invalid item!"
-    if k == 'WORD' and c == 'yes': return True
-    if k == 'WORD' and c == 'no': return False
+    if k == 'WORD' and c.lower() == 'yes': return True
+    if k == 'WORD' and c.lower() == 'no': return False
     return c
 
 def ccl_repr(t):

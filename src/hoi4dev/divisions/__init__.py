@@ -29,14 +29,14 @@ def AddDivisions(path):
             support = div.pop('support')
             division_types = list(set([s for row in regiments for s in row] + [s for row in support for s in row]))
             names_group = { tag: {
-                "name": '"' + designation.split('%d')[0] + '"',
+                "name": designation.split('%d')[0],
                 "for_countries": [key],
                 "can_use": {"always": True},
                 "division_types": division_types,
-                "fallback_name": '"' + designation + '"',
+                "fallback_name": designation,
             } }
             division_template = { "division_template": merge_dicts([{
-                "name": '"' + designation.split('%d')[0] + '"',
+                "name": designation.split('%d')[0],
                 "regiments": merge_dicts([
                     {s: {"x": i, "y": j}}
                     for i, row in enumerate(regiments)

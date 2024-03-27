@@ -312,3 +312,5 @@ def SetLoadingScreenImages(imgs, main=None):
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
     # Arms Against Tyranny
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_aat")), format='dds')
+    # Trial of Allegiance
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_toa")), format='dds')

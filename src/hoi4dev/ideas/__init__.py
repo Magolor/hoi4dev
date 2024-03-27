@@ -35,3 +35,48 @@ def AddIdea(path, translate=True):
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
+
+def AddIdeaCategory(path, translate=True):
+    '''
+    Add a category of ideas to the mod.
+    Args:
+        path: str. The path of the resource files of the category. The resources should include the category definition, the localisation, and the ideas folder.
+        translate: bool. Whether to translate the localisation of the category.
+    Return:
+        None
+    '''
+    ideas = []
+    for idea_folder in ListFolders(path, ordered=True):
+        tag = pjoin(path, idea_folder).strip('/').split('/')[-1].upper()
+        AddIdea(pjoin(path, idea_folder), translate=translate)
+        data = LoadJson(F(pjoin("data","common","ideas",f"IDEA_{tag}.json")))['ideas']
+        assert (len(data) == 1), "The idea should belong to only one category!"
+        idea = list(data.values())[0]; ideas.append(idea)
+        assert (len(idea) == 1), "The idea should have only one tag!"
+        Delete(F(pjoin("data","common","ideas",f"IDEA_{tag}.json")), rm=True)
+    
+    # Adjacency Constraints
+    for i, idea in enumerate(ideas):
+        tag = list(idea.keys())[0]; idea[tag]['level'] = len(ideas)-i
+        # if ((prev_idea is not None) or (next_idea is not None)) and ('available' not in idea[tag]):
+        #     idea[tag]['available'] = dict()
+        # if (prev_idea is not None) and (next_idea is not None):
+        #     or_cond = find_dup("OR", idea[tag]['available'])
+        #     idea[tag]['available'][or_cond] = dict()
+        #     or_field = idea[tag]['available'][or_cond]
+        #     or_field[find_dup('has_idea',or_field)] = f"{list(next_idea.keys())[0]}"
+        #     or_field[find_dup('has_idea',or_field)] = f"{list(prev_idea.keys())[0]}"
+        # elif (prev_idea is not None):
+        #     idea[tag]['available'][find_dup('has_idea',idea[tag]['available'])] = f"{list(prev_idea.keys())[0]}"
+        # elif (next_idea is not None):
+        #     idea[tag]['available'][find_dup('has_idea',idea[tag]['available'])] = f"{list(next_idea.keys())[0]}"
+    
+    # Add category localisation
+    category_tag = path.strip('/').split('/')[-1].upper()
+    AddLocalisation(pjoin(path,"locs.txt"), scope=f"IDEA_CATEGORY_{category_tag}", translate=translate)
+
+    # Initialize category definition
+    info = LoadJson(pjoin(path,"info.json"))
+    name = info.pop('name', None)
+    idea_category = {f"IDEA_CATEGORY_{category_tag}": info | merge_dicts(ideas, d=False)}
+    Edit(F(pjoin("data","common","ideas",f"IDEA_CATEGORY_{category_tag}.json")), {'ideas': idea_category})

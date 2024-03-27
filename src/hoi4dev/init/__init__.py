@@ -1,6 +1,6 @@
 from ..utils import *
 
-MAIN_DIRECTORIES = ['common', 'events', 'gfx', 'history', 'interface', 'music', 'sound', 'tutorial']
+MAIN_DIRECTORIES = ['common', 'events', 'gfx', 'history', 'interface', 'music', 'sound', 'tutorial', "portraits", "country_metadata"]
 def CreateMod(name, **kwargs):
     '''
     Initialize a new mod.
