@@ -302,15 +302,18 @@ def SetLoadingScreenImages(imgs, main=None):
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_tiger")), format='dds')
     # Man the Guns
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_mtg")), format='dds')
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_mtg_2")), format='dds')
     # La Resistance
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_lar")), format='dds')
     # Battle for the Bosporus
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_botb")), format='dds')
     # No Step Back
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_nsb")), format='dds')
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_nsb2")), format='dds')
     # By Blood Alone
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_bba")), format='dds')
     # Arms Against Tyranny
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_aat")), format='dds')
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_aat2")), format='dds')
     # Trial of Allegiance
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_toa")), format='dds')

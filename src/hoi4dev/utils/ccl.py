@@ -131,7 +131,7 @@ def ccl_repr(t):
     ):
         s = repr(t)
         if s.startswith("'") and s.endswith("'"):
-            return '"' + s[1:-1].replace('"','\\"') + '"'
+            return '"' + s[1:-1].replace('"','\\"').replace("\\'","'") + '"'
         return s
     return str(t)
 
