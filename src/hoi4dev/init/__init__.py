@@ -19,7 +19,12 @@ def CreateMod(name, **kwargs):
     '''
     mods_path = get_config('HOI4_MODS_PATH')
     root = pjoin(mods_path, name)
+    git_folder = pjoin(GIT_PATH, name)
+    if ExistFolder(pjoin(root, ".git")):
+        CopyFolder(pjoin(root, ".git"), git_folder, rm=True)
     ClearFolder(root, rm=True)
+    if ExistFolder(git_folder):
+        CopyFolder(git_folder, pjoin(root, ".git"), rm=True)
     
     game_path = get_config('HOI4_GAME_PATH')
     for path in MAIN_DIRECTORIES:

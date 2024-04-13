@@ -87,3 +87,7 @@ def get_mod_config(key=None):
     config = LoadJson(F(pjoin('hoi4dev_settings', 'configs', 'config.json'))); return config if key is None else (config[key] if key in config else None)
 def set_mod_config(key, value):
     config = get_mod_config(); config[key] = value; SaveJson(config, F(pjoin('hoi4dev_settings', 'configs', 'config.json')), indent=4)
+
+GIT_PATH = pjoin(expanduser("~"), ".hoi4dev", "gits")
+def get_git_path(name):
+    return pjoin(GIT_PATH, name)
