@@ -1,7 +1,10 @@
 from .config import *
 
-from wand import image
-from wand.color import Color
+try:
+    from wand import image
+    from wand.color import Color
+except Exception as e:
+    print(e)
 from math import cos, sin, radians
 
 def ImageLoad(path):

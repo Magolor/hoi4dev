@@ -84,6 +84,12 @@
             <li>
                     <a class="function" href="#set_mod_config">set_mod_config</a>
             </li>
+            <li>
+                    <a class="variable" href="#GIT_PATH">GIT_PATH</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_git_path">get_git_path</a>
+            </li>
     </ul>
 
 
@@ -194,6 +200,10 @@
 </span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">LoadJson</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s1">&#39;hoi4dev_settings&#39;</span><span class="p">,</span> <span class="s1">&#39;configs&#39;</span><span class="p">,</span> <span class="s1">&#39;config.json&#39;</span><span class="p">)));</span> <span class="k">return</span> <span class="n">config</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="k">def</span> <span class="nf">set_mod_config</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">get_mod_config</span><span class="p">();</span> <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="n">SaveJson</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s1">&#39;hoi4dev_settings&#39;</span><span class="p">,</span> <span class="s1">&#39;configs&#39;</span><span class="p">,</span> <span class="s1">&#39;config.json&#39;</span><span class="p">)),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="n">GIT_PATH</span> <span class="o">=</span> <span class="n">pjoin</span><span class="p">(</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.hoi4dev&quot;</span><span class="p">,</span> <span class="s2">&quot;gits&quot;</span><span class="p">)</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="k">def</span> <span class="nf">get_git_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>    <span class="k">return</span> <span class="n">pjoin</span><span class="p">(</span><span class="n">GIT_PATH</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -556,6 +566,37 @@
     <a class="headerlink" href="#set_mod_config"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="set_mod_config-89"><a href="#set_mod_config-89"><span class="linenos">89</span></a><span class="k">def</span> <span class="nf">set_mod_config</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 </span><span id="set_mod_config-90"><a href="#set_mod_config-90"><span class="linenos">90</span></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">get_mod_config</span><span class="p">();</span> <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="n">SaveJson</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s1">&#39;hoi4dev_settings&#39;</span><span class="p">,</span> <span class="s1">&#39;configs&#39;</span><span class="p">,</span> <span class="s1">&#39;config.json&#39;</span><span class="p">)),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                </section>
+                <section id="GIT_PATH">
+                    <div class="attr variable">
+            <span class="name">GIT_PATH</span>        =
+<span class="default_value">&#39;/Users/magolor/.hoi4dev/gits/&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#GIT_PATH"></a>
+    
+    
+
+                </section>
+                <section id="get_git_path">
+                            <input id="get_git_path-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_git_path</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">name</span></span><span class="return-annotation">):</span></span>
+
+                <label class="view-source-button" for="get_git_path-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_git_path"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_git_path-93"><a href="#get_git_path-93"><span class="linenos">93</span></a><span class="k">def</span> <span class="nf">get_git_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+</span><span id="get_git_path-94"><a href="#get_git_path-94"><span class="linenos">94</span></a>    <span class="k">return</span> <span class="n">pjoin</span><span class="p">(</span><span class="n">GIT_PATH</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </span></pre></div>
 
 
