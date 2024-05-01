@@ -13,6 +13,7 @@ def AddDecision(path, category, translate=True):
     '''
     tag = path.strip('/').split('/')[-1].upper()
     info = merge_dicts([{
+        "fixed_random_seed": False,
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)
     category = info.pop('category', category)

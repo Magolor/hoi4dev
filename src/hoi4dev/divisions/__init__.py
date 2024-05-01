@@ -18,25 +18,29 @@ def AddDivisions(path):
     for key in locs:
         if key.startswith('TYPE_'): continue
         template = locs[key][language]
+        en_template = locs[key]['en']
         names_groups = []; division_templates = []
         for division, file in zip(divisions, division_files):
             div = deepcopy(division)
             name = div.pop('name', None)
             tag = "NAMES_GROUP_" + '_'.join([key,file.split('.')[0]]).upper()
             loc = locs["TYPE_"+file.split('.')[0]][language]
+            en_loc = locs["TYPE_"+file.split('.')[0]]['en']
             designation = template.replace("<TYPE>", loc)
+            en_designation = en_template.replace("<TYPE>", en_loc)
+            name = f"{designation.split('%d')[0]} ({en_designation.split(' %d')[0]})"
             regiments = div.pop('regiments')
             support = div.pop('support')
             division_types = list(set([s for row in regiments for s in row] + [s for row in support for s in row]))
             names_group = { tag: {
-                "name": designation.split('%d')[0],
+                "name": name,
                 "for_countries": [key],
                 "can_use": {"always": True},
                 "division_types": division_types,
-                "fallback_name": designation,
+                "fallback_name": f"{designation} ({en_designation})",
             } }
             division_template = { "division_template": merge_dicts([{
-                "name": designation.split('%d')[0],
+                "name": name,
                 "regiments": merge_dicts([
                     {s: {"x": i, "y": j}}
                     for i, row in enumerate(regiments)

@@ -128,6 +128,7 @@ def ccl_repr(t):
     and (not ('^' in t))
     and (not (re.match(r'^\d{2}:\d{2}$', t) is not None))
     and (not (t.endswith('%')))
+    and (not (t.startswith('[') and t.endswith(']')))
     ):
         s = repr(t)
         if s.startswith("'") and s.endswith("'"):

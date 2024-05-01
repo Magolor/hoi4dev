@@ -115,5 +115,5 @@ def SaveLocs(locs, name, path, replace=False, clear=True):
             with open(yml_file, 'a', encoding='utf-8') as f:
                 s = repr(value)
                 if s.startswith("'") and s.endswith("'"):
-                    s = '"' + s[1:-1].replace('"','\\"') + '"'
+                    s = '"' + s[1:-1].replace('"','\\"').replace("\\'","'") + '"'
                 f.write("\t" + f"{key}:0 {s}\n")
