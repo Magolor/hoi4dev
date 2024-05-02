@@ -23,7 +23,7 @@ def ReadTxt(file):
         str. Content of the text file.
     '''
     # encoding sus
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='utf-8', errors='ignore') as f:
         return f.read()
 
 def SaveTxt(obj, file):
@@ -35,7 +35,7 @@ def SaveTxt(obj, file):
     Return:
         None
     '''
-    with open(file, 'w') as f:
+    with open(file, 'w', encoding='utf-8', errors='ignore') as f:
         f.write(str(obj))
 
 def mark_ccl_string(ccl_string, patterns=[('"','"'),('#','\n')]):

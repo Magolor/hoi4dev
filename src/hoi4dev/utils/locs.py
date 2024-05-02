@@ -45,7 +45,7 @@ def ReadTxtLocs(path, scope=""):
             if key not in locs:
                 locs[key] = {}
             locs[key][language] = value.strip()
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8', errors='ignore') as f:
         text = ""; key = None; language = None
         for line in f.readlines():
             if line.strip().startswith('[') and line.strip().endswith(']'):
@@ -70,7 +70,7 @@ def ReadYmlLocs(path):
         dict. A dictionary of localisation.
     '''
     locs = dict()
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8', errors='ignore') as f:
         lang = None
         for line in f:
             if line.strip().startswith('#'):
@@ -112,7 +112,7 @@ def SaveLocs(locs, name, path, replace=False, clear=True):
         for language, value in value.items():
             hoi4_lang = LANGUAGE_MAPPING[language]['hoi4']
             yml_file = pjoin(path, "replace" if replace else hoi4_lang, f"{name}_l_{hoi4_lang}.yml")
-            with open(yml_file, 'a', encoding='utf-8') as f:
+            with open(yml_file, 'a', encoding='utf-8', errors='ignore') as f:
                 s = repr(value)
                 if s.startswith("'") and s.endswith("'"):
                     s = '"' + s[1:-1].replace('"','\\"').replace("\\'","'") + '"'
