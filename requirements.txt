@@ -1,6 +1,7 @@
 jsonlines
 numpy
 pandas
+pillow
 pyheaven
 Wand
 pdoc

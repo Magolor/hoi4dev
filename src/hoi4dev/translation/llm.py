@@ -1,5 +1,4 @@
 from ..utils import *
-import openai
 try:
     from seed import LLM
 except ImportError as e:

@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages, SetuptoolsDeprecationWarning
+from setuptools import setup, find_namespace_packages, SetuptoolsDeprecationWarning
 import pkg_resources
 import warnings
 warnings.filterwarnings('ignore', category=SetuptoolsDeprecationWarning)
@@ -27,9 +27,9 @@ setup(
         "Operating System :: OS Independent"
     ],
     package_dir={"":"src"},
-    packages=find_packages(where="src"),
+    packages=find_namespace_packages(where="src"),
     package_data={
-        'seed': ['resources/**/*'],
+        'hoi4dev': ['resources/**/*'],
     },
     python_requires=">=3.9",
 )

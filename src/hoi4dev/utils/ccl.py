@@ -22,7 +22,8 @@ def ReadTxt(file):
     Return:
         str. Content of the text file.
     '''
-    with open(file, 'r') as f:
+    # encoding sus
+    with open(file, 'r', encoding = "utf-8") as f:
         return f.read()
 
 def SaveTxt(obj, file):
