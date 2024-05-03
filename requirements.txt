@@ -1,7 +1,8 @@
 jsonlines
 numpy
 pandas
+pdoc
 pillow
 pyheaven
+send2trash
 Wand
-pdoc
