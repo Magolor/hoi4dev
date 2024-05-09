@@ -104,8 +104,12 @@ def CompileMod():
     files = [(path, f) for path in MAIN_DIRECTORIES for f in EnumFiles(F(pjoin('data', path)), relpath=F(pjoin('data', path))) if f.endswith('.json')]
     for path, file in TQDM(files, desc=f"Compiling the mod..."):
         format = get_format(path, ReadTxt(F(pjoin('data', path, file))))
-        CCLConvert(
-            F(pjoin('data', path, file)),
-            F(pjoin(path, AsFormat(file, format)))
-        )
+        try:
+            CCLConvert(
+                F(pjoin('data', path, file)),
+                F(pjoin(path, AsFormat(file, format)))
+            )
+        except Exception as e:
+            print(f"Error: {e}")
+            print(f"File: {file}")
     CopyFolder(F(pjoin("data", "localisation")), F("localisation"))
