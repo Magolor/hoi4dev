@@ -1,7 +1,9 @@
 from setuptools import setup, find_namespace_packages, SetuptoolsDeprecationWarning
-import pkg_resources
 import warnings
 warnings.filterwarnings('ignore', category=SetuptoolsDeprecationWarning)
+
+# import faulthandler
+# faulthandler.enable()
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
