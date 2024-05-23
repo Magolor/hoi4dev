@@ -19,8 +19,8 @@ def AddAchievement(unique_id, path, translate=True):
     # Add idea localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"ACHIEVEMENT_{tag}", translate=translate)
     
-    # Initialize idea definition
-    Edit(F(pjoin("data","common","achievements",file_name)), {'unique_id': unique_id, f"ACHIEVEMENT_{tag}": info})
+    # Initialize achievement definition
+    Edit(F(pjoin("data","common","achievements",file_name)), {'unique_id': unique_id, f"ACHIEVEMENT_{tag}": info}, clear=False)
     
     # Add achievement icons
     scales = get_mod_config('img_scales'); w, h = scales['achievement']

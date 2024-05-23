@@ -43,6 +43,7 @@ src/hoi4dev/resources/imgs/Super_Event_Window.dds
 src/hoi4dev/resources/imgs/advisor_template.dds
 src/hoi4dev/resources/imgs/country_event_template.dds
 src/hoi4dev/resources/imgs/defaults/X.dds
+src/hoi4dev/resources/imgs/defaults/default_achievement.dds
 src/hoi4dev/resources/imgs/defaults/default_bop.dds
 src/hoi4dev/resources/imgs/defaults/default_equipment.dds
 src/hoi4dev/resources/imgs/defaults/default_event.dds
