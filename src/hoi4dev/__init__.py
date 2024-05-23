@@ -16,5 +16,6 @@ from .focuses import *
 from .events import *
 from .bops import *
 from .intelligence_agencies import *
+from .achievements import *
 
 __version__ = '0.1.0.0'
