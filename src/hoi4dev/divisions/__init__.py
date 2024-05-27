@@ -19,10 +19,11 @@ def AddDivisions(path):
         if key.startswith('TYPE_'): continue
         template = locs[key][language]
         en_template = locs[key]['en']
-        names_groups = []; division_templates = []
+        names_groups = []; division_templates = []; division_templates_not_loaded = []
         for division, file in zip(divisions, division_files):
             div = deepcopy(division)
             name = div.pop('name', None)
+            load = div.pop('load', True)
             tag = "NAMES_GROUP_" + '_'.join([key,file.split('.')[0]]).upper()
             loc = locs["TYPE_"+file.split('.')[0]][language]
             en_loc = locs["TYPE_"+file.split('.')[0]]['en']
@@ -54,9 +55,13 @@ def AddDivisions(path):
                 "division_names_group": tag,
             }, div]) }
             names_groups.append(names_group)
-            division_templates.append(division_template)
+            if load:
+                division_templates.append(division_template)
+            else:
+                division_templates_not_loaded.append(division_template)
         SaveJson(merge_dicts(names_groups, d=True), F(pjoin("data", "common", "units", "names_divisions", f"{key}.json")), indent=4)
         SaveJson(merge_dicts(division_templates, d=True), F(pjoin("data", "history", "units", f"{key}.json")), indent=4)
+        SaveJson(merge_dicts(division_templates_not_loaded, d=True), F(pjoin("data", "history", "units", f"{key}_hidden.json")), indent=4)
 
 def AddInitialArmy(path):
     '''
@@ -70,7 +75,10 @@ def AddInitialArmy(path):
     tag = path.strip('/').split('/')[-1].upper()
     if not ExistFile(pjoin(path,"units.json")):
         return
-    history = LoadJson(F(pjoin("data","history","units",f"{tag}.json")))
+    history = merge_dicts([
+        LoadJson(F(pjoin("data","history","units",f"{tag}.json"))),
+        LoadJson(F(pjoin("data","history","units",f"{tag}_hidden.json")))
+    ], d=True)
     mapping = {}
     for key in history:
         if find_ori(key)=='division_template':

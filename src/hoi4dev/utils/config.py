@@ -10,6 +10,7 @@ def dup_gen(key):
         i += 1
 
 def find_dup(key, ccl_dict):
+    key = find_ori(str(key))
     for key in dup_gen(key):
         if key not in ccl_dict:
             return key
