@@ -10,6 +10,7 @@ def sort_history_priority(key):
         'create_faction',
         'add_to_faction',
         'set_technology',
+        'if',
         'oob',
         'recruit_character',
         'activate_advisor',

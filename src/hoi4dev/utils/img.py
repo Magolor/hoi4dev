@@ -7,6 +7,17 @@ except Exception as e:
     print(e)
 from math import cos, sin, radians
 
+def IsImagePath(path):
+    '''
+    Determine whether the file has format 'dds', 'tga', 'png'.
+    Args:
+        path: str. Path to the file with suffix.
+    Return:
+        bool. True if the file is an image file.
+    '''
+    return path.endswith('.dds') or path.endswith('.tga') or path.endswith('.png')
+    
+
 def ImageLoad(path):
     '''
     Load image from a given path.

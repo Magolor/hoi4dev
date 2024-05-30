@@ -27,6 +27,9 @@ src/hoi4dev/resources/configs/buildings.json
 src/hoi4dev/resources/configs/config.json
 src/hoi4dev/resources/configs/copy.json
 src/hoi4dev/resources/configs/copy_backup.json
+src/hoi4dev/resources/configs/equipmentdesigner.json
+src/hoi4dev/resources/configs/equipmentdesigner_window.json
+src/hoi4dev/resources/configs/equipmentdesigner_window_special.json
 src/hoi4dev/resources/configs/manpower.json
 src/hoi4dev/resources/configs/paths.json
 src/hoi4dev/resources/configs/resources.json

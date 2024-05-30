@@ -185,6 +185,32 @@ def AddEquipment(path, translate=True, debug=False):
             if stat in info:
                 info[stat] = info[stat]+info['delta'][stat]
         info.pop('delta')
+    if ('module_slots' in info) and (info['module_slots'] != 'inherit'):
+        module_slot_gui = LoadJson(F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner.json")))
+        module_slot_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window.json"))
+        module_slot_special_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window_special.json"))
+        slot_mapping = [0, 1, 6, 7, 8, 2, 3, 4, 5] + [9] * max(0, len(info['module_slots'])-9)
+        reordered_slot_names = [k for r,k in sorted(zip(slot_mapping, info['module_slots'].keys()))]
+        for slot_name in reordered_slot_names:
+            special = info['module_slots'][slot_name].pop('special', False) if isinstance(info['module_slots'][slot_name], dict) else False
+            slot_gfx = info['module_slots'][slot_name].pop('tm_gfx', "light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "light_tank_chassis_turret_type_slot"
+            if special:
+                data = LoadJson(module_slot_special_template_path)
+                data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
+            else:
+                data = LoadJson(module_slot_template_path)
+                data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType']['name'] = data['containerWindowType']['containerWindowType']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType__D1']['name'] = data['containerWindowType']['containerWindowType__D1']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_TM_{slot_gfx}")
+            module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'] = merge_dicts([module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'], data], d=True)
+        module_slot_gui['guiTypes']['containerWindowType']['name'] = module_slot_gui['guiTypes']['containerWindowType']['name'].replace('<equipment_name>', f"EQUIPMENT_{tag}")
+        module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'] = module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'].replace('<equipment_gfx>', f"GFX_EQUIPMENT_{tag}_designer")
+        Edit(F(pjoin("data","interface","equipmentdesigner",f"EQUIPMENT_DESIGNER_{tag}.json")), module_slot_gui)
+    if 'module_count_limit_batch' in info:
+        lims = info.pop('module_count_limit_batch', list())
+        for lim in lims:
+            info[find_dup('module_count_limit',info)] = lim
     if debug:
         info['active'] = True
     
@@ -209,7 +235,15 @@ def AddEquipment(path, translate=True, debug=False):
         assert (icon is not None), "The default equipment icon is not found!"
     icon = ImageZoom(icon, w=w, h=h)
     ImageSave(icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}")), format='dds')
-    Edit(F(pjoin("data","interface","equipments",f"EQUIPMENT_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}})
+    sprite_data = {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}}
+    if 'module_slots' in info:
+        designer_icon = ImageFind(pjoin(path,"designer"))
+        if designer_icon is None:
+            designer_icon = icon.clone()
+        designer_icon = ImageZoom(designer_icon, w=w, h=h)
+        ImageSave(designer_icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}_designer")), format='dds')
+        sprite_data['spriteTypes']['spriteType__D1'] = {"name": f"GFX_EQUIPMENT_{tag}_designer", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}_designer.dds")}
+    Edit(F(pjoin("data","interface","equipments",f"EQUIPMENT_{tag}.json")), sprite_data)
 
 class EquipmentNode:
     def __init__(self, path, name):
@@ -250,3 +284,54 @@ def AddEquipments(path, translate=True, debug=False):
         AddEquipment(p.path, translate=translate, debug=debug)
     equipments = [LoadJson(F(pjoin("data","equipments",f"{p.name}.json"))) for p in nodes_list]
     Edit(F(pjoin("data","common","units","equipment",f"zz_all_equipments.json")), merge_dicts(equipments))
+
+
+def AddModules(module_type, path, translate=True):
+    '''
+    Add all modules to the mod.
+    Args:
+        module_type: str. The type of the modules (currently support `tank`, `ship` or `plane`), it only affects the dlc requirement.
+        path: str. The path of the resource files of the modules. Each module resources should include the module icon, the module definition and the localisation.
+        translate: bool. Whether to translate the localisation of the module.
+    Return:
+        None
+    '''
+    modules = {
+	    "limit": {
+	    	"has_dlc": {
+                "tank": "No Step Back",
+                "ship": "Man the Guns",
+                "plane":"By Blood Alone"
+            }[module_type]
+	    }
+    }
+    for category in ListFolders(path, ordered=True):
+        for tag in ListFolders(pjoin(path, category), ordered=True):
+            module_path = pjoin(path, category, tag)
+            info = merge_dicts([{
+                'category': category,
+                'sfx': 'sfx_ui_sd_module_engine'
+            },LoadJson(pjoin(module_path,"info.json"))])
+            name = info.pop('name', None)
+    
+            # Add module localisation
+            AddLocalisation(pjoin(module_path,"locs.txt"), scope=f"MODULE_{tag}", translate=translate)
+            
+            modules = merge_dicts([modules, {f"MODULE_{tag}": info}])
+            
+            # Add module icons
+            scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
+            icon = ImageFind(pjoin(module_path,"default"))
+            if icon is None:
+                icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+                assert (icon is not None), "The default equipment icon is not found!"
+            icon = ImageZoom(icon, w=w, h=h)
+            ImageSave(icon, F(pjoin("gfx","interface","modules",f"MODULE_{tag}")), format='dds')
+            Edit(F(pjoin("data","interface","modules",f"MODULE_{tag}.json")), {'spriteTypes': {
+                'spriteType': {"name": f"GFX_MODULE_{tag}", "texturefile": pjoin("gfx","interface","modules",f"MODULE_{tag}.dds")},
+                'spriteType__D1': {"name": f"GFX_EMI_MODULE_{tag}", "texturefile": pjoin("gfx","interface","modules",f"MODULE_{tag}.dds"), "legacy_lazy_load": False},
+            }})
+    
+    # Initialize modules definition
+    file_name = f"00_{module_type}_modules.json"
+    Edit(F(pjoin("data","common","units","equipment","modules",file_name)), {"equipment_modules": modules}, clear=False)
