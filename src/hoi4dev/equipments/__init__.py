@@ -18,17 +18,65 @@ def AddArchetype(path, translate=True):
         'group_by': 'archetype',
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)
+    if ('module_slots' in info) and (info['module_slots'] != 'inherit'):
+        module_slot_gui = LoadJson(F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner.json")))
+        module_slot_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window.json"))
+        module_slot_special_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window_special.json"))
+        for slot_name in info['module_slots']:
+            special = info['module_slots'][slot_name].pop('special', False) if isinstance(info['module_slots'][slot_name], dict) else False
+            slot_gfx = info['module_slots'][slot_name].pop('tm_gfx', "light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "light_tank_chassis_turret_type_slot"
+            if special:
+                data = LoadJson(module_slot_special_template_path)
+                data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
+            else:
+                data = LoadJson(module_slot_template_path)
+                data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType']['name'] = data['containerWindowType']['containerWindowType']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType__D1']['name'] = data['containerWindowType']['containerWindowType__D1']['name'].replace("<slot_name>", slot_name)
+                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_TM_{slot_gfx}")
+            module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'] = merge_dicts([module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'], data], d=True)
+        module_slot_gui['guiTypes']['containerWindowType']['name'] = module_slot_gui['guiTypes']['containerWindowType']['name'].replace('<equipment_name>', f"ARCHETYPE_{tag}")
+        module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'] = module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'].replace('<equipment_gfx>', f"GFX_ARCHETYPE_{tag}_designer")
+        Edit(F(pjoin("data","interface","equipmentdesigner",f"ARCHETYPE_DESIGNER_{tag}.json")), module_slot_gui)
+        # slot_mapping = [0, 1, 6, 7, 8, 2, 3, 4, 5] + [9] * max(0, len(info['module_slots'])-9)
+        # info['module_slots'] = {k:v for r,(k,v) in sorted(zip(slot_mapping, info['module_slots'].items()))}
+    if 'module_count_limit_batch' in info:
+        lims = info.pop('module_count_limit_batch', list())
+        for lim in lims:
+            info[find_dup('module_count_limit',info)] = lim
+    if 'duplicates' in info:
+        duplicates = info.pop('duplicates', dict())
+        duplicates_data = {"duplicate_archetypes": {
+            f"ARCHETYPE_{k}": merge_dicts([{'archetype': f"ARCHETYPE_{tag}"}, v]) for k,v in duplicates.items()
+        }}
+    else:
+        duplicates = dict()
+        duplicates_data = dict()
     
     # Add archetype localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"ARCHETYPE_{tag}", translate=translate)
     
     # Initialize archetype definition
-    Edit(F(pjoin("data","common","units","equipment",f"ARCHETYPE_{tag}.json")), {'equipments': {f"ARCHETYPE_{tag}": info}})
+    data = merge_dicts([{'equipments': {f"ARCHETYPE_{tag}": info}}, duplicates_data])
+    Edit(F(pjoin("data","common","units","equipment",f"ARCHETYPE_{tag}.json")), data)
+    
+    # Add designer pictures
+    if 'module_slots' in info:
+        scales = get_mod_config('img_scales'); w, h = scales['equipment_designer']
+        designer_icon = ImageFind(pjoin(path,"designer"))
+        if designer_icon is None:
+            designer_icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+            assert (designer_icon is not None), "The default equipment icon is not found!"
+        designer_icon = ImageZoom(designer_icon, w=w, h=h)
+        ImageSave(designer_icon, F(pjoin("gfx","interface","equipments",f"ARCHETYPE_{tag}_designer")), format='dds')
+        Edit(F(pjoin("data","interface","equipments",f"ARCHETYPE_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_ARCHETYPE_{tag}_designer", "texturefile": pjoin("gfx","interface","equipments",f"ARCHETYPE_{tag}_designer.dds")}}})
 
     # Update script_enums
     script_enums = LoadJson(F(pjoin("data","common","script_enums.json")))
     script_enum_equipment_bonus_type = set(script_enums['script_enum_equipment_bonus_type'])
     script_enum_equipment_bonus_type.add(f"ARCHETYPE_{tag}")
+    for key in duplicates:
+        script_enum_equipment_bonus_type.add(f"ARCHETYPE_{key}")
     script_enums['script_enum_equipment_bonus_type'] = list(script_enum_equipment_bonus_type)
     SaveJson(script_enums, F(pjoin("data","common","script_enums.json")), indent=4)
 
@@ -189,9 +237,7 @@ def AddEquipment(path, translate=True, debug=False):
         module_slot_gui = LoadJson(F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner.json")))
         module_slot_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window.json"))
         module_slot_special_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window_special.json"))
-        slot_mapping = [0, 1, 6, 7, 8, 2, 3, 4, 5] + [9] * max(0, len(info['module_slots'])-9)
-        reordered_slot_names = [k for r,k in sorted(zip(slot_mapping, info['module_slots'].keys()))]
-        for slot_name in reordered_slot_names:
+        for slot_name in info['module_slots']:
             special = info['module_slots'][slot_name].pop('special', False) if isinstance(info['module_slots'][slot_name], dict) else False
             slot_gfx = info['module_slots'][slot_name].pop('tm_gfx', "light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "light_tank_chassis_turret_type_slot"
             if special:
@@ -207,6 +253,8 @@ def AddEquipment(path, translate=True, debug=False):
         module_slot_gui['guiTypes']['containerWindowType']['name'] = module_slot_gui['guiTypes']['containerWindowType']['name'].replace('<equipment_name>', f"EQUIPMENT_{tag}")
         module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'] = module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'].replace('<equipment_gfx>', f"GFX_EQUIPMENT_{tag}_designer")
         Edit(F(pjoin("data","interface","equipmentdesigner",f"EQUIPMENT_DESIGNER_{tag}.json")), module_slot_gui)
+        # slot_mapping = [0, 1, 6, 7, 8, 2, 3, 4, 5] + [9] * max(0, len(info['module_slots'])-9)
+        # info['module_slots'] = {k:v for r,(k,v) in sorted(zip(slot_mapping, info['module_slots'].items()))}
     if 'module_count_limit_batch' in info:
         lims = info.pop('module_count_limit_batch', list())
         for lim in lims:
@@ -237,6 +285,7 @@ def AddEquipment(path, translate=True, debug=False):
     ImageSave(icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}")), format='dds')
     sprite_data = {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}}
     if 'module_slots' in info:
+        scales = get_mod_config('img_scales'); w, h = scales['equipment_designer']
         designer_icon = ImageFind(pjoin(path,"designer"))
         if designer_icon is None:
             designer_icon = icon.clone()
@@ -306,6 +355,19 @@ def AddModules(module_type, path, translate=True):
 	    }
     }
     for category in ListFolders(path, ordered=True):
+        if ExistFile(pjoin(path, category, "locs.txt")):
+            AddLocalisation(pjoin(path, category, "locs.txt"), scope=f"EQ_MOD_CAT_{category}_TITLE", translate=translate)
+        scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
+        cat_icon = ImageFind(pjoin(path, category, "default"))
+        if cat_icon is None:
+            cat_icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+            assert (cat_icon is not None), "The default equipment icon is not found!"
+        cat_icon = ImageZoom(cat_icon, w=w, h=h)
+        ImageSave(cat_icon, F(pjoin("gfx","interface","modules",f"GFX_EMI_{category}")), format='dds')
+        Edit(F(pjoin("data","interface","modules",f"GFX_EMI_{category}.json")), {'spriteTypes': {
+            'spriteType': {"name": f"GFX_EMI_{category}", "texturefile": pjoin("gfx","interface","modules",f"GFX_EMI_{category}.dds"), "legacy_lazy_load": False},
+        }})
+        
         for tag in ListFolders(pjoin(path, category), ordered=True):
             module_path = pjoin(path, category, tag)
             info = merge_dicts([{

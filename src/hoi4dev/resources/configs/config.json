@@ -19,6 +19,7 @@
         "equipment_small": [64, 64],
         "equipment_medium": [150, 72],
         "equipment_large": [150, 150],
+        "equipment_designer": [504, 248],
         "country_event": [214, 174],
         "state_event": [214, 174],
         "news_event": [397, 153],
