@@ -16,6 +16,7 @@
         "gfx/interface/goals",
         "gfx/interface/ideas",
         "gfx/interface/intelligence_agencies",
+        "gfx/interface/modifiers",
         "gfx/interface/modules",
         "gfx/flags/medium",
         "gfx/flags/small",

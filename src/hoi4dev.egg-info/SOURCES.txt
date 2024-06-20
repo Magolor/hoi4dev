@@ -23,6 +23,7 @@ src/hoi4dev/intelligence_agencies/__init__.py
 src/hoi4dev/maps/__init__.py
 src/hoi4dev/maps/map2graph.py
 src/hoi4dev/maps/state_stats.py
+src/hoi4dev/modifiers/__init__.py
 src/hoi4dev/resources/configs/buildings.json
 src/hoi4dev/resources/configs/config.json
 src/hoi4dev/resources/configs/copy.json
@@ -54,6 +55,7 @@ src/hoi4dev/resources/imgs/defaults/default_flag.dds
 src/hoi4dev/resources/imgs/defaults/default_focus.dds
 src/hoi4dev/resources/imgs/defaults/default_idea.dds
 src/hoi4dev/resources/imgs/defaults/default_intel_agency.dds
+src/hoi4dev/resources/imgs/defaults/default_modifier.dds
 src/hoi4dev/resources/imgs/defaults/default_portrait.dds
 src/hoi4dev/resources/localisations/empty_l_braz_por.yml
 src/hoi4dev/resources/localisations/empty_l_english.yml
@@ -74,6 +76,7 @@ src/hoi4dev/utils/__init__.py
 src/hoi4dev/utils/ccl.py
 src/hoi4dev/utils/config.py
 src/hoi4dev/utils/date.py
+src/hoi4dev/utils/gui.py
 src/hoi4dev/utils/img.py
 src/hoi4dev/utils/locs.py
 src/hoi4dev/utils/utils.py

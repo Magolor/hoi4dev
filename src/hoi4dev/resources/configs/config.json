@@ -31,6 +31,7 @@
         "autonomy_icon": [36, 36],
         "diplomacy_alert": [47, 42],
         "achievement": [64, 64],
+        "modifier": [37, 47],
 
         "technology_gui_distance": 210
     },
