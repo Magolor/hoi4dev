@@ -124,7 +124,7 @@ def InitSuperEvent():
 
 def AddSuperEvent(path, translate=True):
     '''
-    Add a super event to the mod.
+    Add a super event to the mod. (You have to manually execute `AddEventSpace_("SUPER"); AddEventSpace_("SUPER_NEWS")` after adding super events)
     Args:
         path: str. The path of the resource files of the super event. The resources should include the super event image (optional), the super event definition and the localisation.
         translate: bool. Whether to translate the localisation of the country.
@@ -136,7 +136,8 @@ def AddSuperEvent(path, translate=True):
     tag = int(tag)
     info = LoadJson(pjoin(path,"info.json"))
     name = info.pop('name', None)
-    effects = info.pop('effects', None)
+    effects = info.pop('effects', dict())
+    news_effects = info.pop('new_effects', dict())
 
     # Add event localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"EVENT_SUPER_{tag}", translate=translate)
@@ -152,16 +153,48 @@ def AddSuperEvent(path, translate=True):
             "is_triggered_only": True,
             "fire_only_once": True,
             "hidden": True,
-            "immediate": merge_dicts([{
-                "set_global_flag": f"PIHC_GLOBAL_FLAG_SUPEREVENTS_VISIBLE",
-                "set_global_flag__D1": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_HAPPENED",
-                "set_global_flag__D2": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_ON"
-            }, effects], d=True),
+            "immediate": effects,
             "option": {
                 "ai_chance": {
                     "factor": 100,
                 },
                 "mark_focus_tree_layout_dirty": True
+            }
+        }
+    })
+    news_path = F(pjoin("data","event_spaces","SUPER_NEWS")); CreateFolder(news_path)
+    Edit(F(pjoin("data","event_spaces",f"SUPER_NEWS",f"EVENT_SUPER_NEWS_{tag}.json")), {
+        'news_event': {
+            "id": f"SUPER_NEWS.{tag}",
+            "title": f"EVENT_SUPER_{tag}_NEWS_NAME",
+            "desc": f"EVENT_SUPER_{tag}_NEWS_DESC",
+            "picture": f"GFX_EVENT_SUPER_NEWS_{tag}",
+            "is_triggered_only": True,
+            "immediate": merge_dicts([{
+                "set_global_flag": f"PIHC_GLOBAL_FLAG_SUPEREVENTS_VISIBLE",
+                "set_global_flag__D1": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_HAPPENED",
+                "set_global_flag__D2": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_ON"
+            }, news_effects], d=True),
+            "option": {
+                "ai_chance": {
+                    "factor": 100,
+                },
+                "trigger": {
+                    "is_ai": True
+                }
+            },
+            "option__D1": {
+                "ai_chance": {
+                    "factor": 100,
+                },
+                "trigger": {
+                    "is_ai": False
+                },
+                "hidden_effect": {
+                    "country_event": {
+                        "id": f"SUPER.{tag}",
+                    }
+                }
             }
         }
     })
@@ -175,6 +208,13 @@ def AddSuperEvent(path, translate=True):
     picture = ImageZoom(picture, w=w, h=h)
     ImageSave(picture, F(pjoin("gfx","event_pictures",f"EVENT_SUPER_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","events",f"EVENT_SUPER_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EVENT_SUPER_{tag}", "texturefile": pjoin("gfx","event_pictures",f"EVENT_SUPER_{tag}.dds")}}})
+    w_n, h_n = scales[f"news_event"]
+    news_picture = ImageFind(pjoin(path,"news"))
+    if news_picture is None:
+        news_picture = picture.clone()
+    news_picture = ImageZoom(news_picture, w=w_n, h=h_n)
+    ImageSave(news_picture, F(pjoin("gfx","event_pictures",f"EVENT_SUPER_NEWS_{tag}")), format='dds')
+    Edit(F(pjoin("data","interface","events",f"EVENT_SUPER_NEWS_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EVENT_SUPER_NEWS_{tag}", "texturefile": pjoin("gfx","event_pictures",f"EVENT_SUPER_NEWS_{tag}.dds")}}})
 
     # Add event gui
     # Notice that the order matters, so the file should be sorted after editing
