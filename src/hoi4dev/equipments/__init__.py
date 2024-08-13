@@ -24,7 +24,7 @@ def AddArchetype(path, translate=True):
         module_slot_special_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window_special.json"))
         for slot_name in info['module_slots']:
             special = info['module_slots'][slot_name].pop('special', False) if isinstance(info['module_slots'][slot_name], dict) else False
-            slot_gfx = info['module_slots'][slot_name].pop('tm_gfx', "light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "light_tank_chassis_turret_type_slot"
+            slot_gfx = info['module_slots'][slot_name].pop('gfx', "TM_light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "TM_light_tank_chassis_turret_type_slot"
             if special:
                 data = LoadJson(module_slot_special_template_path)
                 data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
@@ -33,7 +33,7 @@ def AddArchetype(path, translate=True):
                 data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
                 data['containerWindowType']['containerWindowType']['name'] = data['containerWindowType']['containerWindowType']['name'].replace("<slot_name>", slot_name)
                 data['containerWindowType']['containerWindowType__D1']['name'] = data['containerWindowType']['containerWindowType__D1']['name'].replace("<slot_name>", slot_name)
-                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_TM_{slot_gfx}")
+                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_{slot_gfx}")
             module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'] = merge_dicts([module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'], data], d=True)
         module_slot_gui['guiTypes']['containerWindowType']['name'] = module_slot_gui['guiTypes']['containerWindowType']['name'].replace('<equipment_name>', f"ARCHETYPE_{tag}")
         module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'] = module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'].replace('<equipment_gfx>', f"GFX_ARCHETYPE_{tag}_designer")
@@ -239,7 +239,7 @@ def AddEquipment(path, translate=True, debug=False):
         module_slot_special_template_path = F(pjoin("hoi4dev_settings", "configs", "equipmentdesigner_window_special.json"))
         for slot_name in info['module_slots']:
             special = info['module_slots'][slot_name].pop('special', False) if isinstance(info['module_slots'][slot_name], dict) else False
-            slot_gfx = info['module_slots'][slot_name].pop('tm_gfx', "light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "light_tank_chassis_turret_type_slot"
+            slot_gfx = info['module_slots'][slot_name].pop('gfx', "TM_light_tank_chassis_turret_type_slot") if isinstance(info['module_slots'][slot_name], dict) else "TM_light_tank_chassis_turret_type_slot"
             if special:
                 data = LoadJson(module_slot_special_template_path)
                 data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
@@ -248,7 +248,7 @@ def AddEquipment(path, translate=True, debug=False):
                 data['containerWindowType']['name'] = data['containerWindowType']['name'].replace("<slot_name>", slot_name)
                 data['containerWindowType']['containerWindowType']['name'] = data['containerWindowType']['containerWindowType']['name'].replace("<slot_name>", slot_name)
                 data['containerWindowType']['containerWindowType__D1']['name'] = data['containerWindowType']['containerWindowType__D1']['name'].replace("<slot_name>", slot_name)
-                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_TM_{slot_gfx}")
+                data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'] = data['containerWindowType']['containerWindowType__D1']['iconType']['spriteType'].replace("<slot_gfx>", f"GFX_{slot_gfx}")
             module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'] = merge_dicts([module_slot_gui['guiTypes']['containerWindowType']['containerWindowType'], data], d=True)
         module_slot_gui['guiTypes']['containerWindowType']['name'] = module_slot_gui['guiTypes']['containerWindowType']['name'].replace('<equipment_name>', f"EQUIPMENT_{tag}")
         module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'] = module_slot_gui['guiTypes']['containerWindowType']['iconType']['spriteType'].replace('<equipment_gfx>', f"GFX_EQUIPMENT_{tag}_designer")

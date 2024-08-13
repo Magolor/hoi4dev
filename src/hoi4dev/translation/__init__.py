@@ -38,3 +38,4 @@ def AddLocalisation(locs_file, scope="", translate=True, replace=False):
     if translate:
         locs = PopulateLocs(locs, languages=get_mod_config('languages'))
     SaveLocs(locs, name=scope, path=F(pjoin("data","localisation")), replace=replace)
+    return locs
