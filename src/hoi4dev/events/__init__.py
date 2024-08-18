@@ -137,7 +137,8 @@ def AddSuperEvent(path, translate=True):
     info = LoadJson(pjoin(path,"info.json"))
     name = info.pop('name', None)
     effects = info.pop('effects', dict())
-    news_effects = info.pop('new_effects', dict())
+    news_effects = info.pop('news_effects', dict())
+    o_effects = info.pop('o_effects', dict())
 
     # Add event localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"EVENT_SUPER_{tag}", translate=translate)
@@ -153,7 +154,10 @@ def AddSuperEvent(path, translate=True):
             "is_triggered_only": True,
             "fire_only_once": True,
             "hidden": True,
-            "immediate": effects,
+            "immediate": {"hidden_effect": merge_dicts([effects, {
+                "set_global_flag": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_ON",
+                "set_global_flag__D1": f"PIHC_GLOBAL_FLAG_SUPEREVENTS_VISIBLE"
+            }], d=True)},
             "option": {
                 "ai_chance": {
                     "factor": 100,
@@ -170,11 +174,8 @@ def AddSuperEvent(path, translate=True):
             "desc": f"EVENT_SUPER_{tag}_NEWS_DESC",
             "picture": f"GFX_EVENT_SUPER_NEWS_{tag}",
             "is_triggered_only": True,
-            "immediate": merge_dicts([{
-                "set_global_flag": f"PIHC_GLOBAL_FLAG_SUPEREVENTS_VISIBLE",
-                "set_global_flag__D1": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_HAPPENED",
-                "set_global_flag__D2": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_ON"
-            }, news_effects], d=True),
+            "major": True,
+            "immediate": {"hidden_effect": news_effects},
             "option": {
                 "ai_chance": {
                     "factor": 100,
@@ -190,12 +191,14 @@ def AddSuperEvent(path, translate=True):
                 "trigger": {
                     "is_ai": False
                 },
+                "name": f"EVENT_SUPER_{tag}_NEWS_o",
                 "hidden_effect": {
+                    "set_global_flag": f"PIHC_GLOBAL_FLAG_SUPEREVENT_{tag}_HAPPENED",
                     "country_event": {
                         "id": f"SUPER.{tag}",
                     }
                 }
-            }
+            } | o_effects
         }
     })
     
@@ -232,9 +235,20 @@ def AddSuperEvent(path, translate=True):
     }, d=True)
     data = LoadJson(F(pjoin("data","interface","super_events","super_event.json")))
     window = data['guiTypes']['containerWindowType']
-    priority_list = ['OTHERS', 'iconType', '$iconType', '$iconType__D1', 'instantTextBoxType', 'buttonType']
+    order_list_mapping = {
+        'sp_event_text_underlay': 1,
+        'sp_event_desc': 2,
+        'sp_event_overlay': 3,
+        'sp_event_name': 4,
+        'sp_event_close_button': 5
+    }
     data['guiTypes']['containerWindowType'] = {
-        k:v for k, v in sorted(window.items(), key = lambda item: sort_priority(item[0], priority_list))
+        k:v for k, v in sorted(window.items(), key =
+            lambda item:
+                ( order_list_mapping[item[1]['name']]
+                if (item[1]['name'] in order_list_mapping) else 0 )
+                if isinstance(item[1], dict) and ('name' in item[1]) else -1
+        )
     }
     SaveJson(data, F(pjoin("data","interface","super_events","super_event.json")), indent=4)
     
@@ -276,8 +290,7 @@ def AddSuperEvent(path, translate=True):
         }, d=True)
         data = LoadJson(F(pjoin("data","common","scripted_localisation",f"super_events_{key}.json")))
         window = data['defined_text']
-        priority_list = ['name', 'text', '$text']
         data['defined_text'] = {
-            k:v for k, v in sorted(window.items(), key = lambda item: sort_priority(item[0], priority_list))
+            k:v for k, v in sorted(window.items(), key = lambda item: -1 if (item[0]=='name') else (item[1]['localization_key']=="Error"))
         }
         SaveJson(data, F(pjoin("data","common","scripted_localisation",f"super_events_{key}.json")), indent=4)

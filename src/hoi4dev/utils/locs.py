@@ -60,6 +60,16 @@ def ReadTxtLocs(path, scope=""):
     add(key, language, text)
     return locs
 
+def SaveTxtLocs(locs, path):
+    '''
+    Save localisation to a plain text file.
+    '''
+    with open(path, 'w', encoding='utf-8', errors='ignore') as f:
+        for key, loc in locs.items():
+            for language, value in loc.items():
+                f.write(f"[{language}.{key}]\n{value}\n")
+            f.write("\n")
+
 def ReadYmlLocs(path):
     '''
     Read localisation file.
@@ -86,8 +96,13 @@ def ReadYmlLocs(path):
                 if match is not None:
                     key = match.group(1)
                     value = match.group(3) if match.group(3) else match.group(2)
-                    print(key, value)
-                    locs[key] = {lang: eval(value)}
+                    try:
+                        locs[key] = {lang: eval(value.strip())}
+                    except:
+                        try:
+                            locs[key] = {lang: eval("'"+value.strip()[1:1]+"'")}
+                        except:
+                            pass
     return locs
 
 def SaveLocs(locs, name, path, replace=False, clear=True):
