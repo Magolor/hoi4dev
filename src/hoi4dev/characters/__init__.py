@@ -60,7 +60,14 @@ def AddCharacter(path, translate=True):
     Edit(F(pjoin("data","common","characters",f"CHARACTER_{tag}.json")), {'characters': {f"CHARACTER_{tag}": info}})
     
     # Add character portraits
-    for portrait_file in ['default', 'army', 'navy']:
+    portraits = ['default', 'army', 'navy']
+    for f in ListFiles(pjoin(path,"portraits")):
+        if f.endswith('.png') or f.endswith('.jpg') or f.endswith('.dds'):
+            portraits.append(f.split('.')[0])
+    portraits = list(set(portraits))
+    
+    spriteTypes = dict()
+    for portrait_file in portraits:
         portrait = ImageFind(pjoin(path,"portraits",portrait_file))
         if portrait is None:
             portrait = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_portrait")), find_default=False)
@@ -68,3 +75,13 @@ def AddCharacter(path, translate=True):
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
         ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
         ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')
+        spriteTypes = merge_dicts([spriteTypes, {
+            'spriteType': {"name": f"GFX_CHARACTER_{tag}_portrait{suffix}", "texturefile": pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}.dds")}
+        }], d=True)
+        spriteTypes = merge_dicts([spriteTypes, {
+            'spriteType': {"name": f"GFX_CHARACTER_{tag}_portrait{suffix}_small", "texturefile": pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small.dds")}
+        }], d=True)
+    Edit(F(pjoin("data","interface","portraits",f"CHARACTER_{tag}.json")), {'spriteTypes': spriteTypes})
+
+    # Add Gfx just in case one needs to change portraits
+    
