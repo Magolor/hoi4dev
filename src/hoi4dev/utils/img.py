@@ -50,12 +50,12 @@ def ImageSave(img, path, format=None, flip_tga=True):
     - support `tga` flipping.
     '''
     cloned = img.clone()
-    if format == 'dds':
+    if format == 'dds' or ((format is None) and path.endswith('.dds')):
         cloned.compression = 'dxt3'
-    elif format == 'tga':
+    elif format == 'tga' or ((format is None) and path.endswith('.tga')):
         if flip_tga:
             cloned.flip()
-    elif format == 'png':
+    elif format == 'png' or ((format is None) and path.endswith('.png')):
         pass
     else:
         pass
