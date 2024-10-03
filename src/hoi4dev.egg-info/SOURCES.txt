@@ -22,6 +22,7 @@ src/hoi4dev/init/__init__.py
 src/hoi4dev/intelligence_agencies/__init__.py
 src/hoi4dev/maps/__init__.py
 src/hoi4dev/maps/map2graph.py
+src/hoi4dev/maps/map2img.py
 src/hoi4dev/maps/state_stats.py
 src/hoi4dev/modifiers/__init__.py
 src/hoi4dev/resources/configs/buildings.json

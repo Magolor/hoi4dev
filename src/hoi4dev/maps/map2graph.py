@@ -81,7 +81,7 @@ def NumStates():
 
 def BuildAdjacencyGraph(force=False):
     '''
-    Conver the `provinces.bmp` and `definition.csv` to a graph of state adjacency, represented as a file `state_adjacency_graph.json`.
+    Convert the `provinces.bmp` and `definition.csv` to a graph of state adjacency, represented as a file `state_adjacency_graph.json`.
     Args:
         force: bool. If True, force to regenerate the graph.
     Return:
@@ -100,6 +100,7 @@ def BuildAdjacencyGraph(force=False):
         provs = state_data['state']['provinces']
         for prov_id in provs:
             prov2state[prov_id] = state_id
+    SaveJson({repr(k):v for k, v in color2prov.items()}, F("data/map/color2prov.json"), indent=4)
     SaveJson(prov2state, F("data/map/prov2state.json"), indent=4)
 
     def link_state(x, y, a, b):

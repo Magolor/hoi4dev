@@ -27,12 +27,12 @@ def ImageSave(img, path, format='dds', flip=False):
         None
     
     Optimizations for HOI4:
-    - support `dds` compression with `dxt5`.
+    - support `dds` compression with `dxt3`.
     - support `tga` flipping.
     '''
     cloned = img.clone()
     if format == 'dds':
-        cloned.compression = 'dxt5'
+        cloned.compression = 'dxt3'
     elif format == 'tga':
         if flip:
             cloned.flip()

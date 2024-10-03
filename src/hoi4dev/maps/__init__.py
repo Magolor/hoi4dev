@@ -1,6 +1,7 @@
 from ..utils import *
 from .map2graph import *
 from .state_stats import *
+from .map2img import *
 
 def get_num_states():
     return len([f for f in ListFiles(F(pjoin("data","map","converted_states"))) if f.endswith('.json')])
