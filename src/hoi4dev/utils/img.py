@@ -35,23 +35,25 @@ def ImageLoad(path):
         print(e)
         return None
 
-def ImageSave(img, path, format=None, flip_tga=True):
+def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     '''
     Save image to the given path with specified format.
     Args:
         path: str. If it contains suffix, the suffix will be replaced with `format`, otherwise the suffix will be appended.
         format: str. Like 'dds', 'tga', 'png', etc. If not set, will use the suffix of `path`.
         flip_tga: bool. Flip image if it is a `tga` file (specialized for HoI4 country flags).
+        compression: str. Compression method. Default is 'dxt3'. Only works for `dds` files.
     Return:
         None
     
     Optimizations for HOI4:
-    - support `dds` compression with `dxt3`.
+    - support `dds` compression with `dxt3` by default.
     - support `tga` flipping.
     '''
     cloned = img.clone()
     if format == 'dds' or ((format is None) and path.endswith('.dds')):
-        cloned.compression = 'dxt3'
+        if compression is not None:
+            cloned.compression = compression
     elif format == 'tga' or ((format is None) and path.endswith('.tga')):
         if flip_tga:
             cloned.flip()

@@ -125,7 +125,7 @@ def CreateHighlightImage(img, internal_color, border_color, internal_highlight, 
 def BatchCreateStateGroupImages(named_state_groups, output_path,
     internal_color = (88, 93, 99), border_color = (158, 158, 158),
     internal_highlight = (152, 157, 163), border_highlight = (222, 222, 222),
-    margin = 64,
+    margin = 24,
     processing = False,
     zoom_args = {'r': 1.0},
 ):
