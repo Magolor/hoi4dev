@@ -118,3 +118,45 @@ For example `scripts/states_editor/szj.py` shows how you can batch change the ow
 ...
 
 On the other hand, scripts starting with `scripts/CXX_....` demonstrates how a regular mod workflow runs. `v0.2.1.py` is the main thread, generating a mod from scratch (not able to run here due to lack of project resource files).
+
+## Frequent Issues
+
+### Windows Computer with non-UTF-8 characters / pyheaven running error with JSON files
+
+**This package is known to malfunction if you are running on Windows with non-UTF-8 characters. May be fixed in the future.**
+
+This error is usually occurred when operating JSON files containing Chinese. The error occurred due to version difference of `jsonlines`.
+
+Therefore, you may try to modify the dependency `pyheaven`:
+```python
+# In pyheaven/serialize_utils/py 3
+def SaveJson(obj, path, backend:Literal['json','jsonl','demjson','simplejson','jsonpickle']='json', indent:Optional[int]=None, append:bool=False, *args, **kwargs):
+    """Save an object as json (or jsonl) file.
+
+    Args:
+        obj: The object to be saved.
+        path: The save path.
+        backend (str): Specify backend for saving an object in json format. Please refer to function `BUILTIN_JSON_BACKENDS()` for built-in backends.
+        indent (int/None): The `indent` argument for saving in json format, only works if backend is not "jsonl".
+        append (bool): If True, use "a" mode instead of "w" mode, only works if backend is "jsonl".
+    Returns:
+        None
+    """
+    assert (backend in BUILTIN_JSON_BACKENDS()), (f"backend not found! Supported backends: {BUILTIN_JSON_BACKENDS()}")
+    CreateFile(path); path = p2s(path)
+    if backend=='jsonl':
+        assert (indent is None), ("'jsonl' format does not support parameter 'indent'!")
+        with jsonlines.open(path, "a" if append else "w", encoding='utf-8', errors='ignore') as f:
+            for data in obj:
+                f.write(data)
+    else:
+        assert (append is False), ("'json' format does not support parameter 'append'!")
+        module = globals()[backend]
+        with open(path, "w", encoding='utf-8', errors='ignore') as f:
+            if backend in ['json','simplejson']:
+                module.dump(obj, f, indent=indent, *args, **kwargs)
+            else:
+                f.write(module.dumps(obj, indent=indent, *args, **kwargs))
+```
+
+Remove or add `encoding='utf-8', errors='ignore'` depending on your error may solve this issue. You may also want to change `LoadJson` function in the same file. (If you find any convenient fix to this error, feel free to contact me or create a new issue to update `pyheaven`).
