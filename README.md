@@ -11,7 +11,7 @@ On MacOS:
 bash install.bash
 ```
 
-On Windows, please checkout [this link](https://docs.wand-py.org/en/0.6.12/guide/install.html#install-imagemagick-on-windows) to manually download and install `magick`, then:
+On Windows, please checkout [this link](https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows) to manually download and install `magick`, then:
 ```bash
 install.cmd
 ```
@@ -87,6 +87,50 @@ path_to_your_mod = F("")
 # Add a thumbnail manually
 CopyFile("thumbnail.png", F("thumbnail.png"))
 ```
+
+### Conversion between YML localisation and txt
+
+```python
+AddLocalisation("xxx.txt", scope="ABC", translate=False)
+```
+
+In the txt file, use `[<LANGUAGE_ABBREVIATION>.<KEY>]`, use `@` to copy the `scope`
+For example, consider the following `txt` file, under "ABC" scope:
+```
+[en.key01]
+test1
+test2
+[zh.@key01]
+
+中文测例1
+中文测例2
+[zh.key01]
+中文测例3
+中文测例4
+```
+It will be converted to:
+```yml
+l_english:
+  "key01":0 "test1\ntest2"
+```
+
+```yml
+l_simp_chinese:
+  "ABC_key01":0 "中文测例1\n中文测例2"
+  "key01":0 "中文测例3\n中文测例4"
+```
+
+Currently `translate` supports either a local translation model or a Large Language Model, but it requires additonal setups (e.g., huggingface `transformer` or `openai`).
+
+Instead of conversion to YML, you can also convert to JSON using:
+```python
+ReadTxtLocs("xxx.txt", scope="ABC")
+```
+
+For example, the above text file will be parsed as `{'key01: {'en': 'test1\ntest2', 'zh': '中文测例3\n中文测例4'}, 'ABC_key01': {'zh': '中文测例1\n中文测例2'}}`.
+
+### Conversion between YML localisation and txt
+
 
 ## Advanced Features
 
