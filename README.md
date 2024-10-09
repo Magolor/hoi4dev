@@ -2,38 +2,23 @@
 
 **Warning: This package is currently underdeveloped and does not guarantee any consistency.**
 
-## Install
+## Setup
 
-1. Install `magick` (for image processing):
+### Installation
 
 On MacOS:
 ```bash
-brew install freetype imagemagick
-export MAGICK_HOME=/opt/homebrew/opt/imagemagick
-export PATH=$MAGICK_HOME/bin:$PATH
+bash install.bash
 ```
 
-On Windows, please checkout [this link](https://docs.wand-py.org/en/0.6.12/guide/install.html#install-imagemagick-on-windows), then:
+On Windows, please checkout [this link](https://docs.wand-py.org/en/0.6.12/guide/install.html#install-imagemagick-on-windows) to manually download and install `magick`, then:
 ```bash
-export MAGICK_HOME=C:\\Program Files\\ImageMagick-7.1.0-Q16-HDRI
-export PATH=%MAGICK_HOME%\\bin;%PATH%
+install.cmd
 ```
 
-2. Install `hoi4dev` and its dependencies:
-```bash
-export PDOC_ALLOW_EXEC=1
-pip install -q -r requirements.txt
-pip install -e .
+### Configuration
 
-pdoc -d google --output-dir doc hoi4dev
-
-python -c "from hoi4dev import init_config; init_config()"
-python -c "import hoi4dev; from pyheaven import GREEN; print(GREEN(f'hoi4dev version {hoi4dev.__version__} successfully installed!'))"
-```
-
-Or you can use the integrated script in `install.bash`. This installation setup is configured and tested for MacOS. If you encounter dependency issues, try manually configure `magick` and then run `python setup.py develop` or `python setup.py install` instead of the integrated script.
-
-3. After installation, you need to setup the config to start working for a specific mod project. By default, `init_config()` creates a config at `~/.hoi4dev/config.json`, you can setup the paths manually.
+After installation, you need to setup the config to start working for a specific mod project. By default, `init_config()` creates a config at `~/.hoi4dev/config.json`, you can setup the paths manually.
 
 On MacOS:
 ```bash
@@ -118,6 +103,10 @@ For example `scripts/states_editor/szj.py` shows how you can batch change the ow
 ...
 
 On the other hand, scripts starting with `scripts/CXX_....` demonstrates how a regular mod workflow runs. `v0.2.1.py` is the main thread, generating a mod from scratch (not able to run here due to lack of project resource files).
+
+## Demos
+
+We plan to share an end-to-end mod project built with the package in the near future. Stay tuned.
 
 ## Frequent Issues
 

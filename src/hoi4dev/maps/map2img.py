@@ -128,6 +128,7 @@ def BatchCreateStateGroupImages(named_state_groups, output_path,
     margin = 24,
     processing = False,
     zoom_args = {'r': 1.0},
+    alpha = 0.8
 ):
     '''
     Given a dictionary of state groups, create the hightlight images of all state groups.
@@ -233,9 +234,11 @@ def BatchCreateStateGroupImages(named_state_groups, output_path,
         # 1. Zoom
         zoomed_img = ImageZoom(img, **zoom_args)
         
-        # ???
+        # 2. Alpha
+        alphaed_img = zoomed_img.clone()
+        alphaed_img.transparentize(1-alpha)
 
-        return zoomed_img
+        return alphaed_img
     
     CreateFolder(pjoin(output_path, "processed_imgs"))
     processed_imgs = dict()
