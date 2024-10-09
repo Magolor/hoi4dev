@@ -88,7 +88,7 @@ path_to_your_mod = F("")
 CopyFile("thumbnail.png", F("thumbnail.png"))
 ```
 
-### Conversion between YML localisation and txt
+### Conversion between YML localisation and TXT files
 
 ```python
 AddLocalisation("xxx.txt", scope="ABC", translate=False)
@@ -129,8 +129,16 @@ ReadTxtLocs("xxx.txt", scope="ABC")
 
 For example, the above text file will be parsed as `{'key01: {'en': 'test1\ntest2', 'zh': '中文测例3\n中文测例4'}, 'ABC_key01': {'zh': '中文测例1\n中文测例2'}}`.
 
-### Conversion between YML localisation and txt
+### Conversion of dates
 
+Want to know how many days you need to set in `on_actions` for the event to happen at a specific date? Or you need to number of weeks for a focus?
+```python
+get_num_days("1001.06.01", "1001.12.01") // 7   # 26 weeks
+
+get_end_date("1002.12.01", 1298)                # 1006.06.21
+```
+
+Actually, when adding events, `hoi4dev` allows you to automatically set the dates in `on_actions`. We will specify how to use that in the `events` tutorial (Coming Soon).
 
 ## Advanced Features
 
