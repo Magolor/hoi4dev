@@ -11,8 +11,8 @@ export PATH=$MAGICK_HOME/bin:$PATH
 # export PATH=%MAGICK_HOME%\\bin;%PATH%
 
 export PDOC_ALLOW_EXEC=1
-pip install -q -r requirements.txt
-pip install -e .
+python -m pip install -q -r requirements.txt
+python -m pip install -e .
 
 pdoc -d google --output-dir doc hoi4dev
 

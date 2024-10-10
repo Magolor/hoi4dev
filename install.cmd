@@ -8,7 +8,8 @@ set "PATH=%MAGICK_HOME%\bin;%PATH%"
 REM Set PDOC_ALLOW_EXEC environment variable
 set "PDOC_ALLOW_EXEC=1"
 
-pip install -e .
+python -m pip install -q -r requirements.txt
+python -m pip install -e .
 
 REM Run pdoc to generate documentation in Google style
 pdoc -d google --output-dir doc hoi4dev
