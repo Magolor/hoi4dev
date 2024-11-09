@@ -387,6 +387,6 @@ def Edit(file, dict, d=False, clear=True):
     if d:
         clear = False
     if is_ccl(file):
-        SaveTxt(Dict2CCL(merge_dicts([{} if clear else CCL2Dict(ReadTxt(file)), dict], d=d) if ExistFile(file) else dict), file)
+        SaveTxt(Dict2CCL(merge_dicts([{} if clear or not ExistFile(file) else CCL2Dict(ReadTxt(file)), dict], d=d)), file)
     else:
-        SaveJson(merge_dicts([{} if clear else LoadJson(file), dict], d=d) if ExistFile(file) else dict, file, indent=4)
+        SaveJson(merge_dicts([{} if clear or not ExistFile(file) else LoadJson(file), dict], d=d), file, indent=4)

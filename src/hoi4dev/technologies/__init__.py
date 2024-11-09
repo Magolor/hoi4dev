@@ -98,3 +98,49 @@ def AddTechnology(path, translate=True):
             },
         }], d=True)
         SaveJson(countrytechtreeview, F(pjoin("data","interface","countrytechtreeview.json")), indent=4)
+
+def AddDoctrine(path, translate=True):
+    '''
+    Add a doctrine to the mod. A doctrine has slightly different settings compared to a technology.
+    !!! Please note one important difference: CURRENTLY, doctrine does not support automatic change of the `countrydoctrineview.gui` file, you need to manually add the root doctrines to make them appear in the game. !!!
+    Args:
+        path: str. The path of the resource files of the doctrine. The doctrine should include the doctrine icon, the doctrine definition and the localisation.
+        translate: bool. Whether to translate the localisation of the doctrine.
+    Return:
+        None
+    Use 'category' to specify the category of the doctrine. The category should be one of the following (unless manually added): `land`, `naval`, `air`, `special_forces`.
+    '''
+    tag = path.strip('/').split('/')[-1].upper()
+    info = merge_dicts([{
+        'doctrine': True,
+        'doctrine_name': f"DOCTRINE_{tag}",
+        "xp_unlock_cost": 100,
+    },LoadJson(pjoin(path,"info.json"))])
+    name = info.pop('name', None)
+    assert ('category' in info), "The category should be specified in the doctrine definition!"
+    category = info.pop('category')
+    x = info.pop('x', 0); y = info.pop('y', 0)
+    mapping = {'land': 'army', 'naval': 'navy', 'air': 'air', 'special_forces': 'special_forces'}
+    info = merge_dicts([{
+        'folder': {
+            'name': f"{category}_doctrine_folder",
+            'position': { 'x': x, 'y': y },
+        },
+        'xp_research_type': f"{mapping[category]}",
+    }, info])
+    
+    # Add doctrine localisation
+    AddLocalisation(pjoin(path,"locs.txt"), scope=f"DOCTRINE_{tag}", translate=translate)
+    
+    # Initialize technology definition
+    Edit(F(pjoin("data","common","technologies",f"{category}_doctrine.json")), {'$technologies': {f"DOCTRINE_{tag}": info}}, d=True)
+    
+    # Add doctrine icons (notice that the gfx should always be named '_medium' even if the size is small)
+    scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
+    icon = ImageFind(pjoin(path,"default"))
+    if icon is None:
+        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
+        assert (icon is not None), "The default doctrine icon is not found!"
+    icon = ImageZoom(icon, w=w, h=h)
+    ImageSave(icon, F(pjoin("gfx","interface","technologies",f"DOCTRINE_{tag}")), format='dds')
+    Edit(F(pjoin("data","interface","technologies",f"DOCTRINE_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_DOCTRINE_{tag}_medium", "texturefile": pjoin("gfx","interface","technologies",f"DOCTRINE_{tag}.dds")}}})

@@ -20,6 +20,8 @@ def AddIdea(path, translate=True):
     name = info.pop('name', None)
     designer = info.pop('designer', False)
     category = info['category']; info.pop('category')
+    if 'allowed_civil_war' not in info:
+        info['allowed_civil_war'] = {'always': True} # Default to always available for all sides on civil war
     
     # Add idea localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"IDEA_{tag}", translate=translate)
