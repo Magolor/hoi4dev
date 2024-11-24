@@ -89,8 +89,8 @@ def InitMod():
 
 def get_format(directory, content):
     if directory != 'interface': return 'txt'
+    if ('_gfx' in directory) or ('spriteTypes' in content): return 'gfx'
     if 'guiTypes' in content: return 'gui'
-    if 'spriteTypes' in content: return 'gfx'
     return 'txt'
 
 def CompileMod():
@@ -107,7 +107,7 @@ def CompileMod():
         try:
             CCLConvert(
                 F(pjoin('data', path, file)),
-                F(pjoin(path, AsFormat(file, format)))
+                F(pjoin(path, AsFormat(file.replace('_gfx', ''), format)))
             )
         except Exception as e:
             print(f"Error: {e}")

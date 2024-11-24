@@ -76,7 +76,8 @@ def tokenize_ccl_string(ccl_string):
         else:
             # tokens.extend(re.findall(r'{|}|=|\n|-?\w+(?:[.]\w+)?|\S+', sentence[0]))
             # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
-            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
+            # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
+            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-\|]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-\|]\w+)*'?|\S+", sentence[0]))
     return [w for w in tokens if w and w!='\n']
 
 def ccl_type(t):
@@ -218,7 +219,6 @@ def CCLList2Dict(ccl_list):
     This function is highly suspicious in terms of robustness. Please report any bugs you find.
     '''
     all_list = True
-    all_dict = True
     for i, item in enumerate(ccl_list):
         if isinstance(item, dict):
             for k, v in item.items():
@@ -227,15 +227,15 @@ def CCLList2Dict(ccl_list):
             all_list = False
         elif isinstance(item, list):
             ccl_list[i] = CCLList2Dict(item)
-            all_dict = False
-        else:
-            all_dict = False
     if not all_list:
-        assert (all_dict), "A domain can only be either a list of objects or a list of expressions!"
         converted = {}
         for i, item in enumerate(ccl_list):
-            for k, v in item.items():
-                converted[find_dup(k, converted)] = v
+            assert (isinstance(item, dict) or isinstance(item, str)), "Invalid CCL with mixed list and dictionary!"
+            if isinstance(item, str):
+                converted[find_dup(item, converted)] = None
+            else:
+                for k, v in item.items():
+                    converted[find_dup(k, converted)] = v
         return converted
     else:
         return ccl_list
