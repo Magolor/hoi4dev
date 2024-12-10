@@ -1,0 +1,40 @@
+{
+    "languages": ["zh", "en", "ru"],
+    "version": "0.1.0.3",
+    "hoi4_version": "1.13.5",
+    "img_scales": {
+        "loadingscreen": [1920,1080],
+        "mainscreen": [1920,1440],
+        "leader_portrait": [156,210],
+        "advisor_portrait": [65, 67],
+        "flag_large": [82,52],
+        "flag_medium": [41,26],
+        "flag_small": [10,7],
+        "idea": [74, 74],
+        "designer": [64, 64],
+        "ideology": [68, 68],
+        "intel_agency": [117, 117],
+        "intel_agency_full": [234, 117],
+        "bop": [68, 68],
+        "equipment_small": [64, 64],
+        "equipment_medium": [150, 72],
+        "equipment_large": [150, 150],
+        "equipment_designer": [504, 248],
+        "country_event": [214, 174],
+        "state_event": [214, 174],
+        "news_event": [397, 153],
+        "super_event": [960, 540],
+        "decision": [52, 40],
+        "focus": [104, 104],
+        "unit_icon_large": [152, 42],
+        "unit_icon_small": [60, 12],
+        "autonomy_icon": [36, 36],
+        "diplomacy_alert": [47, 42],
+        "achievement": [64, 64],
+        "modifier": [37, 47],
+
+        "technology_gui_distance": 210
+    },
+    "replace_paths": [
+    ]
+}

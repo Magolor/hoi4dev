@@ -1,0 +1,65 @@
+{
+    "probs": {
+        "wasteland":     {
+            "infrastructure": [0.03]
+        },
+        "tiny_island":   {
+            "infrastructure": [0.05]
+        },
+        "enclave":       {
+            "infrastructure": [0.05]
+        },
+        "small_island":  {
+            "infrastructure": [0.1]
+        },
+        "pastoral":      {
+            "infrastructure": [0.2],
+            "industrial_complex": [0.05],
+            "arms_factory": [0.02],
+            "fuel_silo": [0.01]
+        },
+        "rural":         {
+            "infrastructure": [0.3, 0.3],
+            "industrial_complex": [0.08],
+            "arms_factory": [0.05],
+            "fuel_silo": [0.01]
+        },
+        "town":          {
+            "infrastructure": [0.5, 0.3],
+            "industrial_complex": [0.15],
+            "arms_factory": [0.08],
+            "fuel_silo": [0.03]
+        },
+        "large_town":    {
+            "infrastructure": [0.7, 0.3, 0.1],
+            "industrial_complex": [0.6],
+            "arms_factory": [0.2],
+            "fuel_silo": [0.05]
+        },
+        "city":          {
+            "infrastructure": [1.0, 0.5, 0.3, 0.1],
+            "industrial_complex": [0.6, 0.5, 0.3],
+            "arms_factory": [0.4, 0.4],
+            "fuel_silo": [0.1]
+        },
+        "large_city":    {
+            "infrastructure": [1.0, 1.0, 0.5, 0.3, 0.1],
+            "industrial_complex": [0.8, 0.5, 0.5],
+            "arms_factory": [0.8, 0.4, 0.1],
+            "fuel_silo": [0.2]
+        },
+        "metropolis":    {
+            "infrastructure": [1.0, 1.0, 1.0, 0.5, 0.3],
+            "industrial_complex": [1.0, 0.8, 0.7, 0.5, 0.1],
+            "arms_factory": [0.8, 0.7, 0.5, 0.1],
+            "fuel_silo": [0.2]
+        },
+        "megalopolis":   {
+            "infrastructure": [1.0, 1.0, 1.0, 1.0, 0.7],
+            "industrial_complex": [1.0, 1.0, 0.8, 0.6, 0.2],
+            "arms_factory": [0.8, 0.8, 0.5, 0.3, 0.1],
+            "fuel_silo": [0.2]
+        }
+    },
+    "dockyard": [0.3, 0.5, 0.1]
+}

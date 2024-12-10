@@ -1,0 +1,86 @@
+{
+    "guiTypes": {
+        "containerWindowType": {
+            "name": "sp_event_window",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 1080,
+                "height": 640
+            },
+            "orientation": "center",
+            "origo": "center",
+            "moveable": true,
+            "click_to_front": false,
+            "clipping": false,
+            "iconType": {
+                "name": "sp_event_overlay",
+                "spriteType": "GFX_sp_event_window",
+                "position": {
+                    "x": -540,
+                    "y": -320
+                },
+                "orientation": "center"
+            },
+            "iconType__D1": {
+                "name": "sp_event_text_underlay",
+                "spriteType": "GFX_sp_event_underlay",
+                "position": {
+                    "x": 100,
+                    "y": 60
+                },
+                "orientation": "center"
+            },
+            "instantTextBoxType": {
+                "name": "sp_event_desc",
+                "position": {
+                    "x": 90,
+                    "y": 70
+                },
+                "orientation": "center",
+                "font": "hoi_18mbs",
+                "borderSize": {
+                    "x": 0,
+                    "y": 0
+                },
+                "text": "[GetSuperEventDescription]",
+                "maxWidth": 380,
+                "maxHeight": 160,
+                "fixedsize": true,
+                "format": "right"
+            },
+            "instantTextBoxType__D1": {
+                "name": "sp_event_name",
+                "position": {
+                    "x": -350,
+                    "y": -270
+                },
+                "orientation": "center",
+                "font": "hoi_24header",
+                "format": "center",
+                "borderSize": {
+                    "x": 0,
+                    "y": 0
+                },
+                "text": "[GetSuperEventTitle]",
+                "maxWidth": 700,
+                "maxHeight": 50,
+                "fixedsize": true
+            },
+            "buttonType": {
+                "name": "sp_event_close_button",
+                "spriteType": "GFX_sp_event_close_button",
+                "position": {
+                    "x": -125,
+                    "y": 260
+                },
+                "orientation": "center",
+                "clicksound": "click_close",
+                "buttonText": "[GetSuperEventQuote]",
+                "buttonFont": "hoi_20b"
+            }
+        }
+    }
+}

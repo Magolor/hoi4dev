@@ -1,0 +1,16 @@
+{
+    "spriteTypes": {
+        "spriteType__D1": {
+            "name": "GFX_sp_event_window",
+            "textureFile": "gfx/interface/super_events/Super_Event_Window.dds"
+        },
+        "spriteType__D2": {
+            "name": "GFX_sp_event_close_button",
+            "textureFile": "gfx/interface/super_events/Super_Event_Close_Button.dds"
+        },
+        "spriteType__D3": {
+            "name": "GFX_sp_event_underlay",
+            "textureFile": "gfx/interface/super_events/Super_Event_Underlay.dds"
+        }
+    }
+}
