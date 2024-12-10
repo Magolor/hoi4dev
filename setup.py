@@ -6,7 +6,7 @@ here = pathlib.Path(__file__).parent.resolve()
 version = '0.1.0.6'
 short_description = "HOI4DEV: Hearts of Iron IV Development Tools"
 long_description = (here / "README.md").read_text(encoding="utf-8")
-with pathlib.Path('requirements.txt').open() as requirements_txt:
+with (here/'requirements.txt').open() as requirements_txt:
     install_requires = [
         str(requirement)
         for requirement
@@ -43,6 +43,6 @@ setup(
         "Operating System :: Microsoft :: Windows",
     ],
     package_data={
-        'hoi4dev': ['resources/**/*', 'requirements.txt', 'README.md'],
+        'hoi4dev': ['resources/**/*'],
     }
 )
