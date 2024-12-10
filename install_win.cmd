@@ -9,7 +9,7 @@ REM Set PDOC_ALLOW_EXEC environment variable
 set "PDOC_ALLOW_EXEC=1"
 
 python -m pip install -q -r requirements.txt
-python -m pip install -e . --force-reinstall
+python -m pip install -e .
 
 REM Run pdoc to generate documentation in Google style
 pdoc -d google --output-dir doc hoi4dev

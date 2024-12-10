@@ -6,8 +6,17 @@ here = pathlib.Path(__file__).parent.resolve()
 version = '0.1.0.6'
 short_description = "HOI4DEV: Hearts of Iron IV Development Tools"
 long_description = (here/"README.md").read_text(encoding="utf-8")
-requirements_txt = (here/"requirements.txt").read_text(encoding="utf-8")
-install_requires = [str(requirement) for requirement in pkg_resources.parse_requirements(requirements_txt)]
+install_requires = [
+    'jsonlines~=4.0.0',
+    'numpy<2.0.0,>=1.26.4',
+    'openai~=1.57.1',
+    'pandas~=2.0.3',
+    'pdoc~=15.0.0',
+    'pillow~=10.3.0',
+    'pyheaven>=0.1.6.4',
+    'send2trash~=1.8.0',
+    'Wand~=0.6.13'
+]
 
 setup(
     name = "hoi4dev",
