@@ -5,7 +5,7 @@ export PATH=$MAGICK_HOME/bin:$PATH
 
 export PDOC_ALLOW_EXEC=1
 python -m pip install -q -r requirements.txt
-python -m pip install -e .
+python -m pip install -e . --force-reinstall
 
 pdoc -d google --output-dir doc hoi4dev
 
