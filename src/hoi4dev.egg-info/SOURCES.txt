@@ -8,6 +8,7 @@ src/hoi4dev.egg-info/PKG-INFO
 src/hoi4dev.egg-info/SOURCES.txt
 src/hoi4dev.egg-info/dependency_links.txt
 src/hoi4dev.egg-info/entry_points.txt
+src/hoi4dev.egg-info/requires.txt
 src/hoi4dev.egg-info/top_level.txt
 src/hoi4dev/achievements/__init__.py
 src/hoi4dev/bops/__init__.py

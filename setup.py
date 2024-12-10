@@ -1,12 +1,18 @@
 from setuptools import setup, find_packages
+import pkg_resources
 
 import pathlib
 here = pathlib.Path(__file__).parent.resolve()
-version = '0.1.0.4'
+version = '0.1.0.5'
 short_description = "HOI4DEV: Hearts of Iron IV Development Tools"
 long_description = (here / "README.md").read_text(encoding="utf-8")
+with pathlib.Path('requirements.txt').open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement
+        in pkg_resources.parse_requirements(requirements_txt)
+    ]
 
-print(f"Installing HOI4DEV version: {version}.")
 setup(
     name = "hoi4dev",
     version = version,
@@ -22,6 +28,7 @@ setup(
     python_requires=">=3.9, <4",
     packages=find_packages(where="src"),
     package_dir={"":"src"},
+    install_requires=install_requires,
     entry_points = '''
         [console_scripts]
         hoi4dev=hoi4dev.cli:cli
