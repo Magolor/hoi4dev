@@ -3,6 +3,7 @@ README.md
 pyproject.toml
 setup.py
 src/hoi4dev/__init__.py
+src/hoi4dev/cli.py
 src/hoi4dev.egg-info/PKG-INFO
 src/hoi4dev.egg-info/SOURCES.txt
 src/hoi4dev.egg-info/dependency_links.txt
