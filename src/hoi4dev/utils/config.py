@@ -80,8 +80,8 @@ def init_config(force=False, **kwargs):
     if force or not ExistFile(CONFIG_PATH):
         CreateFile(CONFIG_PATH)
         SaveJson(merge_dicts([{
-            'HOI4_GAME_PATH': pjoin(expanduser("~"), "Library", "Application Support", "Steam", "steamapps", "common", "Hearts of Iron IV") if is_macos() else pjoin("C:", "Program Files (x86)", "Steam", "steamapps", "common", "Hearts of Iron IV"),
-            'HOI4_WORKSHOP_PATH': pjoin(expanduser("~"), "Library", "Application Support", "Steam", "steamapps", "workshop", "content", "394360") if is_macos() else pjoin("C:", "Program Files (x86)", "Steam", "steamapps", "workshop", "content", "394360"),
+            'HOI4_GAME_PATH': pjoin(expanduser("~"), "Library", "Application Support", "Steam", "steamapps", "common", "Hearts of Iron IV") if is_macos() else pjoin("C:\\", "Program Files (x86)", "Steam", "steamapps", "common", "Hearts of Iron IV"),
+            'HOI4_WORKSHOP_PATH': pjoin(expanduser("~"), "Library", "Application Support", "Steam", "steamapps", "workshop", "content", "394360") if is_macos() else pjoin("C:\\", "Program Files (x86)", "Steam", "steamapps", "workshop", "content", "394360"),
             'HOI4_MODS_PATH': pjoin(expanduser("~"), "Documents", "Paradox Interactive", "Hearts of Iron IV", "mod"),
             'HOI4_MODS_COMPILE_PATH': pjoin(expanduser("~"), "Documents", "Paradox Interactive", "Hearts of Iron IV", "mod"),
             "CURRENT_MOD_PATH": None
