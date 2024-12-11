@@ -1,0 +1,13 @@
+.DS_Store
+.STATE
+*.pyc
+__pycache__
+dist/
+build/
+.pypirc
+pypi_recovery.txt
+.test
+
+push.bash
+clear.bash
+release.bash

@@ -1,0 +1,2 @@
+[console_scripts]
+hoi4dev = hoi4dev.cli:cli

@@ -1,0 +1,17 @@
+{
+    "mean": {
+        "wasteland":     30000,
+        "tiny_island":   90000,
+        "enclave":       90000,
+        "small_island": 150000,
+        "pastoral":     700000,
+        "rural":       1000000,
+        "town":        1400000,
+        "large_town":  1600000,
+        "city":        2200000,
+        "large_city":  2600000,
+        "metropolis":  3300000,
+        "megalopolis": 3800000
+    },
+    "std": 0.062
+}

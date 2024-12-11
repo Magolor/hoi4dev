@@ -1,0 +1,116 @@
+{
+    "default": {
+        "army": {
+            "male": [
+                "GFX_portrait_unknown"
+            ],
+            "female": [
+                "GFX_portrait_unknown_female"
+            ]
+        },
+        "navy": {
+            "male": [
+                "GFX_portrait_unknown"
+            ],
+            "female": [
+                "GFX_portrait_unknown_female"
+            ]
+        },
+        "political": {
+            "democratic": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "despotic": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "harmonicism": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "equatism": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "fascism": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "peacism": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "corporation": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "transcendence": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            },
+            "anarchy": {
+                "male": [
+                    "GFX_portrait_unknown"
+                ],
+                "female": [
+                    "GFX_portrait_unknown_female"
+                ]
+            }
+        },
+        "operative": {
+            "male": [
+                "GFX_portrait_unknown"
+            ],
+            "female": [
+                "GFX_portrait_unknown_female"
+            ]
+        },
+        "scientist": {
+            "male": [
+                "GFX_portrait_unknown"
+            ],
+            "female": [
+                "GFX_portrait_unknown_female"
+            ]
+        },
+        "male": [
+            "GFX_portrait_unknown"
+        ],
+        "female": [
+            "GFX_portrait_unknown_female"
+        ]
+    }
+}

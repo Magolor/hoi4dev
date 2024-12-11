@@ -1,0 +1,482 @@
+先进的医学专家 (Advanced Medical Expert)
+	random = True
+	experience_loss_factor = -0.25
+	research_speed_factor = 0.05
+
+空军理论家 (Air Theorist)
+	random = True
+	air_doctrine_cost_factor = -0.4
+
+全天候作战 (I Could Do This All Day)
+	random = True
+	land_night_attack = 0.08
+	experience_gain_army = 0.15
+
+考古学家 (Archaeologist)
+	random = False
+	custom_modifier_tooltip = TRAIT_ARCHAEOLOGIST_MODIFER_TOOLTIP
+
+陆军理论家 (Army Theorist)
+	random = True
+	land_doctrine_cost_factor = -0.4
+
+傲慢的指挥官 (Arrogant Commander)
+	random = True
+	experience_gain_navy = 0.2
+
+一针见血 (Straight to the Point)
+	random = True
+	breakthrough_factor = 0.1
+	experience_gain_army = 0.15
+
+中饱私囊 (Corrupt)
+	random = True
+	political_power_cost = 0.3
+
+重度多疑症 (Advanced State of Paranoia)
+	random = False
+	political_advisor_cost_factor = 0.5
+
+繁重的公务 (Buried in Red Tapes)
+	random = False
+	political_power_factor = -0.02
+	economy_cost_factor = 0.1
+
+蛋糕专列 (Cupcake Express)
+	random = True
+	supply_factor = 0.15
+	experience_gain_army = 0.2
+
+思想混乱 (Chaotic Mind)
+	random = True
+	political_power_cost = 0.5
+	drift_defence_factor = -0.2
+
+深得民心 (Popular)
+	random = True
+	stability_weekly_factor = 0.05
+
+外交天才 (Diplomatic Genius)
+	random = True
+	opinion_gain_monthly_factor = 0.35
+	opinion_gain_monthly_same_ideology_factor = 0.6
+	political_power_cost = 0.2
+
+笨嘴拙舌 (Clumsy Speaker)
+	random = True
+	opinion_gain_monthly_factor = -0.2
+	opinion_gain_monthly_same_ideology_factor = -0.2
+	political_power_gain = 0.1
+
+声波攻击专家 (Sonic Attack Specialist)
+	random = False
+	offence = 0.15
+	experience_gain_army = 0.2
+
+安全顾问 (Security Consultant)
+	random = False
+	stability_factor = 0.1
+	enemy_operative_detection_chance_factor = 0.2
+
+鸽派 (Dovish)
+	random = True
+	faction_trade_opinion_factor = 0.05
+	opinion_gain_monthly_factor = 0.1
+	war_support_factor = -0.12
+
+经济学天才 (Economic Genius)
+	random = True
+	local_resources_factor = 0.08
+
+完美经济学教室 (A Perfect Economics Classroom)
+	random = True
+	local_resources_factor = -0.03
+
+教育家 (Educator)
+	random = True
+	research_speed_factor = 0.1
+
+高效 (Efficient)
+	random = True
+	production_factory_max_efficiency_factor = 0.1
+
+有经验的指挥官 (Experienced Commander)
+	random = True
+	offence = 0.05
+	defence = 0.05
+	command_power_gain = 0.2
+	experience_gain_factor = 0.3
+
+阅历丰富的规划家 (Experienced Planner)
+	random = True
+	planning_speed = 0.15
+	max_planning = 0.2
+	army_morale_factor = 0.1
+
+教官 (Instructor)
+	random = True
+	experience_gain_army = 0.3
+	training_time_army_factor = -0.2
+
+老练的闪电天马 (Veteran Wonderbolt)
+	random = True
+	air_agility_factor = 0.15
+	air_ace_generation_chance_factor = 0.25
+	air_mission_efficiency = 0.1
+
+幼驹幻想文学 (Foals’ Fantasy Literature)
+	random = False
+	custom_modifier_tooltip = TRAIT_FANTASY_LITERATURE_MODIFER_TOOLTIP
+	stability_factor = 0.05
+
+时尚偶像 (Fashion Idol)
+	random = True
+	stability_factor = 0.04
+
+代理海军部长 (Acting Head of the Navy)
+	random = False
+	experience_gain_navy = 0.02
+
+烟火世家 (Fireworks Family Tradition)
+	random = False
+	custom_modifier_tooltip = TRAIT_FIRE_FLARE_FIREWORKS_MODIFER_TOOLTIP
+	experience_gain_army = 0.2
+
+火力布置专家 (Fire Placement Master)
+	random = True
+	max_dig_in_factor = 0.2
+	army_defence_factor = 0.05
+	experience_gain_army = 0.2
+
+说谎成性 (Liar in Their Vein)
+	random = False
+	stability_weekly_factor = -0.03
+
+皇室血脉 (Royal Lineage)
+	random = False
+	political_advisor_cost_factor = -0.2
+	stability_factor = 0.08
+	stability_weekly_factor = 0.03
+
+少不更事 (The Inexperience of Youth)
+	random = False
+	political_power_cost = 0.5
+
+自由斗士 (Freedom Fighter)
+	random = True
+	autonomy_gain = 0.4
+	democratic_drift = 0.02
+
+温和的守护者 (Gentle Protector)
+	random = True
+	compliance_growth = 0.2
+	stability_weekly = 0.001
+	experience_gain_army = 0.1
+
+丛林舞者 (Jungle Dancer)
+	random = True
+	terrain_penalty_reduction = 0.3
+	max_dig_in_factor = 0.1
+	experience_gain_army = 0.15
+
+鹰派 (Hawkish)
+	random = True
+	faction_trade_opinion_factor = -0.05
+	opinion_gain_monthly_factor = -0.1
+	war_support_factor = 0.3
+
+军界崇敬 (High Military Esteem)
+	random = True
+	army_advisor_cost_factor = -0.5
+	navy_advisor_cost_factor = -0.5
+	air_advisor_cost_factor = -0.5
+	experience_gain_army = 0.2
+
+政界崇敬 (High Political Esteem)
+	random = True
+	political_power_gain = 0.2
+	drift_defence_factor = 0.3
+	political_advisor_cost_factor = -0.3
+
+莫名其妙的军事指挥 (Unfathomable Military Command)
+	random = False
+	experience_gain_army = 0.1
+
+小丑王牌 (The Joker)
+	random = True
+	breakthrough_factor = 0.06
+	max_dig_in_factor = 0.1
+	experience_gain_army = 0.2
+
+倒置马蹄铁 (Upside-down Horseshoe)
+	random = True
+	army_defence_factor = -0.05
+
+优柔寡断 (Indecisive)
+	random = True
+	political_power_cost = 0.1
+	subjects_autonomy_gain = 0.1
+
+工业领袖 (Industrial Leader)
+	random = True
+	production_speed_industrial_complex_factor = 0.1
+	production_speed_infrastructure_factor = 0.1
+	production_speed_rail_way_factor = 0.1
+	production_speed_synthetic_refinery_factor = 0.1
+
+铁腕进攻 (Iron Fist Attack)
+	random = False
+	offence = 0.15
+	experience_gain_army = 0.2
+
+善良的艺术家 (Kind Artist)
+	random = True
+	opinion_gain_monthly_factor = 0.2
+	stability_factor = 0.15
+
+怪物之王 (King of Monsters)
+	random = False
+	offence = 0.35
+	defence = 0.2
+	breakthrough_factor = 0.3
+	ai_focus_aggressive_factor = 1.0
+	// infantry_magical_attack_factor = 0.35
+	minimum_training_level = -0.15
+
+恐惧之源 (Source of Terror)
+	random = False
+	local_resources_factor = 0.25
+	stability_weekly_factor = 0.1
+	drift_defence_factor = 0.3
+	war_stability_factor = 1.0
+	war_support_factor = 1.0
+	trade_opinion_factor = -1.0
+	annex_cost_factor = -1.0
+
+效忠的领袖 (Vowed Leader)
+	random = False
+	conscription_factor = 0.1
+	training_time_army_factor = -0.1
+
+逻辑分析师 (Logical Analyst)
+	random = True
+	research_speed_factor = 0.1
+	land_doctrine_cost_factor = -0.1
+	experience_gain_army = 0.08
+
+支配性力量 (Dominant Power)
+	random = False
+	offence = 0.3
+
+顽固且无知 (Stubbornness and Ignorance)
+	random = False
+	research_speed_factor = -0.2
+	stability_factor = -0.1
+	local_resources_factor = -0.05
+
+化妆师 (Makeup Artist)
+	random = False
+	encryption_factor = 0.3
+	civilian_intel_to_others = -0.5
+	political_power_gain = 0.2
+	stability_factor = 0.02
+
+缝补大师 (Master Patcher)
+	random = True
+	equipment_capture_factor = 0.2
+
+神秘身份 (Mysterious Identity)
+	random = False
+	custom_modifier_tooltip = TRAIT_MYSTERY_MODIFER_TOOLTIP
+
+海军理论家 (Navy Theorist)
+	random = True
+	naval_doctrine_cost_factor = -0.4
+
+永恒的女王 (Eternal Queen)
+	random = False
+	offence = 0.25
+	defence = 0.25
+
+天马指挥官 (Pegasus Commander)
+	random = False
+	army_bonus_air_superiority_factor = 0.05
+	air_agility_factor = 0.1
+	air_accidents_factor = -0.15
+	experience_gain_air = 0.2
+
+和平美梦 (A Peaceful Dream)
+	random = False
+	trade_opinion_factor = 0.3
+	political_power_gain = 0.3
+	stability_factor = 0.25
+	local_resources_factor = 0.05
+	war_support_factor = -0.35
+	peacism_drift = 0.02
+
+创造性作战专家 (Creative Combat Expert)
+	random = False
+	offence = 0.1
+	defence = 0.1
+	experience_gain_army = 0.1
+
+权术天才 (Political Genius)
+	random = True
+	stability_factor = 0.04
+	political_power_gain = 0.6
+	subjects_autonomy_gain = -0.15
+
+“合作愉快” (“A Pleasure to Work With”)
+	random = True
+	stability_factor = -0.02
+	political_power_gain = -0.2
+
+两面派 (Two Faces)
+	random = True
+	resistance_damage_to_garrison = -0.25
+	foreign_subversive_activites = -0.3
+	non_core_manpower = 0.02
+
+可畏的女王 (The Formidable Queen)
+	random = False
+	stability_factor = 0.05
+	subjects_autonomy_gain = -0.4
+	political_power_cost = 0.3
+	war_support_factor = 0.15
+	war_stability_factor = 0.2
+	drift_defence_factor = 0.4
+	ai_focus_aggressive_factor = 0.3
+
+驭民之术 (Talent of Reign)
+	random = True
+	stability_weekly_factor = 0.04
+	corporation_drift = 0.01
+
+果断 (Ruthless)
+	random = True
+	political_power_gain = 0.1
+	subjects_autonomy_gain = -0.1
+
+永恒的恩典 (Eternal Grace)
+	random = False
+	stability_factor = 0.5
+	local_resources_factor = 0.15
+	monthly_population = 0.3
+	war_support_factor = -1.0
+	peacism_drift = 0.05
+
+知识之心 (Heart of Knowledge)
+	random = False
+	research_speed_factor = 0.2
+	research_bonus = {'pihc_magical': 0.2, 'pihc_magic_theory': 0.15}
+
+硅晶之梦 (Silicon Dream)
+	random = False
+	custom_modifier_tooltip = TRAIT_SILICON_DREAM_MODIFER_TOOLTIP
+
+海马利亚的骏鹰 (TODO)
+	random = False
+	experience_gain_navy = 0.12
+
+金汤匙综合症 (Silver Spoon Syndrome)
+	random = True
+	stability_factor = -0.01
+
+坠落之咒 (Curse of Fallen)
+	random = True
+	cas_damage_reduction = 1.0
+	air_superiority_efficiency = 1.0
+
+前友谊学校校长 (Former Principal of the School of Friendship)
+	random = False
+	opinion_gain_monthly_same_ideology_factor = 0.05
+	harmonicism_acceptance = 90
+
+解放阵线领袖 (Liberation Front Leader)
+	random = False
+	political_power_factor = 0.15
+	stability_factor = 0.05
+
+抵抗组织领袖 (Resistance Leader)
+	random = False
+	political_power_factor = 0.1
+
+生产组织家 (Production Organizer)
+	random = False
+	production_factory_efficiency_gain_factor = 0.1
+	production_factory_max_efficiency_factor = 0.1
+	consumer_goods_factor = -0.05
+
+大魔法师 (Powerful Sorcerer)
+	random = False
+	research_speed_factor = 0.15
+	political_power_gain = 0.05
+
+魔法偏科生 (Magical Talents)
+	random = False
+	research_speed_factor = 0.1
+
+科技天才 (Technological Genius)
+	random = True
+	research_speed_factor = 0.3
+
+科技恐惧症 (Technophobia)
+	random = True
+	research_speed_factor = -0.08
+
+伟大又全能 (Great and Powerful)
+	random = False
+	offence = 0.15
+	defence = 0.05
+	political_power_gain = 0.5
+	research_speed_factor = 0.15
+	local_resources_factor = 0.15
+	monthly_population = 0.08
+	stability_factor = 0.2
+
+不相信轮子 (Don’t Trust Wheels)
+	random = False
+	army_speed_factor = -0.25
+
+暗影之女 (The Daughter of Shadow)
+	random = True
+	political_power_gain = 0.3
+	transcendence_drift = 0.01
+
+暗影之母 (The Mother of Shadow)
+	random = True
+	monthly_population = 0.15
+	transcendence_drift = 0.02
+
+美国军方 (US Military)
+	random = False
+	research_speed_factor = 0.25
+	offence = 0.15
+	country_resource_cost_oil = 10
+
+冷酷的报复者 (Vengeful Mastermind)
+	random = True
+	operative_slot = 2
+	agency_upgrade_time = -0.15
+	resistance_damage_to_garrison = -0.3
+
+战争实业家 (War Industrialist)
+	random = True
+	production_speed_arms_factory_factor = 0.1
+	production_speed_dockyard_factor = 0.1
+	production_speed_fuel_silo_factor = 0.1
+
+暴风雪之源 (Source of Blizzards)
+	random = True
+	ai_focus_aggressive_factor = 1.0
+	acclimatization_cold_climate_gain_factor = 10.0
+	winter_attrition_factor = -1.0
+	air_weather_penalty = -1.0
+	army_attack_factor = 0.2
+	army_attack_speed_factor = 0.2
+	breakthrough_factor = 0.2
+	army_speed_factor = 0.2
+	army_strength_factor = 0.5
+	terrain_penalty_reduction = 0.25
+	out_of_supply_factor = -0.35
+
