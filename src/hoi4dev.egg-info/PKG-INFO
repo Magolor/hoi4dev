@@ -27,196 +27,229 @@ Requires-Dist: pyheaven>=0.1.6.5
 Requires-Dist: send2trash~=1.8.0
 Requires-Dist: Wand~=0.6.13
 
-# HOI4DEV
+# HOI4DEV HOI4 MOD Development Tool
 
-**Warning: This package is currently underdeveloped and does not guarantee any consistency.**
+Update Date: 2024.12.10
 
-**Tutorial Coming Soon...**
+Version: 0.1.0.9
 
-**Compatible with HOI4 Version**: 
+Compatible with HOI4 Version: ~ 1.15.1
+
+## Installation and Configuration
+
+Complete installation and configuration tutorial: [Installation Tutorial - Prerequisites](https://github.com/Magolor/hoi4dev/blob/main/docs/zh/0.%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B-%E5%89%8D%E7%BD%AE.md) and [Installation Tutorial](https://github.com/Magolor/hoi4dev/blob/main/docs/zh/1.%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.md)
+
+Pre-installation requirements: [ImageMagick](https://imagemagick.org/script/download.php), Steam, Steam version of HOI4
+
+<br/>
+
+### PIP Installation
+```bash
+pip install -U hoi4dev
+```
+
+<br/>
+
+### Installation from Repo
+```bash
+git clone git@github.com:Magolor/hoi4dev.git
+cd ./hoi4dev/
+bash install_win.bash # or bash install_mac.bash
+```
+
+<br/>
 
 ### Configuration
 
-After installation, you need to setup the config to start working for a specific mod project. By default, `init_config()` creates a config at `~/.hoi4dev/config.json`, you can setup the paths manually.
-
-On MacOS:
 ```bash
+hoi4dev init
+```
+
+<br/>
+
+### Path Settings
+
+You can find the configuration file `config.json` in the hidden folder `~/.hoi4dev/` in your user directory.
+
+On Windows, it is located at `C:\Users\<Your Username>\.hoi4dev\config.json`:
+```json
 {
-    "HOI4_GAME_PATH": "/Users/<YOUR_USER_NAME_HERE>/Library/Application Support/Steam/steamapps/common/Hearts of Iron IV",
-    "HOI4_MODS_PATH": "/Users/<YOUR_USER_NAME_HERE>/Documents/Paradox Interactive/Hearts of Iron IV/mod",
-    "HOI4_MODS_COPY_PATH": "/Users/<YOUR_USER_NAME_HERE>/Documents/Paradox Interactive/Hearts of Iron IV/mod",
-    "CURRENT_MOD_PATH": "/Users/<YOUR_USER_NAME_HERE>/Documents/Paradox Interactive/Hearts of Iron IV/mod/<YOUR_MOD_NAME>"
+    "HOI4_GAME_PATH": "/Users/<Your Username>/Library/Application Support/Steam/steamapps/common/Hearts of Iron IV/",
+    "HOI4_WORKSHOP_PATH": "/Users/<Your Username>/Library/Application Support/Steam/steamapps/workshop/content/394360/",
+    "HOI4_MODS_PATH": "/Users/<Your Username>/Documents/Paradox Interactive/Hearts of Iron IV/mod/",
+    "HOI4_MODS_COMPILE_PATH": "/Users/<Your Username>/Documents/Paradox Interactive/Hearts of Iron IV/mod/",
+    "CURRENT_MOD_PATH": null
 }
 ```
 
-On Windows:
-```bash
+On MacOS, it is located at `/Users/<Your Username>/.hoi4dev/config.json`:
+```json
 {
-    "HOI4_GAME_PATH": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Hearts of Iron IV",
-    "HOI4_MODS_PATH": "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\394360",
-    "HOI4_MODS_COPY_PATH": "C:\\Users\\<YOUR_USER_NAME_HERE>\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod",
-    "CURRENT_MOD_PATH": "C:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\394360\\<YOUR_MOD_NAME>"
+    "HOI4_GAME_PATH": "C:\\/Program Files (x86)/Steam/steamapps/common/Hearts of Iron IV/",
+    "HOI4_WORKSHOP_PATH": "C:\\/Program Files (x86)/Steam/steamapps/workshop/content/394360/",
+    "HOI4_MODS_PATH": "C:\\/Users/<Your Username>/Documents/Paradox Interactive/Hearts of Iron IV/mod/",
+    "HOI4_MODS_COMPILE_PATH": "C:\\/Users/<Your Username>/Documents/Paradox Interactive/Hearts of Iron IV/mod/",
+    "CURRENT_MOD_PATH": null
 }
 ```
 
-The `HOI4_MODS_COPY_PATH` is usually useless, but sometimes it may be required if your user name contains Chinese or other non-UTF-8 characters. Though, it is still worth warning that **This package is known to malfunction if you are running on Windows with non-UTF-8 characters. May be fixed in the future.**
+If you have modified these paths during the installation of Steam, HOI4, or mods, you may need to adjust them manually.
 
-## Basic Features
+Where:
+- `HOI4_GAME_PATH` should be the installation location of your Steam HOI4, which should contain the executable and many other files;
+- `HOI4_WORKSHOP_PATH` should be the location of your Steam HOI4 workshop download files (this path is usually not used);
+- `HOI4_MODS_PATH` should be the installation location of all your HOI4 mod files; note that `.mod` files must be present for the HOI4 launcher to recognize and load the mods;
+- `HOI4_MODS_COMPILE_PATH` should be the expected location for your compiled mods (the HOI4 launcher only needs to recognize `.mod` files, and mod resource files do not need to be placed together with `.mod` files. If your computer is low on space, you can choose to set `HOI4_MODS_COMPILE_PATH` to another drive or any other location. Typically, if the user does not make changes, this path will be the same as `HOI4_MODS_PATH`);
+- `CURRENT_MOD_PATH` is the mod currently being modified, recorded by the tool, and you do not need to worry about it. When you have a mod project folder you are developing, you can use the command `hoi4dev checkout <your folder address>` to switch `CURRENT_MOD_PATH` to the mod you are currently modifying.
 
-### CCL (Clausewitz scripting language) and JSON conversion
+<br/>
 
+## Basic Functions
+
+### Conversion between HOI4 Script CCL and JSON Format
+
+Use `hoi4dev convert -i <input file> -o <output file>` to automatically and intelligently convert from one format to another.
+
+Format recognition depends on the file extension; `.txt`, `.gui`, and `.gfx` files will be treated as CCL, while `.json` files will be treated as JSON format.
+
+For example, converting from CCL to JSON format in Python code is equivalent to:
 ```python
-from hoi4dev import *
-# Load JSON file
-A = LoadJson("xxx.json")
+input_file = "<input file>"
+output_file = "<output file>"
 
-# Convert JSON to CCL
-with open("xxx.txt", "w") as f:
-    f.write(Dict2CCL(A) + "\n")
+ccl_data = ReadTxt(input_file)
+json_data = CCL2Dict(ccl_data)
 
-# Load CCL file
-with open("ccl.txt", "r") as f:
-    A_ccl = f.read()
-
-# Convert CCL to JSON
-
+CreateFile(output_file)
+SaveJson(json_data, output_file, indent=4)
 ```
 
-### Image conversion
-
+Conversely, converting from JSON format to CCL is equivalent to:
 ```python
-from hoi4dev import *
+input_file = "<input file>"
+output_file = "<output file>"
 
-# Load a png
-a = ImageLoad("xxx.png")
+json_data = LoadJson(input_file)
+ccl_data = Dict2CCL(json_data)
 
-# Zoom & auto-Crop to target size
-A = ImageZoom(a, w=512, h=512)
-
-# Save Image:
-ImageSave(A, "xxx.dds") # automatically compress dds with dxt5
-ImageSave(A, "xxx.tga") # automatically flip tga for flags
+CreateFile(output_file)
+SaveTxt(ccl_data, output_file)
 ```
 
-### Find your COMPILED mod
+<br/>
 
+### TXT Format Localization
+
+Use `hoi4dev loc2json -i <input file> -o <output file> -s <domain>` to convert TXT or YML to JSON. Format recognition depends on the file extension; `.txt` files will be treated as localization text files defined by HOI4DEV, while `.yml` files will be treated as HOI4's localization format. `<domain>` only applies to `.txt` files.
+
+In Python code, this is equivalent to:
 ```python
-# Use `F` to find your COMPILED mod files
-path_to_your_mod = F("")
-# Add a thumbnail manually
-CopyFile("thumbnail.png", F("thumbnail.png"))
+input_file = "<input file>"
+output_file = "<output file>"
+
+json_data = ReadTxtLocs(input_file, scope="<domain>") if input.endswith('.txt') else ReadYmlLocs(path=input)
+
+CreateFile(output_file)
+SaveJson(json_data, output_file, indent=4)
 ```
 
-### Conversion between YML localisation and TXT files
+Meanwhile, using `hoi4dev json2loc -i <input file> -o <output file>` can convert JSON files back to TXT text files. Since converting to YML will result in multiple files placed in different locations within the mod's `localisation/` directory, it needs to be used during mod compilation.
 
+In Python code, this is equivalent to:
 ```python
-AddLocalisation("xxx.txt", scope="ABC", translate=False)
+input_file = "<input file>"
+output_file = "<output file>"
+
+json_data = LoadJson(input_file)
+
+CreateFile(output_file)
+SaveTxtLocs(json_data, output_file)
 ```
 
-In the txt file, use `[<LANGUAGE_ABBREVIATION>.<KEY>]`, use `@` to copy the `scope`
-For example, consider the following `txt` file, under "ABC" scope:
-```
-[en.key01]
-test1
-test2
-[zh.@key01]
+<br/>
 
-中文测例1
-中文测例2
-[zh.key01]
-中文测例3
-中文测例4
-```
-It will be converted to:
-```yml
-l_english:
-  "key01":0 "test1\ntest2"
+### Image Editing
+
+The image editing function allows users to resize and convert image formats, supporting various image formats including `.png`, `.jpg`, `.tga`, and the particularly beloved `.dds` by Paradox Interactive.
+
+Use the following command for basic image resizing, cropping, and format conversion:
+```bash
+hoi4dev imgedit -i <input file> -o <output file> -r <scale ratio> -w <width> -h <height> -b <behavior> -f <flip TGA> -c <compression>
 ```
 
-```yml
-l_simp_chinese:
-  "ABC_key01":0 "中文测例1\n中文测例2"
-  "key01":0 "中文测例3\n中文测例4"
+- `-i` or `--input`: Input file path.
+- `-o` or `--output`: Output file path.
+- `-r` or `--ratio`: Scale ratio, default is 1.
+- `-w` or `--width`: Target width, default is -1 (maintain original width).
+- `-h` or `--height`: Target height, default is -1 (maintain original height).
+- `-b` or `--behavior`: Scaling behavior, default is `max`, optional values are `max` or `min`.
+- `-f` or `--flip_tga`: Whether to flip the image when saving as a `.tga` file, default is `False` (indicating no flip; HOI4 flags are all upside-down `.tga` files).
+- `-c` or `--compression`: Compression format when saving the edited image, default is `dxt3`. Only applicable to `.dds`.
+
+Please note the behavior of this command:
+1. The aspect ratio of the image will always be maintained, avoiding stretching or distortion.
+2. If a ratio `r` is given, the image will always be scaled proportionally, then cropped/extended (filling with a transparent background). `w` and `h` should either both be unset or both set; otherwise, it will cause an error.
+3. If no ratio is given, and neither `w` nor `h` is provided, the image will not be modified.
+4. Otherwise, if no ratio is given, and only one of `w` or `h` is provided, the image will be scaled to the given size.
+5. If both `w` and `h` are provided, if the behavior is 'max', the image will scale until both sides are greater than the given size, then crop to the given size; if the behavior is 'min', the image will scale until only one side equals the given size, then extend to the given size.
+For example:
+- An image of size (5, 3) scaled by `r=2` will result in (10, 6).
+- An image of size (5, 3) scaled by `r=2, w=30, h=30` will result in (10, 6) then extended to (30, 30).
+- An image of size (5, 3) scaled by `w=30` will result in (30, 18).
+- An image of size (5, 3) scaled by `h=30` will result in (50, 30).
+- An image of size (5, 3) scaled by `w=30, h=30, behavior='max'` will result in (50, 30) then cropped to (30, 30).
+- An image of size (5, 3) scaled by `w=30, h=30, behavior='min'` will result in (30, 18) then extended to (30, 30).
+
+In practical use, for example:
+```bash
+hoi4dev imgedit -i <input file> -o <output file> -r 2 -w 800 -h 600 -b max -c dxt3
 ```
 
-Currently `translate` supports either a local translation model or a Large Language Model, but it requires additonal setups (e.g., huggingface `transformer` or `openai`).
+This will double the size of the input image, crop it to 800x600 (if smaller, it will fill with a transparent background), and if saved as a `.dds` file, it will be compressed.
 
-Instead of conversion to YML, you can also convert to JSON using:
+In Python code, this is equivalent to:
 ```python
-ReadTxtLocs("xxx.txt", scope="ABC")
+input_file = "<input file>"
+output_file = "<output file>"
+r = 2  # Scale ratio
+w = 800  # Target width
+h = 600  # Target height
+behavior = 'max'  # Scaling behavior
+flip_tga = False  # Do not flip TGA
+compression = 'dxt3'  # Compression format
+
+img = ImageLoad(input_file)
+edited_img = ImageZoom(img, r=r, w=w, h=h, flip_tga=flip_tga, behavior=behavior)
+ImageSave(edited_img, output_file, compression=compression)
 ```
 
-For example, the above text file will be parsed as `{'key01: {'en': 'test1\ntest2', 'zh': '中文测例3\n中文测例4'}, 'ABC_key01': {'zh': '中文测例1\n中文测例2'}}`.
+However, it is worth noting that in Python code, `flip_tga` defaults to true, meaning all `.tga` image files are flipped by default.
 
-### Conversion of dates
+<br/>
 
-Want to know how many days you need to set in `on_actions` for the event to happen at a specific date? Or you need to number of weeks for a focus?
-```python
-get_num_days("1001.06.01", "1001.12.01") // 7   # 26 weeks
+## Advanced Functions and Project Examples
 
-get_end_date("1002.12.01", 1298)                # 1006.06.21
-```
+For more details, see: [Usage Tutorial](https://github.com/Magolor/hoi4dev/blob/main/docs/zh/2.%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B.md) and [Example - PIHC2 Mod](https://github.com/Magolor/hoi4dev/blob/main/docs/zh/3.%E7%A4%BA%E4%BE%8B-PIHC2%E6%A8%A1%E7%BB%84.md)
 
-Actually, when adding events, `hoi4dev` allows you to automatically set the dates in `on_actions`. We will specify how to use that in the `events` tutorial (Coming Soon).
+Complete mod development example project: PIHC (The Pony In The High Castle MOD).
 
-## Advanced Features
+[GitHub Link](https://github.com/Magolor/HOI4-PIHC) (currently private, contact the author for access; we will open it soon).
 
-See example scripts in `example_scripts/`. Those scripts may not all able to run as they lack project resource files, but can be useful to help you understand the `hoi4dev` mechanism and classical workflows. For example, consider example scripts in `PIHC_v_0_2_1_2024_10_06/`
+<br/>
 
-On the one hand, there are some useful little tools that can be created using `hoi4dev` in `scripts/*/`:
+## Changelog
 
-For example `scripts/states_editor/szj.py` shows how you can batch change the owner of certain states by converting all state history files to JSON, modifying them, and save them back.
+### v0.1.1.0
 
-`scripts/add_kitin_state_group_gui.py` batch creates a map GUI gfxs (results are in `scripts/region_gui/`). This rely on preprocessed map information by `scripts/C01_build_the_map.py`.
+- TODO
 
-`scripts/adv_gen/script.py` and `scripts/mil_gen/script.py` allow you generate a huge amount of political advisors and military generals with a single `.csv` file. You can create Chinese translation if all your mod developers are from Chinese, for example.
+<br/>
 
-...
+## Contact Information
 
-On the other hand, scripts starting with `scripts/CXX_....` demonstrates how a regular mod workflow runs. `v0.2.1.py` is the main thread, generating a mod from scratch (not able to run here due to lack of project resource files).
+Talirian:
 
-## Demos
+- QQ: 125657190
+- Email: magolorcz@gmail.com
 
-We plan to share an end-to-end mod project built with the package in the near future. Stay tuned.
-
-## Frequent Issues
-
-### Windows Computer with non-UTF-8 characters / pyheaven running error with JSON files
-
-**This package is known to malfunction if you are running on Windows with non-UTF-8 characters. May be fixed in the future.**
-
-This error is usually occurred when operating JSON files containing Chinese. The error occurred due to version difference of `jsonlines`.
-
-Therefore, you may try to modify the dependency `pyheaven`:
-```python
-# In pyheaven/serialize_utils/py 3
-def SaveJson(obj, path, backend:Literal['json','jsonl','demjson','simplejson','jsonpickle']='json', indent:Optional[int]=None, append:bool=False, *args, **kwargs):
-    """Save an object as json (or jsonl) file.
-
-    Args:
-        obj: The object to be saved.
-        path: The save path.
-        backend (str): Specify backend for saving an object in json format. Please refer to function `BUILTIN_JSON_BACKENDS()` for built-in backends.
-        indent (int/None): The `indent` argument for saving in json format, only works if backend is not "jsonl".
-        append (bool): If True, use "a" mode instead of "w" mode, only works if backend is "jsonl".
-    Returns:
-        None
-    """
-    assert (backend in BUILTIN_JSON_BACKENDS()), (f"backend not found! Supported backends: {BUILTIN_JSON_BACKENDS()}")
-    CreateFile(path); path = p2s(path)
-    if backend=='jsonl':
-        assert (indent is None), ("'jsonl' format does not support parameter 'indent'!")
-        with jsonlines.open(path, "a" if append else "w", encoding='utf-8', errors='ignore') as f:
-            for data in obj:
-                f.write(data)
-    else:
-        assert (append is False), ("'json' format does not support parameter 'append'!")
-        module = globals()[backend]
-        with open(path, "w", encoding='utf-8', errors='ignore') as f:
-            if backend in ['json','simplejson']:
-                module.dump(obj, f, indent=indent, *args, **kwargs)
-            else:
-                f.write(module.dumps(obj, indent=indent, *args, **kwargs))
-```
-
-Remove or add `encoding='utf-8', errors='ignore'` depending on your error may solve this issue. You may also want to change `LoadJson` function in the same file. (If you find any convenient fix to this error, feel free to contact me or create a new issue to update `pyheaven`).
+<br/>
