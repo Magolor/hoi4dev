@@ -2,7 +2,7 @@
 
 更新日期：2024.12.10
 
-版本：0.1.0.9
+版本：0.1.0.10
 
 适配钢4版本：~ 1.15.1
 
@@ -210,9 +210,13 @@ ImageSave(edited_img, output_file, compression=compression)
 
 ## 更新日志
 
-### v0.1.1.0
+### v0.1.0.10
 
-- TODO
+- 支持特殊工程、科学家
+
+- `hoi4dev`终端命令自动推断输出路径
+
+- `hoi4dev blueprint`
 
 <br/>
 

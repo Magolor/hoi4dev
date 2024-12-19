@@ -18,5 +18,6 @@ from .events import *
 from .bops import *
 from .intelligence_agencies import *
 from .achievements import *
+from .special_projects import *
 
-__version__ = "0.1.0.9"
+__version__ = "0.1.0.10"

@@ -1,5 +1,6 @@
 from ..utils import *
 from ..translation import AddLocalisation
+import numpy as np
 
 def AddCharacter(path, translate=True):
     '''
@@ -115,15 +116,17 @@ def AddRandomCharacters(path):
         Edit(F(pjoin("data","interface","portraits",f"RANDOM_CHARACTER_{category}.json")), {'spriteTypes': spriteTypes})
 
 
-def GetRandomCorpsCommander(quality=8, traits_pool=list()):
+def GetRandomCorpsCommander(quality=8, traits_pool=list(), seed=42):
     '''
     Generate a random corps commander.
     Args:
         quality: int. The quality of the corps commander.
         traits_pool: list. The pool of traits that the corps commander can have.
+        seed: int. The seed for the random number generator
     Return:
         dict. The corps commander definition.
     '''
+    np.random.seed(seed)
     skills = [
         "attack_skill",
         "defense_skill",
@@ -132,7 +135,6 @@ def GetRandomCorpsCommander(quality=8, traits_pool=list()):
     ]
     assert (quality >= len(skills)), f"Quality too low! Expected quality >= {len(skills)}."
     assert (quality <= len(skills)*6), f"Quality too high! Expected quality <= {len(skills)*6}."
-    import numpy as np
     def random_partition(quality):
         parts = [quality//len(skills) for _ in range(len(skills))]
         if sum(parts) < quality:
@@ -149,6 +151,56 @@ def GetRandomCorpsCommander(quality=8, traits_pool=list()):
     return {
         "corps_commander": random_partition(quality) | {
             "skill": max(1, quality//3) + (np.random.rand()>0.9),
+            "traits": [np.random.choice(traits_pool)] if traits_pool and np.random.rand()>0.7 else [],
+        }
+    }
+
+def GetRandomScientist(mode="random", specializations_pool=list(), traits_pool=list(), seed=42):
+    '''
+    Generate a random scientist.
+    Args:
+        mode: str. The mode of the scientist. Can be "single" (meaning a 2 point skill on one specialization), "multi" (meaning a 2 point skill on one specialization and a 1 point skill on another specialization), "expert" (meaning a 3 point skill on one specialization), "newbie" (meaning a 1 point skill on one specializations), "davinci" (meaning a 1 point skill on all specializations), or "random" (meaning a random mode selected from the above, by default it has a 50% chance of being "single", 25% chance of being "multi", 5% chance of being "expert", and 19% chance of being "newbie", and 1% chance of being "davinci"). Or, you can choose mode as a specialization that is in the specializations_pool, which forces the scientist to have a 2 point skill on that specialization.
+        specializations_pool: list. The pool of specializations that the scientist can have.
+        traits_pool: list. The pool of traits that the scientist can have.
+        seed: int. The seed for the random number generator
+    Return:
+        dict. The scientist definition.
+    '''
+    np.random.seed(seed)
+    if mode == "random":
+        mode = np.random.choice(["single", "multi", "expert", "newbie", "davinci"], p=[0.5, 0.25, 0.05, 0.19, 0.01])
+    if mode == "single":
+        skills = {
+            np.random.choice(specializations_pool): 2
+        }
+    elif mode == "multi":
+        major = np.random.choice(specializations_pool)
+        minor = np.random.choice([s for s in specializations_pool if s != major])
+        skills = {
+            major: 2,
+            minor: 1
+        }
+    elif mode == "expert":
+        skills = {
+            np.random.choice(specializations_pool): 3
+        }
+    elif mode == "newbie":
+        skills = {
+            s: 1 for s in specializations_pool
+        }
+    elif mode == "davinci":
+        skills = {
+            s: 1 for s in specializations_pool
+        }
+    elif mode in specializations_pool:
+        skills = {
+            mode: 2
+        }
+    else:
+        raise ValueError(f"Invalid mode: {mode}. Expected one of 'single', 'multi', 'expert', 'newbie', 'davinci', or 'random', or a specialization in the specializations_pool ({','.join(sp for sp in specializations_pool)}).")
+    return {
+        "generate_scientist_character": {
+            "skills": skills,
             "traits": [np.random.choice(traits_pool)] if traits_pool and np.random.rand()>0.7 else [],
         }
     }

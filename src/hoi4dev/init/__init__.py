@@ -87,12 +87,6 @@ def InitMod():
             elif key in ['CreateFolder']:
                 eval(f"{key}(\"{F(v)}\")")
 
-def get_format(directory, content):
-    if directory != 'interface': return 'txt'
-    if ('_gfx' in directory) or ('spriteTypes' in content): return 'gfx'
-    if 'guiTypes' in content: return 'gui'
-    return 'txt'
-
 def CompileMod():
     '''
     Compile the mod to get a final version.
@@ -103,7 +97,7 @@ def CompileMod():
     '''
     files = [(path, f) for path in MAIN_DIRECTORIES for f in EnumFiles(F(pjoin('data', path)), relpath=F(pjoin('data', path))) if f.endswith('.json')]
     for path, file in TQDM(files, desc=f"Compiling the mod..."):
-        format = get_format(path, ReadTxt(F(pjoin('data', path, file))))
+        format = get_format_by_content(ReadTxt(F(pjoin('data', path, file))))
         try:
             CCLConvert(
                 F(pjoin('data', path, file)),

@@ -1,6 +1,10 @@
 {
     "CreateFolder": [
         "common/decisions/categories",
+        "common/special_projects/project_tags",
+        "common/special_projects/projects",
+        "common/special_projects/prototype_rewards",
+        "common/special_projects/specialization",
         "common/units/equipment",
         "common/units/names",
         "common/units/names_divisions",
@@ -18,6 +22,8 @@
         "gfx/interface/intelligence_agencies",
         "gfx/interface/modifiers",
         "gfx/interface/modules",
+        "gfx/interface/special_project",
+        "gfx/interface/special_project/project_icons",
         "gfx/flags/medium",
         "gfx/flags/small",
         "gfx/event_pictures",

@@ -141,6 +141,17 @@ def ccl_repr(t):
         return s
     return str(t)
 
+def get_format__legacy(directory, content):
+    if directory != 'interface': return 'txt'
+    if ('_gfx' in directory) or ('spriteTypes' in content): return 'gfx'
+    if 'guiTypes' in content: return 'gui'
+    return 'txt'
+
+def get_format_by_content(content):
+    if 'spriteTypes' in content: return 'gfx'
+    if 'guiTypes' in content: return 'gui'
+    return 'txt'
+
 def CCL2List(ccl_string):
     '''
     Convert a CCL (Clausewitz scripting language) string to a json list format.

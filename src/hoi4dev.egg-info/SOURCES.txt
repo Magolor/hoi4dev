@@ -62,6 +62,7 @@ src/hoi4dev/resources/imgs/defaults/default_idea.dds
 src/hoi4dev/resources/imgs/defaults/default_intel_agency.dds
 src/hoi4dev/resources/imgs/defaults/default_modifier.dds
 src/hoi4dev/resources/imgs/defaults/default_portrait.dds
+src/hoi4dev/resources/imgs/defaults/default_sp.dds
 src/hoi4dev/resources/localisations/empty_l_braz_por.yml
 src/hoi4dev/resources/localisations/empty_l_english.yml
 src/hoi4dev/resources/localisations/empty_l_french.yml
@@ -71,6 +72,7 @@ src/hoi4dev/resources/localisations/empty_l_polish.yml
 src/hoi4dev/resources/localisations/empty_l_russian.yml
 src/hoi4dev/resources/localisations/empty_l_simp_chinese.yml
 src/hoi4dev/resources/localisations/empty_l_spanish.yml
+src/hoi4dev/special_projects/__init__.py
 src/hoi4dev/technologies/__init__.py
 src/hoi4dev/traits/__init__.py
 src/hoi4dev/translation/__init__.py

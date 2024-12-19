@@ -1,4 +1,5 @@
 from .config import *
+import numpy as np
 
 try:
     from wand import image
@@ -287,6 +288,66 @@ def CreateIntelAgencyImage(img):
     for _ in range(8):
         bg.composite(shd, gravity='east')
     bg.composite(img, gravity='east')
+    return bg
+
+def CreateBlueprintImage(img, color='white', radius=10.0, bg_color='blue', threshold=0.15, add_grid=6, grid_color='white', grid_opacity=0.2, grid_width=None):
+    '''
+    Convert a image to a blueprint image.
+    Args:
+        img: image.Image. A `wand` image object.
+        color: str. Color ('white' by default). Use by the blueprint lines.
+        radius: int. Width of the blueprint lines.
+        bg_color: str. Color (transparent by default).
+        threshold: float. Threshold for edge detection. The lower threshold will be `0.7*threshold` and the upper threshold will be `1.3*threshold`.
+        add_grid: int. Whether to add a grid to the blueprint. If an integer > 0, the grid will be added with the given size. If 0, no grid will be added.
+        grid_color: str. Color ('white' by default). Use by the grid.
+        grid_opacity: float. Opacity of the grid.
+        grid_width: int. Width of the grid. If None, will auto to 1/10 of the grid size.
+    Return:
+        image.Image. The blueprint image.
+    '''
+    lines = img.clone()
+
+    # Step 1: Extract edges
+    lines.transform_colorspace('gray')
+    lines.gaussian_blur(radius=radius/3)
+    lower = max(0, 0.7*threshold)
+    upper = min(1, 1.3*threshold)
+    lines.canny(radius=radius, lower_percent=lower, upper_percent=upper)
+    
+    # Now we have a image of white lines on a black background
+    # Step 2: Extract the white lines, and make black background transparent
+    lines.transparent_color(Color('white'), alpha=1)
+    lines.alpha_channel = 'remove'
+    lines.transparent_color(Color('black'), alpha=0)
+    lines.alpha_channel = 'set'
+    
+    # Step 3: Thickening the lines by dilation
+    lines.morphology('dilate', 'octagon', iterations=1)
+    
+    # Step 4: Change the color of the lines
+    if color != 'white':
+        lines.colorize(Color(color), Color('white'))
+    
+    # Step 4: Composite the lines over a blue background
+    bg = CreateBlankImage(img.width, img.height, bg_color)
+    if add_grid > 0:
+        grid = CreateBlankImage(img.width, img.height, 'transparent')
+        with Drawing() as draw:
+            draw.fill_color = Color(grid_color)
+            draw.fill_opacity = grid_opacity
+            draw.stroke_color = Color(grid_color)
+            draw.stroke_opacity = grid_opacity
+            if grid_width is None:
+                grid_width = add_grid // 10
+            draw.stroke_width = int(grid_width)
+            for x in range(add_grid//2, img.width, add_grid):
+                draw.line((x, 0), (x, img.height))
+            for y in range(add_grid//2, img.height, add_grid):
+                draw.line((0, y), (img.width, y))
+            draw(grid)
+        bg.composite(grid, 0, 0)
+    bg.composite(lines, 0, 0)
     return bg
 
 def SetLoadingScreenImages(imgs, main=None):

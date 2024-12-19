@@ -2,7 +2,7 @@
 
 Update Date: 2024.12.10
 
-Version: 0.1.0.9
+Version: 0.1.0.10
 
 Compatible with HOI4 Version: ~ 1.15.1
 
@@ -210,9 +210,13 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ## Changelog
 
-### v0.1.1.0
+### v0.1.0.10
 
-- TODO
+- Added suport for special projects and scientists
+
+- `hoi4dev` terminal command auto-infers output path
+
+- `hoi4dev blueprint`
 
 <br/>
 
