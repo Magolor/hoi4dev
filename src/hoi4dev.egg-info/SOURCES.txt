@@ -17,6 +17,7 @@ src/hoi4dev/countries/__init__.py
 src/hoi4dev/decisions/__init__.py
 src/hoi4dev/diplomacy/__init__.py
 src/hoi4dev/divisions/__init__.py
+src/hoi4dev/entities/__init__.py
 src/hoi4dev/equipments/__init__.py
 src/hoi4dev/events/__init__.py
 src/hoi4dev/focuses/__init__.py

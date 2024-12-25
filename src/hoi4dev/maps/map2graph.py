@@ -2,7 +2,6 @@ import PIL
 import PIL.Image
 from ..utils import *
 import pandas as pd
-from collections import defaultdict
 
 def ConvertStates(path):
     '''

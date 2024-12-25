@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: hoi4dev
-Version: 0.1.0.10
+Version: 0.1.0.11
 Summary: HOI4DEV: Hearts of Iron IV Development Tools
 Home-page: https://github.com/Magolor/
 Author: Magolor
@@ -31,9 +31,9 @@ Requires-Dist: Wand~=0.6.13
 
 Update Date: 2024.12.10
 
-Version: 0.1.0.10
+Version: 0.1.0.11
 
-Compatible with HOI4 Version: ~ 1.15.1
+Compatible with HOI4 Version: ~ 1.15.3
 
 ## Installation and Configuration
 
@@ -241,7 +241,11 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ### v0.1.0.10
 
-- TODO
+- Added suport for special projects and scientists
+
+- `hoi4dev` terminal command auto-infers output path
+
+- `hoi4dev blueprint`
 
 <br/>
 

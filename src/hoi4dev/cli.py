@@ -141,7 +141,7 @@ def json2loc(input=None, output=None, yes=False, delete_input=False):
 @cli.command()
 @click.option('--input', '-i', is_flag=False, default=None, help='Input file path.')
 @click.option('--output', '-o', is_flag=False, default=None, help='Output file path.')
-@click.option('--ratio', '-r', is_flag=False, default=1, help='The ratio to zoom the image. Default is 1.')
+@click.option('--ratio', '-r', is_flag=False, default=1.0, help='The ratio to zoom the image. Default is 1.')
 @click.option('--width', '-w', is_flag=False, default=-1, help='The width to resize the image. Default is -1.')
 @click.option('--height', '-h', is_flag=False, default=-1, help='The height to resize the image. Default is -1.')
 @click.option('--behavior', '-b', is_flag=False, default='max', help='The behavior when resizing the image. Default is \'max\'. Options: \'max\', \'min\'. Please refer to `ImageZoom` for detailed explanation.')

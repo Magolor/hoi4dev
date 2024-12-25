@@ -1,10 +1,8 @@
 # HOI4DEV HOI4 MOD Development Tool
 
-Update Date: 2024.12.10
+Version: 0.1.0.11
 
-Version: 0.1.0.10
-
-Compatible with HOI4 Version: ~ 1.15.1
+Compatible with HOI4 Version: ~ 1.15.3
 
 ## Installation and Configuration
 
@@ -210,9 +208,13 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ## Changelog
 
+### v0.1.0.11
+
+- Added support for entity modding and more image utils
+
 ### v0.1.0.10
 
-- Added suport for special projects and scientists
+- Added support for special projects and scientists
 
 - `hoi4dev` terminal command auto-infers output path
 

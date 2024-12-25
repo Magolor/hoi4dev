@@ -38,6 +38,7 @@ def SaveTxt(obj, file, encoding=None):
         None
     '''
     encoding = load_default_encoding() if encoding is None else encoding
+    CreateFile(file)
     with open(file, 'w', encoding=encoding, errors='ignore') as f:
         f.write(str(obj))
 
@@ -123,6 +124,11 @@ def ccl_eval(t):
 def ccl_repr(t):
     if isinstance(t, bool):
         return 'yes' if t else 'no'
+    if isinstance(t, str) and t.startswith("``") and t.endswith("``"):
+        s = repr(t[2:-2])
+        if s.startswith("'") and s.endswith("'"):
+            return '"' + s[1:-1].replace('"','\\"').replace("\\'","'") + '"'
+        return s
     if not isinstance(t, str):
         return str(t)
     if t=='':
@@ -148,8 +154,12 @@ def get_format__legacy(directory, content):
     return 'txt'
 
 def get_format_by_content(content):
-    if 'spriteTypes' in content: return 'gfx'
-    if 'guiTypes' in content: return 'gui'
+    content = content.lower()
+    if 'objecttypes' in content: return 'gfx'
+    if 'spritetypes' in content: return 'gfx'
+    if 'guitypes' in content: return 'gui'
+    if 'pdxmesh =' in content: return 'asset'
+    if 'entity =' in content: return 'asset'
     return 'txt'
 
 def CCL2List(ccl_string):

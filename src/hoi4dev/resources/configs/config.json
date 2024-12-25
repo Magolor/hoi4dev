@@ -1,7 +1,7 @@
 {
     "languages": ["zh", "en", "ru"],
-    "version": "0.1.0.10",
-    "hoi4_version": "1.15.1",
+    "version": "0.1.0.11",
+    "hoi4_version": "1.15.3",
     "img_scales": {
         "loadingscreen": [1920,1080],
         "mainscreen": [1920,1440],

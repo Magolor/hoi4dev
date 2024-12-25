@@ -10,6 +10,15 @@ except Exception as e:
     print(e)
 from math import cos, sin, radians
 
+def rgb2hex(rgb):
+    r, g, b = rgb
+    return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
+def hex2rgb(hex):
+    if hex.startswith('#'):
+        hex = hex[1:]
+    return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+
 def IsImagePath(path):
     '''
     Determine whether the file has format 'dds', 'tga', 'png'.
@@ -121,7 +130,7 @@ def CreateBlankImage(w, h, color='transparent'):
     Return:
         image.Image. A `wand` image object.
     '''
-    return image.Image(width=w, height=h, background=image.Color(color))
+    return image.Image(width=w, height=h, background=Color(color) if isinstance(color,str) else color)
 
 def ImageExtend(img, w, h):
     '''
@@ -194,7 +203,7 @@ def ImageRotate(img, angle):
     Rotate image to the given angle. The rotated image will be centered and filled with transparent color.
     Args:
         img: image.Image. A `wand` image object.
-        angle: float. Angle in degree.
+        angle: float. Angle in degree (clockwise).
     Return:
         image.Image. The rotated image.
     
@@ -204,7 +213,7 @@ def ImageRotate(img, angle):
     rot_h = int(img.width*abs(sin(radians(angle))) + img.height*abs(cos(radians(angle))))
     bg = CreateBlankImage(rot_w, rot_h)
     bg.composite(img, int((rot_w-img.width)/2), int((rot_h-img.height)/2))
-    bg.rotate(angle, background=image.Color('transparent'))
+    bg.rotate(angle, background=Color('transparent'))
     return bg
 
 def ImageShift(img, dw=0, dh=0):
@@ -220,6 +229,73 @@ def ImageShift(img, dw=0, dh=0):
     ext = ImageExtend(img, w=img.width+abs(dw)*2, h=img.height+abs(dh)*2)
     ext.crop(left=max(-dw,0), top=max(-dh,0), width=img.width+abs(dw), height=img.height+abs(dh))
     return ext
+
+def ImageComposite(imgs):
+    '''
+    Composite images together. The images will be centered and filled with transparent color.
+    Args:
+        imgs: list[image.Image]. A list of `wand` image objects.
+    Return:
+        image.Image. The composited image.
+    '''
+    assert len(imgs) > 0, "No image to composite!"
+    w, h = max([img.width for img in imgs]), max([img.height for img in imgs])
+    bg = CreateBlankImage(w, h)
+    for img in imgs:
+        bg.composite(img, gravity='center')
+    return bg
+
+def ImageColorTransfer(img, src_color, tgt_color, intensity=0.3):
+    '''
+    Transfer the color of the image from `src_color` to `tgt_color`.
+    Args:
+        img: image.Image. A `wand` image object.
+        src_color: str. Source color in hex format.
+        tgt_color: str. Target color in hex format.
+        intensity: float. Intensity of the color transfer (0.0-1.0). 1.0 means painting, while 0.0 means no change.
+    Return:
+        image.Image. The color transferred image.
+    '''
+    cloned = img.clone()
+    src_color = Color(src_color)
+    inv_src_color = Color(rgb2hex((255-src_color.red_int8, 255-src_color.green_int8, 255-src_color.blue_int8)))
+    alpha = Color(rgb2hex((int(255*intensity), int(255*intensity), int(255*intensity))))
+    cloned.colorize(Color(tgt_color), alpha)
+    cloned.colorize(inv_src_color, alpha)
+    return cloned
+
+def ImageGammaCorrection(img, gammas=[0.8, 0.9, 1.33, 1.66]):
+    '''
+    Perform gamma correction on the image.
+    Args:
+        img: image.Image. A `wand` image object.
+        gammas: list[float]. A list of gamma values.
+    Return:
+        image.Image. The gamma corrected image.
+    '''
+    cloned = img.clone()
+    for gamma in gammas:
+        cloned.gamma(gamma)
+    return cloned
+
+def ImageMask(img, mask, color='transparent'):
+    '''
+    Mask the image with the given mask.
+    Args:
+        img: image.Image. A `wand` image object.
+        mask: image.Image. A `wand` image object, supposed to be black and white. White part will be kept.
+        color: str. Color of the background after masking (transparent by default).
+    Return:
+        image.Image. The masked image.
+    '''
+    cloned = img.clone()
+    bg = CreateBlankImage(img.width, img.height, color)
+    alpha = mask.clone()
+    alpha.transform_colorspace('gray')
+    alpha.alpha_channel = 'copy'
+    cloned.composite_channel('alpha', alpha, 'copy_alpha')
+    bg.composite(cloned)
+    return bg
 
 def CreateLeaderImage(img):
     '''

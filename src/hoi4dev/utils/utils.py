@@ -11,3 +11,4 @@ def is_windows():
     return platform.system() == "Windows"
 
 from copy import deepcopy
+from collections import defaultdict
