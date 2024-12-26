@@ -19,6 +19,39 @@ def hex2rgb(hex):
         hex = hex[1:]
     return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
 
+def hoi4dev_auto_image(
+    path,
+    searches = ["icon", "default"],
+    resource_type = "idea",
+    resource_default = True,
+    scale = (-1, -1),
+    cache_key = None,
+    force = False
+):
+    cache_path = pjoin(path, ".cache", f"{resource_type}_{cache_key}.dds" if cache_key else f"{resource_type}.dds")
+    if (not force) and ExistFile(cache_path):
+        return ImageLoad(cache_path)
+    if isinstance(scale, str):
+        scale = get_mod_config('img_scales')[scale]
+    w, h = scale
+    icon = None
+    for search in searches:
+        if icon is None:
+            icon = ImageFind(pjoin(path, search))
+        else:
+            break
+    if (icon is None) and resource_default:
+        if resource_default==True: resource_default = f"default_{resource_type}"
+        else: resource_default = f"default_{resource_default}"
+        icon = ImageFind(pjoin("hoi4dev_settings", "imgs", "defaults", resource_default), find_default=False)
+        assert (icon is not None), f"The default {resource_type} icon is not found in {path}!"
+    if icon is not None:
+        icon = ImageZoom(icon, w=w, h=h)
+        if force or (not ExistFile(cache_path)):
+            CreateFolder(pjoin(path, ".cache"))
+            ImageSave(icon, cache_path, format='dds')
+    return icon
+
 def IsImagePath(path):
     '''
     Determine whether the file has format 'dds', 'tga', 'png'.
@@ -73,6 +106,7 @@ def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
         pass
     if format and (not path.endswith(f".{format}")):
         path = AsFormat(path, format)
+    CreateFile(path)
     cloned.save(filename=path)
 
 def ImageFind(path, priority=['png','dds','tga'], find_default=True):

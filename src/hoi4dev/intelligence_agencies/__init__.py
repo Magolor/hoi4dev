@@ -11,12 +11,13 @@ def InitIntelAgencies():
     '''
     SaveJson({}, F(pjoin("data","common","intelligence_agencies","00_intelligence_agencies.json")))
 
-def AddIntelAgency(path, translate=True):
+def AddIntelAgency(path, translate=True, force=True):
     '''
     Add an intelligence agency to the mod.
     Args:
         path: str. The path of the resource files of the intelligence agency. The resources should include the intelligence agency icon, the intelligence agency definition and the localisation.
         translate: bool. Whether to translate the localisation of the intelligence agency.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -34,13 +35,18 @@ def AddIntelAgency(path, translate=True):
     Edit(F(pjoin("data","common","intelligence_agencies",f"00_intelligence_agencies.json")), {'intelligence_agency': info}, d=True)
     
     # Add intelligence agency icons
-    scales = get_mod_config('img_scales'); w, h = scales['intel_agency']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_intel_agency")), find_default=False)
-        assert (icon is not None), "The default intelligence agency icon is not found!"
-    icon = CreateIntelAgencyImage(ImageZoom(icon, w=w, h=h))
-    ImageSave(icon, F(pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}")), format='dds')
+    if (not force) and ExistFile(pjoin(path, ".cache", "doubled.dds")):
+        doubled_icon = ImageLoad(pjoin(path, ".cache", "doubled.dds"))
+    else:
+        icon = hoi4dev_auto_image(
+            path = path,
+            resource_type = "intel_agency",
+            scale = "intel_agency",
+            force = force
+        )
+        doubled_icon = CreateIntelAgencyImage(icon)
+        ImageSave(doubled_icon, F(pjoin(path, ".cache", "doubled.dds")), format='dds')
+    ImageSave(doubled_icon, F(pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.json")), {'spriteTypes': {'spriteType': {
         "name": f"GFX_INTEL_AGENCY_{tag}",
         "texturefile": pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.dds"),

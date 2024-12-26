@@ -1,12 +1,13 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddArchetype(path, translate=True):
+def AddArchetype(path, translate=True, force=True):
     '''
     Add an equipment archetype to the mod.
     Args:
         path: str. The path of the resource files of the archetype. The resources should include the archetype icon, the archetype definition and the localisation.
         translate: bool. Whether to translate the localisation of the archetype.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -62,12 +63,13 @@ def AddArchetype(path, translate=True):
     
     # Add designer pictures
     if 'module_slots' in info:
-        scales = get_mod_config('img_scales'); w, h = scales['equipment_designer']
-        designer_icon = ImageFind(pjoin(path,"designer"))
-        if designer_icon is None:
-            designer_icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-            assert (designer_icon is not None), "The default equipment icon is not found!"
-        designer_icon = ImageZoom(designer_icon, w=w, h=h)
+        designer_icon = hoi4dev_auto_image(
+            path = path,
+            searches = ['designer', 'default'],
+            resource_type = "equipment",
+            scale = "equipment_designer",
+            force = force
+        )
         ImageSave(designer_icon, F(pjoin("gfx","interface","equipments",f"ARCHETYPE_{tag}_designer")), format='dds')
         Edit(F(pjoin("data","interface","equipments",f"ARCHETYPE_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_ARCHETYPE_{tag}_designer", "texturefile": pjoin("gfx","interface","equipments",f"ARCHETYPE_{tag}_designer.dds")}}})
 
@@ -80,13 +82,14 @@ def AddArchetype(path, translate=True):
     script_enums['script_enum_equipment_bonus_type'] = list(script_enum_equipment_bonus_type)
     SaveJson(script_enums, F(pjoin("data","common","script_enums.json")), indent=4)
 
-def AddEquipment(path, translate=True, debug=False):
+def AddEquipment(path, translate=True, debug=False, force=True):
     '''
     Add an equipment to the mod. Notice that the equipment will not take effect until it is compiled using `AddEquipments` function.
     Args:
         path: str. The path of the resource files of the equipment. The resources should include the equipment icon, the equipment definition and the localisation.
         translate: bool. Whether to translate the localisation of the equipment.
         debug: bool. If in debug mode, the equipment is always active.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     In the definition, you can set 'alpha_global' as a parameter, which is the scaling factor of the equipment's stats compared to its parent. This works only when the 'parent' attribute is set and the corresponding stat is missing in the equipment definition. Notice that the parent should be compiled before the current equipment. If not set, the `alpha_global` is 0.0 by default.
@@ -276,20 +279,22 @@ def AddEquipment(path, translate=True, debug=False):
     SaveJson(script_enums, F(pjoin("data","common","script_enums.json")), indent=4)
     
     # Add equipment pictures
-    scales = get_mod_config('img_scales'); w, h = scales['equipment_medium']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-        assert (icon is not None), "The default equipment icon is not found!"
-    icon = ImageZoom(icon, w=w, h=h)
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "equipment",
+        scale = "equipment_medium",
+        force = force
+    )
     ImageSave(icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}")), format='dds')
     sprite_data = {'spriteTypes': {'spriteType': {"name": f"GFX_EQUIPMENT_{tag}_medium", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}.dds")}}}
     if 'module_slots' in info:
-        scales = get_mod_config('img_scales'); w, h = scales['equipment_designer']
-        designer_icon = ImageFind(pjoin(path,"designer"))
-        if designer_icon is None:
-            designer_icon = icon.clone()
-        designer_icon = ImageZoom(designer_icon, w=w, h=h)
+        designer_icon = hoi4dev_auto_image(
+            path = path,
+            searches = ['designer', 'default'],
+            resource_type = "equipment",
+            scale = "equipment_designer",
+            force = force
+        )
         ImageSave(designer_icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}_designer")), format='dds')
         sprite_data['spriteTypes']['spriteType__D1'] = {"name": f"GFX_EQUIPMENT_{tag}_designer", "texturefile": pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}_designer.dds")}
     Edit(F(pjoin("data","interface","equipments",f"EQUIPMENT_{tag}.json")), sprite_data)
@@ -313,35 +318,37 @@ def topo_sort(nodes):
                 q.append(p.parent)
     return list(reversed(q))
 
-def AddEquipments(path, translate=True, debug=False):
+def AddEquipments(path, translate=True, debug=False, force=True):
     '''
     Add all the equipments and compile them.
     Args:
         path: str. The path of the resource folder of all the equipments.
         translate: bool. Whether to translate the localisation of the equipment.
         debug: bool. If in debug mode, all the equipments are always active.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
-    nodes = {f"EQUIPMENT_{folder}":EquipmentNode(pjoin(path,folder),f"EQUIPMENT_{folder}") for folder in ListFolders(path)}
+    nodes = {f"EQUIPMENT_{folder}":EquipmentNode(pjoin(path,folder),f"EQUIPMENT_{folder}") for folder in ListResourceFolders(path)}
     for k,n in nodes.items():
         if 'parent' in n.d:
             n.parent = nodes[n.d['parent']]
             n.parent.children.append(n)
     nodes_list = topo_sort(nodes)
     for p in nodes_list:
-        AddEquipment(p.path, translate=translate, debug=debug)
+        AddEquipment(p.path, translate=translate, debug=debug, force=force)
     equipments = [LoadJson(F(pjoin("data","equipments",f"{p.name}.json"))) for p in nodes_list]
     Edit(F(pjoin("data","common","units","equipment",f"zz_all_equipments.json")), merge_dicts(equipments))
 
 
-def AddModules(module_type, path, translate=True):
+def AddModules(module_type, path, translate=True, force=True):
     '''
     Add all modules to the mod.
     Args:
         module_type: str. The type of the modules (currently support `tank`, `ship` or `plane`), it only affects the dlc requirement.
         path: str. The path of the resource files of the modules. Each module resources should include the module icon, the module definition and the localisation.
         translate: bool. Whether to translate the localisation of the module.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -354,21 +361,21 @@ def AddModules(module_type, path, translate=True):
             }[module_type]
 	    }
     }
-    for category in ListFolders(path, ordered=True):
+    for category in ListResourceFolders(path):
         if ExistFile(pjoin(path, category, "locs.txt")):
             AddLocalisation(pjoin(path, category, "locs.txt"), scope=f"EQ_MOD_CAT_{category}_TITLE", translate=translate)
-        scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
-        cat_icon = ImageFind(pjoin(path, category, "default"))
-        if cat_icon is None:
-            cat_icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-            assert (cat_icon is not None), "The default equipment icon is not found!"
-        cat_icon = ImageZoom(cat_icon, w=w, h=h)
+        cat_icon = hoi4dev_auto_image(
+            path = pjoin(path, category),
+            resource_type = "equipment",
+            scale = "equipment_small",
+            force = force
+        )
         ImageSave(cat_icon, F(pjoin("gfx","interface","modules",f"GFX_EMI_{category}")), format='dds')
         Edit(F(pjoin("data","interface","modules",f"GFX_EMI_{category}.json")), {'spriteTypes': {
             'spriteType': {"name": f"GFX_EMI_{category}", "texturefile": pjoin("gfx","interface","modules",f"GFX_EMI_{category}.dds"), "legacy_lazy_load": False},
         }})
         
-        for tag in ListFolders(pjoin(path, category), ordered=True):
+        for tag in ListResourceFolders(pjoin(path, category)):
             module_path = pjoin(path, category, tag)
             info = merge_dicts([{
                 'category': category,
@@ -382,12 +389,12 @@ def AddModules(module_type, path, translate=True):
             modules = merge_dicts([modules, {f"MODULE_{tag}": info}])
             
             # Add module icons
-            scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
-            icon = ImageFind(pjoin(module_path,"default"))
-            if icon is None:
-                icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-                assert (icon is not None), "The default equipment icon is not found!"
-            icon = ImageZoom(icon, w=w, h=h)
+            icon = hoi4dev_auto_image(
+                path = module_path,
+                resource_type = "equipment",
+                scale = "equipment_small",
+                force = force
+            )
             ImageSave(icon, F(pjoin("gfx","interface","modules",f"MODULE_{tag}")), format='dds')
             Edit(F(pjoin("data","interface","modules",f"MODULE_{tag}.json")), {'spriteTypes': {
                 'spriteType': {"name": f"GFX_MODULE_{tag}", "texturefile": pjoin("gfx","interface","modules",f"MODULE_{tag}.dds")},

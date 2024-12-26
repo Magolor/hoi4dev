@@ -61,7 +61,7 @@ def AddModels(path, units_pool=dict(), external_entities=dict()):
         SaveTxt(Dict2CCL(anim_data), F(pjoin("gfx", "models", model, f"animations.asset")))
         
         # 2. Create mesh files
-        for variant in [""] + ListFolders(pjoin(path, model), ordered=True):
+        for variant in [""] + ListResourceFolders(pjoin(path, model)):
             info = merge_dicts([{
             },LoadJson(pjoin(path, model, variant,"info.json")) if ExistFile(pjoin(path, model, variant,"info.json")) else (LoadJson(pjoin(path, model,"info.json")) if ExistFile(pjoin(path, model,"info.json")) else {})], d=True)
             if 'mesh' not in info: info['mesh'] = dict()

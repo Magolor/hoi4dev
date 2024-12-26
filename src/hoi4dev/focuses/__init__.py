@@ -18,13 +18,14 @@ def CreateDefaultFocusTree(path, info=dict()):
         },
     }, info]), pjoin(path,"info.json"), indent=4)
 
-def AddNationalFocus(path, tree, translate=True):
+def AddNationalFocus(path, tree, translate=True, force=True):
     '''
     Add a focus to a given national focus tree. The focus 'parent' (None if it is the root of the focus tree) and focus 'tree' should be specified in the focus definition. Notice that the 'parent' should be the parent in geometric position, not the focus tree. Use 'prerequisites' to refer to the parent in the focus tree as in HoI4.
     Args:
         path: str. The path of the resource files of the focus. The resources should include the focus icon, the focus definition and the localisation.
         tree: str. The id of the focus tree to which the focus belongs.
         translate: bool. Whether to translate the localisation of the focus.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     Please note that the added national focus is not automatically compiled. Explicitly invoking `AddFocusTree()` for the focus tree it belongs is required to make the national focus work.
@@ -56,12 +57,12 @@ def AddNationalFocus(path, tree, translate=True):
     Edit(F(pjoin("data","focus_trees",tree,f"FOCUS_{tag}.json")), info)
     
     # Add focus icons
-    scales = get_mod_config('img_scales'); w, h = scales['focus']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_focus")), find_default=False)
-        assert (icon is not None), "The default focus icon is not found!"
-    icon = ImageZoom(icon, w=w, h=h)
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "focus",
+        scale = "focus",
+        force = force
+    )
     ImageSave(icon, F(pjoin("gfx","interface","goals",f"FOCUS_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","focuses",f"FOCUS_{tag}.json")), {'spriteTypes': {
         'spriteType': {
@@ -175,19 +176,19 @@ def CompileFocusTree(path):
     ], d=True)
     SaveJson({'focus_tree':focus_tree}, F(pjoin("data","common","national_focus",f"{tree}.json")), indent=4)
 
-def AddFocusTree(path, translate=True):
+def AddFocusTree(path, translate=True, force=True):
     '''
     Add a focus tree and then compile it.
     Args:
         path: str. The path of the resource files of the focus tree. The resources should include the focus tree definition and the localisation.
         translate: bool. Whether to translate the localisation of the focus tree.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
     tree = path.strip('/').split('/')[-1].upper()
     SaveJson(LoadJson(pjoin(path,"info.json")), F(pjoin("data","focus_trees",tree,"info.json")), indent=4)
-    for focus in ListFolders(path):
-        if not focus.startswith('__'):
-            AddNationalFocus(pjoin(path, focus), tree=tree, translate=translate)
+    for focus in ListResourceFolders(path):
+        AddNationalFocus(pjoin(path, focus), tree=tree, translate=translate, force=force)
     tree_path = F(pjoin("data","focus_trees",tree)); CreateFolder(tree_path)
     CompileFocusTree(tree_path)

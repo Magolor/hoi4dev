@@ -1,13 +1,14 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddEvent(path, space, translate=True):
+def AddEvent(path, space, translate=True, force=True):
     '''
     Add a event to the mod.
     Args:
         path: str. The path of the resource files of the event. The resources should include the event image (optional), the event definition and the localisation.
         space: str. The space of the event.
         translate: bool. Whether to translate the localisation of the country.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -65,18 +66,18 @@ def AddEvent(path, space, translate=True):
     Edit(F(pjoin("data","event_spaces",f"{space}",f"EVENT_{space}_{tag}.json")), {f"{category}_event": info})
     
     # Add event picture
-    scales = get_mod_config('img_scales'); w, h = scales[f"{category}_event"]
-    picture = ImageFind(pjoin(path,"default"))
-    if picture is None:
-        picture = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_event")), find_default=None)
-        assert (picture is not None), "The default event picture is not found!"
-    if space == "SUPER":
-        w, h = scales["super_event"]
-        picture = ImageZoom(picture, w=w, h=h)
-    elif category == 'country':
-        picture = CreateCountryEventImage(picture)
+    if (not force) and (category == 'country') and ExistFile(pjoin(path, ".cache", "country_event.dds")):
+        picture = ImageLoad(pjoin(path, ".cache", "country_event.dds"))
     else:
-        picture = ImageZoom(picture, w=w, h=h)
+        picture = hoi4dev_auto_image(
+            path = path,
+            resource_type = "event",
+            scale = (-1, -1) if category=='country' else ("super_event" if space=="SUPER" else f"{category}_event"),
+            force = force
+        )
+        if category == 'country':
+            picture = CreateCountryEventImage(picture)
+            ImageSave(picture, pjoin(path, ".cache", "country_event.dds"), format='dds')
     ImageSave(picture, F(pjoin("gfx","event_pictures",f"EVENT_{space}_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","events",f"EVENT_{space}_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EVENT_{space}_{tag}", "texturefile": pjoin("gfx","event_pictures",f"EVENT_{space}_{tag}.dds")}}})
 
@@ -87,19 +88,19 @@ def AddEventSpace_(space):
     event_space = merge_dicts([{"add_namespace": space}] + events, d=True)
     SaveJson(event_space, F(pjoin("data","events",f"{space}.json")), indent=4)
 
-def AddEventSpace(path, translate=True):
+def AddEventSpace(path, translate=True, force=True):
     '''
     Add a event space and all events inside it.
     Args:
         path: str. The path of the resource files of the event space. The resources should include a list of folders, each representing a event.
         translate: bool. Whether to translate the localisation of the event.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
     space = path.strip('/').split('/')[-1].upper()
-    for event in ListFolders(path):
-        if not event.startswith('__'):
-            AddEvent(pjoin(path, event), space=space, translate=translate)
+    for event in ListResourceFolders(path):
+        AddEvent(pjoin(path, event), space=space, translate=translate, force=force)
     AddEventSpace_(space)
 
 
@@ -122,12 +123,13 @@ def InitSuperEvent():
     CopyFile(F(pjoin("hoi4dev_settings", "imgs", "Super_Event_Underlay.dds")), F(pjoin("gfx","interface", "super_events", "Super_Event_Underlay.dds")))
     CopyFile(F(pjoin("hoi4dev_settings", "imgs", "Super_Event_Window.dds")), F(pjoin("gfx","interface", "super_events", "Super_Event_Window.dds")))
 
-def AddSuperEvent(path, translate=True):
+def AddSuperEvent(path, translate=True, force=True):
     '''
     Add a super event to the mod. (You have to manually execute `AddEventSpace_("SUPER"); AddEventSpace_("SUPER_NEWS")` after adding super events)
     Args:
         path: str. The path of the resource files of the super event. The resources should include the super event image (optional), the super event definition and the localisation.
         translate: bool. Whether to translate the localisation of the country.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -203,19 +205,28 @@ def AddSuperEvent(path, translate=True):
     })
     
     # Add event picture
-    scales = get_mod_config('img_scales'); w, h = scales[f"super_event"]
-    picture = ImageFind(pjoin(path,"default"))
-    if picture is None:
-        picture = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_event")))
-        assert (picture is not None), "The default event picture is not found!"
-    picture = ImageZoom(picture, w=w, h=h)
+    scales = get_mod_config('img_scales')
+    w, h = scales['super_event']
+    picture = hoi4dev_auto_image(
+        path = path,
+        resource_type = "event",
+        scale = (w, h),
+        force = force
+    )
     ImageSave(picture, F(pjoin("gfx","event_pictures",f"EVENT_SUPER_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","events",f"EVENT_SUPER_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EVENT_SUPER_{tag}", "texturefile": pjoin("gfx","event_pictures",f"EVENT_SUPER_{tag}.dds")}}})
-    w_n, h_n = scales[f"news_event"]
-    news_picture = ImageFind(pjoin(path,"news"))
+    news_picture = hoi4dev_auto_image(
+        path = path,
+        searches = ["news"],
+        resource_type = "event",
+        resource_default = False,
+        scale = 'news_event',
+        force = force
+    )
     if news_picture is None:
         news_picture = picture.clone()
-    news_picture = ImageZoom(news_picture, w=w_n, h=h_n)
+        w_n, h_n = scales['news_event']
+        news_picture = ImageZoom(news_picture, w=w_n, h=h_n)
     ImageSave(news_picture, F(pjoin("gfx","event_pictures",f"EVENT_SUPER_NEWS_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","events",f"EVENT_SUPER_NEWS_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_EVENT_SUPER_NEWS_{tag}", "texturefile": pjoin("gfx","event_pictures",f"EVENT_SUPER_NEWS_{tag}.dds")}}})
 

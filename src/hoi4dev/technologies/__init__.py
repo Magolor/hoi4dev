@@ -1,12 +1,13 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddTechnology(path, translate=True):
+def AddTechnology(path, translate=True, force=True):
     '''
     Add a technology to the mod.
     Args:
         path: str. The path of the resource files of the technology. The technology should include the technology icon, the technology definition and the localisation.
         translate: bool. Whether to translate the localisation of the technology.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     Use 'category' to specify the category of the technology. The category should be one of the following (unless manually added): `infantry`, `support`, `armour`, `nsb_armour`, `artillery`, `naval`, `mtgnaval`, `mtgnavalsupport`, `air_techs`, `ba_air_techs`, `industry`, `electronics`.
@@ -58,12 +59,13 @@ def AddTechnology(path, translate=True):
     Edit(F(pjoin("data","common","technologies",f"TECHNOLOGY_{tag}.json")), {'technologies': {f"TECHNOLOGY_{tag}": info}})
     
     # Add technology icons (notice that the gfx should always be named '_medium' even if the size is small)
-    scales = get_mod_config('img_scales'); w, h = scales[f'equipment_{size}']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-        assert (icon is not None), "The default technology icon is not found!"
-    icon = ImageZoom(icon, w=w, h=h)
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "technology",
+        resource_default = "equipment",
+        scale = f"equipment_{size}",
+        force = force
+    )
     ImageSave(icon, F(pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}")), format='dds')
     Edit(F(pjoin("data","interface","technologies",f"TECHNOLOGY_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_TECHNOLOGY_{tag}_medium", "texturefile": pjoin("gfx","interface","technologies",f"TECHNOLOGY_{tag}_{size}.dds")}}})
     
@@ -99,13 +101,14 @@ def AddTechnology(path, translate=True):
         }], d=True)
         SaveJson(countrytechtreeview, F(pjoin("data","interface","countrytechtreeview.json")), indent=4)
 
-def AddDoctrine(path, translate=True):
+def AddDoctrine(path, translate=True, force=True):
     '''
     Add a doctrine to the mod. A doctrine has slightly different settings compared to a technology.
     !!! Please note one important difference: CURRENTLY, doctrine does not support automatic change of the `countrydoctrineview.gui` file, you need to manually add the root doctrines to make them appear in the game. !!!
     Args:
         path: str. The path of the resource files of the doctrine. The doctrine should include the doctrine icon, the doctrine definition and the localisation.
         translate: bool. Whether to translate the localisation of the doctrine.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     Use 'category' to specify the category of the doctrine. The category should be one of the following (unless manually added): `land`, `naval`, `air`, `special_forces`.
@@ -136,11 +139,12 @@ def AddDoctrine(path, translate=True):
     Edit(F(pjoin("data","common","technologies",f"{category}_doctrine.json")), {'$technologies': {f"DOCTRINE_{tag}": info}}, d=True)
     
     # Add doctrine icons (notice that the gfx should always be named '_medium' even if the size is small)
-    scales = get_mod_config('img_scales'); w, h = scales[f'equipment_small']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_equipment")), find_default=False)
-        assert (icon is not None), "The default doctrine icon is not found!"
-    icon = ImageZoom(icon, w=w, h=h)
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "doctrine",
+        resource_default = "equipment",
+        scale = "equipment_small",
+        force = force
+    )
     ImageSave(icon, F(pjoin("gfx","interface","technologies",f"DOCTRINE_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","technologies",f"DOCTRINE_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_DOCTRINE_{tag}_medium", "texturefile": pjoin("gfx","interface","technologies",f"DOCTRINE_{tag}.dds")}}})

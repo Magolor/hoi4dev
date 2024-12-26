@@ -28,7 +28,7 @@ def CreateMod(name, **kwargs):
     
     game_path = get_config('HOI4_GAME_PATH')
     for path in MAIN_DIRECTORIES:
-        for folder in ListFolders(pjoin(game_path, path)):
+        for folder in ListResourceFolders(pjoin(game_path, path)):
             CreateFolder(pjoin(root, path, folder))
     
     CreateFolder(pjoin(root, 'hoi4dev_settings'))

@@ -2,12 +2,13 @@ from ..utils import *
 from ..translation import AddLocalisation
 import numpy as np
 
-def AddCharacter(path, translate=True):
+def AddCharacter(path, translate=True, force=True):
     '''
     Add a character to the mod.
     Args:
         path: str. The path of the resource files of the character. The resources should include the character portrait, the character definition and the localisation.
         translate: bool. Whether to translate the localisation of the character.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -69,13 +70,28 @@ def AddCharacter(path, translate=True):
     
     spriteTypes = dict()
     for portrait_file in portraits:
-        portrait = ImageFind(pjoin(path,"portraits",portrait_file))
-        if portrait is None:
-            portrait = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_portrait")), find_default=False)
-            assert (portrait is not None), "The default portrait is not found!"
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
-        ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
-        ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')
+        need_portrait = force or (not ExistFile(pjoin(path, "portraits", ".cache", f"{portrait_file}_leader.dds"))) or (not ExistFile(pjoin(path, "portraits", ".cache", f"{portrait_file}_advisor.dds")))
+        if need_portrait:
+            portrait = hoi4dev_auto_image(
+                path = pjoin(path,"portraits"),
+                searches = [portrait_file, 'default'],
+                resource_type = "portrait",
+                cache_key = portrait_file,
+                force = force
+            )
+        if (not force) and ExistFile(pjoin(path, "portraits", ".cache", f"{portrait_file}_leader.dds")):
+            leader_portrait = ImageLoad(pjoin(path, "portraits", ".cache", f"{portrait_file}_leader.dds"))
+        else:
+            leader_portrait = CreateLeaderImage(portrait)
+            ImageSave(leader_portrait, pjoin(path, "portraits", ".cache", f"{portrait_file}_leader.dds"))
+        if (not force) and ExistFile(pjoin(path, "portraits", ".cache", f"{portrait_file}_advisor.dds")):
+            advisor_portrait = ImageLoad(pjoin(path, "portraits", ".cache", f"{portrait_file}_advisor.dds"))
+        else:
+            advisor_portrait = CreateAdvisorImage(portrait)
+            ImageSave(advisor_portrait, pjoin(path, "portraits", ".cache", f"{portrait_file}_advisor.dds"))
+        ImageSave(leader_portrait, F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}")), format='dds')
+        ImageSave(advisor_portrait, F(pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small")), format='dds')
         spriteTypes = merge_dicts([spriteTypes, {
             'spriteType': {"name": f"GFX_CHARACTER_{tag}_portrait{suffix}", "texturefile": pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}.dds")}
         }], d=True)
@@ -86,27 +102,40 @@ def AddCharacter(path, translate=True):
 
     # Add Gfx just in case one needs to change portraits
 
-def AddRandomCharacters(path):
+def AddRandomCharacters(path, force=True):
     '''
     Add random character portraits to the mod.
     Args:
         path: str. The path of the resource files of the character. The resources should include folders of character portraits.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
         
     TODO: Currently this does not handle adding these to `portraits`, you need to manually arrange the GFX files in `portraits/*.json` files.
     For example, if character portrait is at `ponies/001.png`, then it should be referred to as `GFX_RANDOM_CHARACTER_PONIES_001_portrait` in `portraits/*.json`.
     '''
-    for category in ListFolders(path):
+    for category in ListResourceFolders(path):
         spriteTypes = dict()
         for f in ListFiles(pjoin(path, category)):
             if f.endswith('.png') or f.endswith('.jpg') or f.endswith('.dds'):
-                portrait = ImageFind(pjoin(path, category, f))
                 tag = f"{category.upper()}_{f.split('.')[0].upper()}"
+                need_portrait = force or (not ExistFile(pjoin(path, ".cache", f"{tag}_leader.dds"))) or (not ExistFile(pjoin(path, ".cache", f"{tag}_advisor.dds")))
+                if need_portrait:
+                    portrait = ImageFind(pjoin(path, category, f))
                 # id, labels = f.split('.')[0].split('-'); labels = labels.split('_'); tag = f"{category.upper()}_{id.upper()}"
-                # add_to_portraits(f"GFX_RANDOM_CHARACTER_{tag}_portrait", labels)                
-                ImageSave(CreateLeaderImage(portrait), F(pjoin("gfx","leaders",f"RANDOM_CHARACTER_{tag}")), format='dds')
-                ImageSave(CreateAdvisorImage(portrait), F(pjoin("gfx","leaders",f"RANDOM_CHARACTER_{tag}_small")), format='dds')
+                # add_to_portraits(f"GFX_RANDOM_CHARACTER_{tag}_portrait", labels)
+                if (not force) and ExistFile(pjoin(path, ".cache", f"{tag}_leader.dds")):
+                    leader_portrait = ImageLoad(pjoin(path, ".cache", f"{tag}_leader.dds"))
+                else:
+                    leader_portrait = CreateLeaderImage(portrait)
+                    ImageSave(leader_portrait, pjoin(path, ".cache", f"{tag}_leader.dds"))
+                if (not force) and ExistFile(pjoin(path, ".cache", f"{tag}_advisor.dds")):
+                    advisor_portrait = ImageLoad(pjoin(path, ".cache", f"{tag}_advisor.dds"))
+                else:
+                    advisor_portrait = CreateAdvisorImage(portrait)
+                    ImageSave(advisor_portrait, pjoin(path, ".cache", f"{tag}_advisor.dds"))
+                ImageSave(leader_portrait, F(pjoin("gfx","leaders",f"RANDOM_CHARACTER_{tag}")), format='dds')
+                ImageSave(advisor_portrait, F(pjoin("gfx","leaders",f"RANDOM_CHARACTER_{tag}_small")), format='dds')
                 spriteTypes = merge_dicts([spriteTypes, {
                     'spriteType': {"name": f"GFX_RANDOM_CHARACTER_{tag}_portrait", "texturefile": pjoin("gfx","leaders",f"RANDOM_CHARACTER_{tag}.dds")}
                 }], d=True)

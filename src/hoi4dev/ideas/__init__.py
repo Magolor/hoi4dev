@@ -1,12 +1,13 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddIdea(path, translate=True):
+def AddIdea(path, translate=True, force=True):
     '''
     Add an idea to the mod.
     Args:
         path: str. The path of the resource files of the idea. The resources should include the idea icon, the idea definition and the localisation.
         translate: bool. Whether to translate the localisation of the idea.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -31,21 +32,22 @@ def AddIdea(path, translate=True):
     Edit(F(pjoin("data","common","ideas",f"IDEA_{tag}.json")), {'ideas': {category: data}})
     
     # Add idea icons
-    scales = get_mod_config('img_scales'); w, h = scales['idea']
-    icon = ImageFind(pjoin(path,"default"))
-    if icon is None:
-        icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "default_idea")), find_default=False)
-        assert (icon is not None), "The default idea icon is not found!"
-    icon = ImageZoom(icon, w=w, h=h)
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "idea",
+        scale = 'idea',
+        force = force
+    )
     ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
 
-def AddIdeaCategory(path, translate=True):
+def AddIdeaCategory(path, translate=True, force=True):
     '''
     Add a category of ideas to the mod.
     Args:
         path: str. The path of the resource files of the category. The resources should include the category definition, the localisation, and the ideas folder.
         translate: bool. Whether to translate the localisation of the category.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -62,9 +64,9 @@ def AddIdeaCategory(path, translate=True):
     level = info.pop('level', True)
     
     ideas = []
-    for idea_folder in ListFolders(path, ordered=True):
+    for idea_folder in ListResourceFolders(path):
         tag = pjoin(path, idea_folder).strip('/').split('/')[-1].upper()
-        AddIdea(pjoin(path, idea_folder), translate=translate)
+        AddIdea(pjoin(path, idea_folder), translate=translate, force=force)
         data = LoadJson(F(pjoin("data","common","ideas",f"IDEA_{tag}.json")))['ideas']
         assert (len(data) == 1), "The idea should belong to only one category!"
         idea = list(data.values())[0]; ideas.append(idea)

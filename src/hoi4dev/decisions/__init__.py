@@ -1,13 +1,14 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddDecision(path, category, translate=True):
+def AddDecision(path, category, translate=True, force=True):
     '''
     Add a decision to the mod.
     Args:
         path: str. The path of the resource files of the decision. The resources should include the decision icon (optional), the decision definition and the localisation.
         category: str. The category of the decision.
         translate: bool. Whether to translate the localisation of the country.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -28,18 +29,24 @@ def AddDecision(path, category, translate=True):
     Edit(F(pjoin("data","common","decisions",f"DECISION_{tag}.json")), {category: {f"DECISION_{tag}": info}})
     
     # Add decision icon
-    scales = get_mod_config('img_scales'); w, h = scales['decision']
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "decision",
+        resource_default = False,
+        scale = "decision",
+        force = True
+    )
     if icon is not None:
-        icon = ImageZoom(icon, w=w, h=h)
         ImageSave(icon, F(pjoin("gfx","interface","decisions",f"DECISION_{tag}")), format='dds')
         Edit(F(pjoin("data","interface","decisions",f"DECISION_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_decision_DECISION_{tag}", "texturefile": pjoin("gfx","interface","decisions",f"DECISION_{tag}.dds")}}})
 
-def AddDecisionCategory(path, translate=True):
+def AddDecisionCategory(path, translate=True, force=True):
     '''
     Add a decision category and all decisions inside it.
     Args:
         path: str. The path of the resource files of the decision category. The resources should include the category definition and the localisation.
         translate: bool. Whether to translate the localisation of the decision category.
+        force: bool. Whether to force the overwriting of the existing cached images.
     Return:
         None
     '''
@@ -48,18 +55,21 @@ def AddDecisionCategory(path, translate=True):
         'icon': f"{category}",
         'picture': "GFX_decision_category_picture",
     },LoadJson(pjoin(path,"info.json")) if ExistFile(pjoin(path,"info.json")) else {}])
-    for decision in ListFolders(path):
-        if not decision.startswith('__'):
-            AddDecision(pjoin(path, decision), category=f"DECISION_CATEGORY_{category}", translate=translate)
+    for decision in ListResourceFolders(path):
+        AddDecision(pjoin(path, decision), category=f"DECISION_CATEGORY_{category}", translate=translate)
     
     # Add decision category localisation
     AddLocalisation(pjoin(path,"locs.txt"), scope=f"DECISION_CATEGORY_{category}", translate=translate)
     
     # Add decision category icon
-    icon = ImageFind(pjoin(path,"icon"))
-    scales = get_mod_config('img_scales'); w, h = scales['decision']
+    icon = hoi4dev_auto_image(
+        path = path,
+        resource_type = "decision",
+        resource_default = False,
+        scale = "decision",
+        force = True
+    )
     if icon is not None:
-        icon = ImageZoom(icon, w=w, h=h)
         ImageSave(icon, F(pjoin("gfx","interface","decisions",f"DECISION_CATEGORY_{category}")), format='dds')
         Edit(F(pjoin("data","interface","decisions",f"DECISION_CATEGORY_{category}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_decision_category_{category}", "texturefile": pjoin("gfx","interface","decisions",f"DECISION_CATEGORY_{category}.dds")}}})
     
