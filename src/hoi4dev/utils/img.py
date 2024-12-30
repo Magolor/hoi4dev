@@ -94,6 +94,7 @@ def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     - support `tga` flipping.
     '''
     cloned = img.clone()
+    cloned.alpha_channel = True
     if format == 'dds' or ((format is None) and path.endswith('.dds')):
         if compression is not None:
             cloned.compression = compression

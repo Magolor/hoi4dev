@@ -1,12 +1,13 @@
 from ..utils import *
 from ..translation import AddLocalisation
 
-def AddBoP(path, translate=True):
+def AddBoP(path, translate=True, force=True):
     '''
     Add a balance of power to the mod.
     Args:
         path: str. The path of the resource files of the bop. The resources should include the left side icon, right side icon, the bop definition and the localisation.
         translate: bool. Whether to translate the localisation of the bop.
+        force: bool. Whether to force the update of the bop.
     Return:
         None
     It is recommended to use 'sides' to define the sides of the bop, which is a dictionary mapping from the side name to the side. 'left' and 'right' are reserved for the left and right side of the bop.
@@ -51,11 +52,13 @@ def AddBoP(path, translate=True):
     sprites = []
     for s in sides:
         S = s.upper()
-        icon = ImageFind(pjoin(path,"icons",s))
-        if icon is None:
-            icon = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "default_bop")), find_default=False)
-            assert (icon is not None), "The default balance of power icon is not found!"
-        icon = ImageZoom(icon, w=w, h=h)
+        icon = hoi4dev_auto_image(
+            path = pjoin(path,"icons"),
+            searches = [s, "icon", "default"],
+            resource_default = "bop",
+            scale = "bop",
+            force = force
+        )
         ImageSave(icon, F(pjoin("gfx","interface","bop",f"BOP_{tag}_{S}_SIDE")), format='dds')
         sprites.append({'spriteType': {"name": f"GFX_BOP_{tag}_{S}_SIDE", "texturefile": pjoin("gfx","interface","bop",f"BOP_{tag}_{S}_SIDE.dds")}})
     Edit(F(pjoin("data","interface","bop",f"BOP_{tag}.json")), {'spriteTypes': merge_dicts(sprites,d=True)})

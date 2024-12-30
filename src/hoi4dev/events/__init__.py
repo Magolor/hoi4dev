@@ -75,7 +75,7 @@ def AddEvent(path, space, translate=True, force=True):
             scale = (-1, -1) if category=='country' else ("super_event" if space=="SUPER" else f"{category}_event"),
             force = force
         )
-        if category == 'country':
+        if (category == 'country') and (space != 'SUPER'):
             picture = CreateCountryEventImage(picture)
             ImageSave(picture, pjoin(path, ".cache", "country_event.dds"), format='dds')
     ImageSave(picture, F(pjoin("gfx","event_pictures",f"EVENT_{space}_{tag}")), format='dds')
@@ -209,7 +209,8 @@ def AddSuperEvent(path, translate=True, force=True):
     w, h = scales['super_event']
     picture = hoi4dev_auto_image(
         path = path,
-        resource_type = "event",
+        resource_type = "super_event",
+        resource_default = "event",
         scale = (w, h),
         force = force
     )
@@ -218,7 +219,7 @@ def AddSuperEvent(path, translate=True, force=True):
     news_picture = hoi4dev_auto_image(
         path = path,
         searches = ["news"],
-        resource_type = "event",
+        resource_type = "super_event_news",
         resource_default = False,
         scale = 'news_event',
         force = force
