@@ -17,8 +17,9 @@ def CreateMod(name, **kwargs):
     - copies: str. The path to a mod resource, the entire mod will be copied before creating the current mod.
     - replace_paths: list. List of files to be replaced.
     '''
+    compile_path = get_config('HOI4_MODS_COMPILE_PATH')
     mods_path = get_config('HOI4_MODS_PATH')
-    root = pjoin(mods_path, name)
+    root = pjoin(compile_path, name)
     git_folder = pjoin(GIT_PATH, name)
     if ExistFolder(pjoin(root, ".git")):
         CopyFolder(pjoin(root, ".git"), git_folder, rm=True)
@@ -63,7 +64,6 @@ def CreateMod(name, **kwargs):
             [ f"supported_version=\"{settings['hoi4_version']}\""] +
             [ f"replace_path=\"{p}\"" for p in settings['replace_paths'] ]
         ))
-    
     return root
 
 def InitMod():

@@ -3,7 +3,7 @@ import pkg_resources
 
 import pathlib
 here = pathlib.Path(__file__).parent.resolve()
-version = '0.1.0.13'
+version = '0.1.0.14'
 short_description = "HOI4DEV: Hearts of Iron IV Development Tools"
 long_description = (here/"README.md").read_text(encoding="utf-8")
 install_requires = [
@@ -16,6 +16,7 @@ install_requires = [
     'pillow~=10.3.0',
     'pyheaven>=0.1.6.5',
     'send2trash~=1.8.0',
+    'setuptools>=61.0.0',
     'Wand~=0.6.13'
 ]
 
