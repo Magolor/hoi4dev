@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: hoi4dev
-Version: 0.1.0.14
+Version: 0.1.1.0
 Summary: HOI4DEV: Hearts of Iron IV Development Tools
 Home-page: https://github.com/Magolor/
 Author: Magolor
@@ -30,7 +30,7 @@ Requires-Dist: Wand~=0.6.13
 
 # HOI4DEV HOI4 MOD Development Tool
 
-Version: 0.1.0.14
+Version: 0.1.1.0
 
 Compatible with HOI4 Version: ~ 1.15.3
 
@@ -238,7 +238,11 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ## Changelog
 
-### v0.1.0.14
+### v0.1.1.0
+
+- Bugfix
+
+### v0.1.0.13
 
 - Bugfix
 

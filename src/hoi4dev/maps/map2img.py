@@ -190,7 +190,7 @@ def BatchCreateStateGroupImages(named_state_groups, output_path,
     
     # STEP 2: Get the a minimal bounding box for all state_groups
     if not ExistFile(pjoin(output_path, "all_groups.png")):
-        all_groups_img = state_group_imgs["KIRIN_CENTRAL"].clone()
+        all_groups_img = list(state_group_imgs.values())[0].clone()
         for group_name, group_img in state_group_imgs.items():
             all_groups_img.composite(group_img)
         ImageSave(all_groups_img, pjoin(output_path, f"all_groups.png"))

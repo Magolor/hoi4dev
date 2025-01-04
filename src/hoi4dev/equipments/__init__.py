@@ -293,6 +293,7 @@ def AddEquipment(path, translate=True, debug=False, force=True):
             searches = ['designer', 'default'],
             resource_type = "equipment",
             scale = "equipment_designer",
+            cache_key = "designer",
             force = force
         )
         ImageSave(designer_icon, F(pjoin("gfx","interface","equipments",f"EQUIPMENT_{tag}_designer")), format='dds')
