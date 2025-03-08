@@ -57,10 +57,10 @@
 
                         <label class="view-source-button" for="mod-divisions-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span> <span class="nn">..translation</span> <span class="kn">import</span> <span class="n">PopulateLocs</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..translation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PopulateLocs</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span> <span class="nf">AddDivisions</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddDivisions</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">    Add divisions for all countries to the mod.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    Args:</span>
@@ -122,7 +122,7 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="n">SaveJson</span><span class="p">(</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">division_templates</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="n">SaveJson</span><span class="p">(</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">division_templates_not_loaded</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_hidden.json&quot;</span><span class="p">)),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="k">def</span> <span class="nf">AddInitialArmy</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddInitialArmy</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">    Add initial army for a country to the mod.</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    Args:</span>
@@ -173,7 +173,7 @@
 
     </div>
     <a class="headerlink" href="#AddDivisions"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddDivisions-5"><a href="#AddDivisions-5"><span class="linenos"> 5</span></a><span class="k">def</span> <span class="nf">AddDivisions</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AddDivisions-5"><a href="#AddDivisions-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddDivisions</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 </span><span id="AddDivisions-6"><a href="#AddDivisions-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="AddDivisions-7"><a href="#AddDivisions-7"><span class="linenos"> 7</span></a><span class="sd">    Add divisions for all countries to the mod.</span>
 </span><span id="AddDivisions-8"><a href="#AddDivisions-8"><span class="linenos"> 8</span></a><span class="sd">    Args:</span>
@@ -267,7 +267,7 @@
 
     </div>
     <a class="headerlink" href="#AddInitialArmy"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddInitialArmy-67"><a href="#AddInitialArmy-67"><span class="linenos"> 67</span></a><span class="k">def</span> <span class="nf">AddInitialArmy</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AddInitialArmy-67"><a href="#AddInitialArmy-67"><span class="linenos"> 67</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddInitialArmy</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 </span><span id="AddInitialArmy-68"><a href="#AddInitialArmy-68"><span class="linenos"> 68</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="AddInitialArmy-69"><a href="#AddInitialArmy-69"><span class="linenos"> 69</span></a><span class="sd">    Add initial army for a country to the mod.</span>
 </span><span id="AddInitialArmy-70"><a href="#AddInitialArmy-70"><span class="linenos"> 70</span></a><span class="sd">    Args:</span>

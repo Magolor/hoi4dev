@@ -1,6 +1,8 @@
 from .config import *
 import numpy as np
 
+# TODO: For some reason, Wand/Imagemagick is glitchy when saving dds files, resulting in strange artifacts.
+
 try:
     from wand import image
     from wand.color import Color
@@ -78,6 +80,7 @@ def ImageLoad(path):
         print(e)
         return None
 
+STABLE_EXPORT = os.environ.get('HOI4DEV_STABLE_EXPORT',False)
 def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     '''
     Save image to the given path with specified format.
@@ -94,7 +97,9 @@ def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     - support `tga` flipping.
     '''
     cloned = img.clone()
-    cloned.alpha_channel = True
+    cloned.alpha_channel = "set"
+    if STABLE_EXPORT:
+        time.sleep((cloned.size[0]*cloned.size[1]/2073600)*2.0+0.2) # 4.0s for each 4K image
     if format == 'dds' or ((format is None) and path.endswith('.dds')):
         if compression is not None:
             cloned.compression = compression

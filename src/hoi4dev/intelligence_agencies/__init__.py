@@ -45,7 +45,7 @@ def AddIntelAgency(path, translate=True, force=True):
             force = force
         )
         doubled_icon = CreateIntelAgencyImage(icon)
-        ImageSave(doubled_icon, F(pjoin(path, ".cache", "doubled.dds")), format='dds')
+        ImageSave(doubled_icon, pjoin(path, ".cache", "doubled.dds"), format='dds')
     ImageSave(doubled_icon, F(pjoin("gfx","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}")), format='dds')
     Edit(F(pjoin("data","interface","intelligence_agencies",f"INTEL_AGENCY_{tag}.json")), {'spriteTypes': {'spriteType': {
         "name": f"GFX_INTEL_AGENCY_{tag}",

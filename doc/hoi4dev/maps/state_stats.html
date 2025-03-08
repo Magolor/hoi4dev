@@ -75,10 +75,10 @@
 
                         <label class="view-source-button" for="mod-state_stats-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span> <span class="nf">hard_gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span><span class="w"> </span><span class="nf">hard_gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>        <span class="n">mu</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>            <span class="mi">1</span><span class="o">+</span><span class="n">sigma</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(),</span>
@@ -87,7 +87,7 @@
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>        <span class="p">))</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>    <span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="k">def</span> <span class="nf">RandomManpower</span><span class="p">(</span><span class="n">state_category</span><span class="p">):</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomManpower</span><span class="p">(</span><span class="n">state_category</span><span class="p">):</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="sd">    Generate a random manpower for a state.</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    Args:</span>
@@ -102,7 +102,7 @@
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">manpower_config</span> <span class="o">=</span> <span class="n">LoadJson</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">pjoin</span><span class="p">(</span><span class="s2">&quot;hoi4dev_settings&quot;</span><span class="p">,</span><span class="s2">&quot;configs&quot;</span><span class="p">,</span><span class="s2">&quot;manpower.json&quot;</span><span class="p">)))</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="k">return</span> <span class="n">hard_gaussian</span><span class="p">(</span><span class="n">manpower_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">][</span><span class="n">state_category</span><span class="p">],</span> <span class="n">manpower_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">])</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">def</span> <span class="nf">GenerateManpower</span><span class="p">():</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateManpower</span><span class="p">():</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">    Generate random manpower for all states.</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    Args:</span>
@@ -117,7 +117,7 @@
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="n">state_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;manpower&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RandomManpower</span><span class="p">(</span><span class="n">state_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;state_category&#39;</span><span class="p">])</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>        <span class="n">SaveJson</span><span class="p">(</span><span class="n">state_data</span><span class="p">,</span> <span class="n">pjoin</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;data/map/converted_states&quot;</span><span class="p">),</span><span class="n">state_file</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="k">def</span> <span class="nf">random_progression</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="k">def</span><span class="w"> </span><span class="nf">random_progression</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)):</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span><span class="o">&lt;=</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>            <span class="k">continue</span>
@@ -125,7 +125,7 @@
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>    <span class="k">else</span><span class="p">:</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="k">def</span> <span class="nf">RandomBuildings</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">is_coastal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomBuildings</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">is_coastal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">    Generate a random buildings distribution for a state.</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">    Args:</span>
@@ -146,7 +146,7 @@
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="k">if</span> <span class="n">num</span><span class="p">:</span> <span class="n">buildings</span><span class="p">[</span><span class="s1">&#39;dockyard&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="k">return</span> <span class="n">buildings</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="k">def</span> <span class="nf">GenerateBuildings</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateBuildings</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">    Generate random buildings for all states.</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">    Args:</span>
@@ -172,7 +172,7 @@
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>                <span class="p">}[</span><span class="n">behavior</span><span class="p">](</span><span class="n">random_buildings</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">state_data</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;history&#39;</span><span class="p">][</span><span class="s1">&#39;buildings&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">])</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="n">SaveJson</span><span class="p">(</span><span class="n">state_data</span><span class="p">,</span> <span class="n">pjoin</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s2">&quot;data/map/converted_states&quot;</span><span class="p">),</span><span class="n">state_file</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="k">def</span> <span class="nf">RandomResources</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">state_terrain</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">):</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomResources</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">state_terrain</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">):</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">    Generate a random resources distribution for a state.</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">    Args:</span>
@@ -193,7 +193,7 @@
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">if</span> <span class="n">num</span><span class="p">:</span> <span class="n">resources</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">*</span><span class="n">resources_config</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="n">resource_type</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">resources</span><span class="p">[</span><span class="n">resource_type</span><span class="p">]</span> <span class="k">if</span> <span class="n">resource_type</span> <span class="ow">in</span> <span class="n">resources</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">return</span> <span class="n">resources</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="k">def</span> <span class="nf">GenerateResources</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateResources</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    Generate random resources for all states.</span>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    Args:</span>
@@ -233,7 +233,7 @@
 
     </div>
     <a class="headerlink" href="#hard_gaussian"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="hard_gaussian-5"><a href="#hard_gaussian-5"><span class="linenos"> 5</span></a><span class="k">def</span> <span class="nf">hard_gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="hard_gaussian-5"><a href="#hard_gaussian-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">hard_gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 </span><span id="hard_gaussian-6"><a href="#hard_gaussian-6"><span class="linenos"> 6</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span>
 </span><span id="hard_gaussian-7"><a href="#hard_gaussian-7"><span class="linenos"> 7</span></a>        <span class="n">mu</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
 </span><span id="hard_gaussian-8"><a href="#hard_gaussian-8"><span class="linenos"> 8</span></a>            <span class="mi">1</span><span class="o">+</span><span class="n">sigma</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(),</span>
@@ -258,7 +258,7 @@
 
     </div>
     <a class="headerlink" href="#RandomManpower"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomManpower-14"><a href="#RandomManpower-14"><span class="linenos">14</span></a><span class="k">def</span> <span class="nf">RandomManpower</span><span class="p">(</span><span class="n">state_category</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomManpower-14"><a href="#RandomManpower-14"><span class="linenos">14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomManpower</span><span class="p">(</span><span class="n">state_category</span><span class="p">):</span>
 </span><span id="RandomManpower-15"><a href="#RandomManpower-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="RandomManpower-16"><a href="#RandomManpower-16"><span class="linenos">16</span></a><span class="sd">    Generate a random manpower for a state.</span>
 </span><span id="RandomManpower-17"><a href="#RandomManpower-17"><span class="linenos">17</span></a><span class="sd">    Args:</span>
@@ -307,7 +307,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#GenerateManpower"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateManpower-29"><a href="#GenerateManpower-29"><span class="linenos">29</span></a><span class="k">def</span> <span class="nf">GenerateManpower</span><span class="p">():</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateManpower-29"><a href="#GenerateManpower-29"><span class="linenos">29</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateManpower</span><span class="p">():</span>
 </span><span id="GenerateManpower-30"><a href="#GenerateManpower-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="GenerateManpower-31"><a href="#GenerateManpower-31"><span class="linenos">31</span></a><span class="sd">    Generate random manpower for all states.</span>
 </span><span id="GenerateManpower-32"><a href="#GenerateManpower-32"><span class="linenos">32</span></a><span class="sd">    Args:</span>
@@ -354,7 +354,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#random_progression"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="random_progression-44"><a href="#random_progression-44"><span class="linenos">44</span></a><span class="k">def</span> <span class="nf">random_progression</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="random_progression-44"><a href="#random_progression-44"><span class="linenos">44</span></a><span class="k">def</span><span class="w"> </span><span class="nf">random_progression</span><span class="p">(</span><span class="n">probs</span><span class="p">):</span>
 </span><span id="random_progression-45"><a href="#random_progression-45"><span class="linenos">45</span></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">probs</span><span class="p">)):</span>
 </span><span id="random_progression-46"><a href="#random_progression-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span><span class="o">&lt;=</span><span class="n">probs</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
 </span><span id="random_progression-47"><a href="#random_progression-47"><span class="linenos">47</span></a>            <span class="k">continue</span>
@@ -378,7 +378,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#RandomBuildings"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomBuildings-52"><a href="#RandomBuildings-52"><span class="linenos">52</span></a><span class="k">def</span> <span class="nf">RandomBuildings</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">is_coastal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomBuildings-52"><a href="#RandomBuildings-52"><span class="linenos">52</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomBuildings</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">is_coastal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 </span><span id="RandomBuildings-53"><a href="#RandomBuildings-53"><span class="linenos">53</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="RandomBuildings-54"><a href="#RandomBuildings-54"><span class="linenos">54</span></a><span class="sd">    Generate a random buildings distribution for a state.</span>
 </span><span id="RandomBuildings-55"><a href="#RandomBuildings-55"><span class="linenos">55</span></a><span class="sd">    Args:</span>
@@ -432,7 +432,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#GenerateBuildings"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateBuildings-73"><a href="#GenerateBuildings-73"><span class="linenos">73</span></a><span class="k">def</span> <span class="nf">GenerateBuildings</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateBuildings-73"><a href="#GenerateBuildings-73"><span class="linenos">73</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateBuildings</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
 </span><span id="GenerateBuildings-74"><a href="#GenerateBuildings-74"><span class="linenos">74</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="GenerateBuildings-75"><a href="#GenerateBuildings-75"><span class="linenos">75</span></a><span class="sd">    Generate random buildings for all states.</span>
 </span><span id="GenerateBuildings-76"><a href="#GenerateBuildings-76"><span class="linenos">76</span></a><span class="sd">    Args:</span>
@@ -490,7 +490,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#RandomResources"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomResources-99"><a href="#RandomResources-99"><span class="linenos"> 99</span></a><span class="k">def</span> <span class="nf">RandomResources</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">state_terrain</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RandomResources-99"><a href="#RandomResources-99"><span class="linenos"> 99</span></a><span class="k">def</span><span class="w"> </span><span class="nf">RandomResources</span><span class="p">(</span><span class="n">state_category</span><span class="p">,</span> <span class="n">state_terrain</span><span class="o">=</span><span class="s2">&quot;unknown&quot;</span><span class="p">):</span>
 </span><span id="RandomResources-100"><a href="#RandomResources-100"><span class="linenos">100</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="RandomResources-101"><a href="#RandomResources-101"><span class="linenos">101</span></a><span class="sd">    Generate a random resources distribution for a state.</span>
 </span><span id="RandomResources-102"><a href="#RandomResources-102"><span class="linenos">102</span></a><span class="sd">    Args:</span>
@@ -544,7 +544,7 @@ The manpower of the state is generated from a Gaussian distribution with 3x std 
 
     </div>
     <a class="headerlink" href="#GenerateResources"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateResources-120"><a href="#GenerateResources-120"><span class="linenos">120</span></a><span class="k">def</span> <span class="nf">GenerateResources</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GenerateResources-120"><a href="#GenerateResources-120"><span class="linenos">120</span></a><span class="k">def</span><span class="w"> </span><span class="nf">GenerateResources</span><span class="p">(</span><span class="n">behavior</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">):</span>
 </span><span id="GenerateResources-121"><a href="#GenerateResources-121"><span class="linenos">121</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="GenerateResources-122"><a href="#GenerateResources-122"><span class="linenos">122</span></a><span class="sd">    Generate random resources for all states.</span>
 </span><span id="GenerateResources-123"><a href="#GenerateResources-123"><span class="linenos">123</span></a><span class="sd">    Args:</span>

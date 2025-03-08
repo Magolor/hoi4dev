@@ -57,11 +57,11 @@
 
                         <label class="view-source-button" for="mod-countries-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="o">*</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span> <span class="nn">..translation</span> <span class="kn">import</span> <span class="n">AddLocalisation</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span> <span class="nn">..ideologies</span> <span class="kn">import</span> <span class="n">get_ideologies</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..translation</span><span class="w"> </span><span class="kn">import</span> <span class="n">AddLocalisation</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..ideologies</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ideologies</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="k">def</span> <span class="nf">sort_history_priority</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sort_history_priority</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>    <span class="k">return</span> <span class="n">sort_priority</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>        <span class="s1">&#39;capital&#39;</span><span class="p">,</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>        <span class="s1">&#39;set_popularities&#39;</span><span class="p">,</span>
@@ -78,7 +78,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>        <span class="s1">&#39;add_power_balance_modifier&#39;</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="p">])</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="k">def</span> <span class="nf">AddCountry</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddCountry</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    Add a country to the mod.</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    Args:</span>
@@ -174,7 +174,7 @@
 
     </div>
     <a class="headerlink" href="#sort_history_priority"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="sort_history_priority-6"><a href="#sort_history_priority-6"><span class="linenos"> 6</span></a><span class="k">def</span> <span class="nf">sort_history_priority</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="sort_history_priority-6"><a href="#sort_history_priority-6"><span class="linenos"> 6</span></a><span class="k">def</span><span class="w"> </span><span class="nf">sort_history_priority</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
 </span><span id="sort_history_priority-7"><a href="#sort_history_priority-7"><span class="linenos"> 7</span></a>    <span class="k">return</span> <span class="n">sort_priority</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[</span>
 </span><span id="sort_history_priority-8"><a href="#sort_history_priority-8"><span class="linenos"> 8</span></a>        <span class="s1">&#39;capital&#39;</span><span class="p">,</span>
 </span><span id="sort_history_priority-9"><a href="#sort_history_priority-9"><span class="linenos"> 9</span></a>        <span class="s1">&#39;set_popularities&#39;</span><span class="p">,</span>
@@ -207,7 +207,7 @@
 
     </div>
     <a class="headerlink" href="#AddCountry"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddCountry-23"><a href="#AddCountry-23"><span class="linenos"> 23</span></a><span class="k">def</span> <span class="nf">AddCountry</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AddCountry-23"><a href="#AddCountry-23"><span class="linenos"> 23</span></a><span class="k">def</span><span class="w"> </span><span class="nf">AddCountry</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">translate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 </span><span id="AddCountry-24"><a href="#AddCountry-24"><span class="linenos"> 24</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="AddCountry-25"><a href="#AddCountry-25"><span class="linenos"> 25</span></a><span class="sd">    Add a country to the mod.</span>
 </span><span id="AddCountry-26"><a href="#AddCountry-26"><span class="linenos"> 26</span></a><span class="sd">    Args:</span>

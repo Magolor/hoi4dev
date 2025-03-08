@@ -63,10 +63,10 @@
 
                         <label class="view-source-button" for="mod-init-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="o">*</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="n">MAIN_DIRECTORIES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;common&#39;</span><span class="p">,</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="s1">&#39;gfx&#39;</span><span class="p">,</span> <span class="s1">&#39;history&#39;</span><span class="p">,</span> <span class="s1">&#39;interface&#39;</span><span class="p">,</span> <span class="s1">&#39;music&#39;</span><span class="p">,</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="s1">&#39;tutorial&#39;</span><span class="p">,</span> <span class="s2">&quot;portraits&quot;</span><span class="p">,</span> <span class="s2">&quot;country_metadata&quot;</span><span class="p">]</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span> <span class="nf">CreateMod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="k">def</span><span class="w"> </span><span class="nf">CreateMod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    Args:</span>
@@ -131,7 +131,7 @@
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="p">))</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="k">return</span> <span class="n">root</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">def</span> <span class="nf">InitMod</span><span class="p">():</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">def</span><span class="w"> </span><span class="nf">InitMod</span><span class="p">():</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    Args:</span>
@@ -152,7 +152,7 @@
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CreateFolder&#39;</span><span class="p">]:</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>                <span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">(</span><span class="se">\&quot;</span><span class="si">{</span><span class="n">F</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">)&quot;</span><span class="p">)</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="k">def</span> <span class="nf">CompileMod</span><span class="p">():</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="k">def</span><span class="w"> </span><span class="nf">CompileMod</span><span class="p">():</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">    Compile the mod to get a final version.</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">    Args:</span>
@@ -200,7 +200,7 @@
 
     </div>
     <a class="headerlink" href="#CreateMod"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CreateMod-5"><a href="#CreateMod-5"><span class="linenos"> 5</span></a><span class="k">def</span> <span class="nf">CreateMod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CreateMod-5"><a href="#CreateMod-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">CreateMod</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span id="CreateMod-6"><a href="#CreateMod-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="CreateMod-7"><a href="#CreateMod-7"><span class="linenos"> 7</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="CreateMod-8"><a href="#CreateMod-8"><span class="linenos"> 8</span></a><span class="sd">    Args:</span>
@@ -306,7 +306,7 @@
 
     </div>
     <a class="headerlink" href="#InitMod"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="InitMod-70"><a href="#InitMod-70"><span class="linenos">70</span></a><span class="k">def</span> <span class="nf">InitMod</span><span class="p">():</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="InitMod-70"><a href="#InitMod-70"><span class="linenos">70</span></a><span class="k">def</span><span class="w"> </span><span class="nf">InitMod</span><span class="p">():</span>
 </span><span id="InitMod-71"><a href="#InitMod-71"><span class="linenos">71</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="InitMod-72"><a href="#InitMod-72"><span class="linenos">72</span></a><span class="sd">    Initialize a new mod.</span>
 </span><span id="InitMod-73"><a href="#InitMod-73"><span class="linenos">73</span></a><span class="sd">    Args:</span>
@@ -357,7 +357,7 @@
 
     </div>
     <a class="headerlink" href="#CompileMod"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CompileMod-91"><a href="#CompileMod-91"><span class="linenos"> 91</span></a><span class="k">def</span> <span class="nf">CompileMod</span><span class="p">():</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CompileMod-91"><a href="#CompileMod-91"><span class="linenos"> 91</span></a><span class="k">def</span><span class="w"> </span><span class="nf">CompileMod</span><span class="p">():</span>
 </span><span id="CompileMod-92"><a href="#CompileMod-92"><span class="linenos"> 92</span></a><span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 </span><span id="CompileMod-93"><a href="#CompileMod-93"><span class="linenos"> 93</span></a><span class="sd">    Compile the mod to get a final version.</span>
 </span><span id="CompileMod-94"><a href="#CompileMod-94"><span class="linenos"> 94</span></a><span class="sd">    Args:</span>
