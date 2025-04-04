@@ -81,7 +81,8 @@ def tokenize_ccl_string(ccl_string):
             # tokens.extend(re.findall(r'{|}|=|\n|-?\w+(?:[.]\w+)?|\S+', sentence[0]))
             # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
             # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-]\w+)*'?|\S+", sentence[0]))
-            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-\|]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-\|]\w+)*'?|\S+", sentence[0]))
+            # tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-\|]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-\|]\w+)*'?|\S+", sentence[0]))
+            tokens.extend(re.findall(r"{|}|=|<|>|\n|-?\w+(?:[?.'@^:\-\|]\w+)*%{1,2}|-?\w+(?:[?.'@^:\-\|]\w+)*'?|[^\s{}<>=]+", sentence[0]))
     return [w for w in tokens if w and w!='\n']
 
 def ccl_type(t):

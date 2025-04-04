@@ -8,6 +8,7 @@ try:
     from wand.color import Color
     from wand.image import Image
     from wand.drawing import Drawing
+    from wand.display import display
 except Exception as e:
     print(e)
 from math import cos, sin, radians
@@ -79,6 +80,16 @@ def ImageLoad(path):
     except TypeError as e:
         print(e)
         return None
+
+def ImageShow(img):
+    '''
+    Show the image.
+    Args:
+        img: image.Image. A `wand` image object.
+    Return:
+        None
+    '''
+    display(img)
 
 STABLE_EXPORT = os.environ.get('HOI4DEV_STABLE_EXPORT',False)
 def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):

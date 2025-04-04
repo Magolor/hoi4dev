@@ -45,6 +45,7 @@ def AddNationalFocus(path, tree, translate=True, force=True):
     },LoadJson(pjoin(path,"info.json"))])
     name = info.pop('name', None)
     tree = info.pop('tree', tree)
+    scale = info.pop('scale', 'focus')
     assert not((info['x'] is None)^(info['y'] is None)), "If specified, the focus's x and y should be specified simultaneously!"
     
     # Add focus localisation
@@ -60,7 +61,7 @@ def AddNationalFocus(path, tree, translate=True, force=True):
     icon = hoi4dev_auto_image(
         path = path,
         resource_type = "focus",
-        scale = "focus",
+        scale = scale,
         force = force
     )
     ImageSave(icon, F(pjoin("gfx","interface","goals",f"FOCUS_{tag}")), format='dds')

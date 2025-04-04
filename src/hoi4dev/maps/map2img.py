@@ -117,8 +117,12 @@ def CreateHighlightImage(img, internal_color, border_color, internal_highlight, 
     doubled_img = CreateBlankImage(w=img.width*2, h=img.height)
     doubled_img.composite(img, left=0, top=0)
     highlighted = img.clone()
+    ImageShow(highlighted)
     highlighted.opaque_paint(target=Color('rgb({},{},{})'.format(*internal_color)), fill=Color('rgb({},{},{})'.format(*internal_highlight)), fuzz=0.0, invert=False)
     highlighted.opaque_paint(target=Color('rgb({},{},{})'.format(*border_color)), fill=Color('rgb({},{},{})'.format(*border_highlight)), fuzz=0.0, invert=False)
+    ImageShow(highlighted)
+    input()
+    exit(0)
     doubled_img.composite(highlighted, left=img.width, top=0)
     return doubled_img
 
