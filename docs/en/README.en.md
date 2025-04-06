@@ -1,6 +1,6 @@
 # HOI4DEV HOI4 MOD Development Tool
 
-Version: 0.1.1.0
+Version: 0.1.1.1
 
 Compatible with HOI4 Version: ~ 1.15.3
 
@@ -208,7 +208,7 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ## Changelog
 
-### v0.1.1.0
+### v0.1.1.1
 
 - Bugfix
 
