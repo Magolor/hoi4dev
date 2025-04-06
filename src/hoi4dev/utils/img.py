@@ -525,3 +525,5 @@ def SetLoadingScreenImages(imgs, main=None):
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_toa")), format='dds')
     # Gotterdammerung
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_ww")), format='dds')
+    # Graveyard of Empires
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_goe")), format='dds')
