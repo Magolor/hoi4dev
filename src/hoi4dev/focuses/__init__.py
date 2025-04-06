@@ -62,9 +62,10 @@ def AddNationalFocus(path, tree, translate=True, force=True):
         path = path,
         resource_type = "focus",
         scale = scale,
-        force = force
+        force = force,
+        compression = 'no'
     )
-    ImageSave(icon, F(pjoin("gfx","interface","goals",f"FOCUS_{tag}")), format='dds')
+    ImageSave(icon, F(pjoin("gfx","interface","goals",f"FOCUS_{tag}")), format='dds', compression='no')
     Edit(F(pjoin("data","interface","focuses",f"FOCUS_{tag}.json")), {'spriteTypes': {
         'spriteType': {
             "name": f"GFX_FOCUS_{tag}_icon",

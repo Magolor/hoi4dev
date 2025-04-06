@@ -29,6 +29,7 @@ def hoi4dev_auto_image(
     resource_default = True,
     scale = (-1, -1),
     cache_key = None,
+    compression = 'dxt3',
     force = False
 ):
     cache_path = pjoin(path, ".cache", f"{resource_type}_{cache_key}.dds" if cache_key else f"{resource_type}.dds")
@@ -52,7 +53,7 @@ def hoi4dev_auto_image(
         icon = ImageZoom(icon, w=w, h=h)
         if force or (not ExistFile(cache_path)):
             CreateFolder(pjoin(path, ".cache"))
-            ImageSave(icon, cache_path, format='dds')
+            ImageSave(icon, cache_path, format='dds', compression=compression)
     return icon
 
 def IsImagePath(path):
@@ -114,6 +115,7 @@ def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     if format == 'dds' or ((format is None) and path.endswith('.dds')):
         if compression is not None:
             cloned.compression = compression
+            cloned.options['dds:mipmaps'] = '0'
     elif format == 'tga' or ((format is None) and path.endswith('.tga')):
         if flip_tga:
             cloned.flip()

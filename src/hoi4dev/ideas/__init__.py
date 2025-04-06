@@ -36,9 +36,10 @@ def AddIdea(path, translate=True, force=True):
         path = path,
         resource_type = "idea",
         scale = 'idea',
-        force = force
+        force = force,
+        compression = 'no'
     )
-    ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds')
+    ImageSave(icon, F(pjoin("gfx","interface","ideas",f"IDEA_{tag}")), format='dds', compression='no')
     Edit(F(pjoin("data","interface","ideas",f"IDEA_{tag}.json")), {'spriteTypes': {'spriteType': {"name": f"GFX_idea_{tag}", "texturefile": pjoin("gfx","interface","ideas",f"IDEA_{tag}.dds")}}})
 
 def AddIdeaCategory(path, translate=True, force=True):
