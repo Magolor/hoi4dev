@@ -9,6 +9,9 @@ try:
     from wand.image import Image
     from wand.drawing import Drawing
     from wand.display import display
+    from wand.api import library
+    from ctypes import c_void_p, c_size_t
+    library.MagickSetCompressionQuality.argtypes = [c_void_p, c_size_t]
 except Exception as e:
     print(e)
 from math import cos, sin, radians
@@ -110,6 +113,7 @@ def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     '''
     cloned = img.clone()
     cloned.alpha_channel = "set"
+    library.MagickSetCompressionQuality(cloned.wand, 100)
     if STABLE_EXPORT:
         time.sleep((cloned.size[0]*cloned.size[1]/2073600)*2.0+0.2) # 4.0s for each 4K image
     if format == 'dds' or ((format is None) and path.endswith('.dds')):
@@ -229,7 +233,7 @@ def ImageZoom(img, r=1, w=-1, h=-1, behavior='max'):
     '''
     cloned = img.clone(); w = int(w); h = int(h)
     if r != 1:
-        cloned.resize(int(cloned.width*r), int(cloned.height*r))
+        cloned.resize(int(cloned.width*r), int(cloned.height*r), filter='lanczos', blur=0)
         assert ((w!=-1 and h!=-1) or (w==-1 and h==-1)), "When the ratio `r` is given, `w` and `h` should be either not set, or both set!"
         return cloned if (w==-1 and h==-1) else ImageExtend(cloned, w, h)
     if w == -1 and h == -1:
@@ -239,15 +243,15 @@ def ImageZoom(img, r=1, w=-1, h=-1, behavior='max'):
     min_w = min(w_w, h_w); min_h = min(w_h, h_h)
     max_w = max(w_w, h_w); max_h = max(w_h, h_h)
     if w==-1:
-        cloned.resize(h_w, h_h)
+        cloned.resize(h_w, h_h, filter='lanczos', blur=0)
     elif h==-1:
-        cloned.resize(w_w, w_h)
+        cloned.resize(w_w, w_h, filter='lanczos', blur=0)
     else:
         if behavior == 'max':
-            cloned.resize(max_w, max_h)
+            cloned.resize(max_w, max_h, filter='lanczos', blur=0)
             cloned.crop(width=w, height=h, gravity='center')
         elif behavior == 'min':
-            cloned.resize(min_w, min_h)
+            cloned.resize(min_w, min_h, filter='lanczos', blur=0)
             cloned = ImageExtend(cloned, w, h)
     return cloned
 
