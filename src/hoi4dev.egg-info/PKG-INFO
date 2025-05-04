@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: hoi4dev
-Version: 0.1.1.2
+Version: 0.1.1.3
 Summary: HOI4DEV: Hearts of Iron IV Development Tools
 Home-page: https://github.com/Magolor/
 Author: Magolor
@@ -16,17 +16,17 @@ Classifier: Operating System :: Microsoft :: Windows
 Requires-Python: >=3.9, <4
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: click~=8.1.7
-Requires-Dist: jsonlines~=4.0.0
+Requires-Dist: click
+Requires-Dist: jsonlines
 Requires-Dist: numpy<2.0.0,>=1.26.4
-Requires-Dist: openai~=1.57.1
-Requires-Dist: pandas~=2.0.3
-Requires-Dist: pdoc~=15.0.0
-Requires-Dist: pillow~=10.3.0
+Requires-Dist: openai
+Requires-Dist: pandas
+Requires-Dist: pdoc
+Requires-Dist: pillow
 Requires-Dist: pyheaven>=0.1.6.5
-Requires-Dist: send2trash~=1.8.0
+Requires-Dist: send2trash
 Requires-Dist: setuptools>=61.0.0
-Requires-Dist: Wand~=0.6.13
+Requires-Dist: Wand
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
@@ -41,7 +41,7 @@ Dynamic: summary
 
 # HOI4DEV HOI4 MOD Development Tool
 
-Version: 0.1.1.2
+Version: 0.1.1.3
 
 Compatible with HOI4 Version: ~ 1.16.4
 
@@ -249,7 +249,7 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 
 ## Changelog
 
-### v0.1.1.2
+### v0.1.1.3
 
 - Bugfix
 

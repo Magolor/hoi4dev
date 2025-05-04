@@ -63,6 +63,7 @@ def AddCharacter(path, translate=True, force=True):
     
     # Add character portraits
     portraits = ['default', 'army', 'navy']
+    CreateFolder(pjoin(path,"portraits"))
     for f in ListFiles(pjoin(path,"portraits")):
         if f.endswith('.png') or f.endswith('.jpg') or f.endswith('.dds'):
             portraits.append(f.split('.')[0])
