@@ -11,13 +11,22 @@ class ConfigManager(object):
         self.config = dict()
         self.setup()
 
-    def setup(self):
+    def setup(self, reset:bool = False):
         touch_dir(self.root_path)
+        if reset:
+            self.reset_config()
         touch_dir(self.cache_path)
         self.load()
 
     def _load_default_config(self) -> Dict[str, Any]:
-        return load_json(get_hoi4dev_resource("config.json"))
+        config = load_json(get_hoi4dev_resource("config.json"))
+        config['paths'] = {
+            "hoi4_game_path": DEFAULT_HOI4_GAME_PATH,
+            "hoi4_workshop_path": DEFAULT_HOI4_WORKSHOP_PATH,
+            "hoi4_mods_path": DEFAULT_HOI4_MODS_PATH,
+            "hoi4_mods_compile_path": DEFAULT_HOI4_MODS_COMPILE_PATH,
+            "cache_path": pj("~", self.HOI4DEV_WORKSPACE_DIR, self.HOI4DEV_CACHE_DIR),
+        }
     def _init_config_file(self):
         try:
             save_json(self._load_default_config(), self.config_path)

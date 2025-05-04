@@ -1,4 +1,6 @@
 matplotlib
 streamlit
+streamlit-code-editor
 streamlit-image-coordinates
+streamlit-shortcuts
 watchdog

@@ -1,11 +1,12 @@
 __all__ = [
     "is_ccl", "is_json", "deduce_ext_by_ccl_content",
-    "load_ccl", "save_ccl"
-    "ccl_from_dict", "ccl_to_dict"
+    "load_ccl", "save_ccl",
+    "ccl_from_dict", "ccl_to_dict",
     "ccl_convert", "ccl_convert_batch",
 ]
 
 from ..base import *
+from .json import *
 
 import re
 from textwrap import indent
@@ -392,5 +393,5 @@ def ccl_convert_batch(src_path, tgt_path, ext=False):
 def ccl_from_dict(data):
     return Dict2CCL(data)
 
-def ccl_to_json(data):
+def ccl_to_dict(data):
     return CCL2Dict(data)

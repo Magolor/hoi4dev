@@ -28,24 +28,24 @@ SUPPORTED_IMAGE_RESOURCES_SUFFIXES = [
     "png",
     "jpg",
 ]
-def is_image(filename):
-    return filename.rsplit('.', 1)[-1].lower() in SUPPORTED_IMAGE_RESOURCES_SUFFIXES
+def is_image(path):
+    return get_file_ext(path) in SUPPORTED_IMAGE_RESOURCES_SUFFIXES
 
 SUPPORTED_AUDIO_RESOURCES_SUFFIXES = [
     "ogg",
     "wav",
     "mp3",
 ]
-def is_audio(filename):
-    return filename.rsplit('.', 1)[-1].lower() in SUPPORTED_AUDIO_RESOURCES_SUFFIXES
+def is_audio(path):
+    return get_file_ext(path) in SUPPORTED_AUDIO_RESOURCES_SUFFIXES
 
 SUPPORTED_HOI4DEV_RESOURCES_SUFFIXES = [
     "py",
     "bash",
     "json"
 ]
-def is_hoi4dev(filename):
-    return filename.rsplit('.', 1)[-1].lower() in SUPPORTED_HOI4DEV_RESOURCES_SUFFIXES
+def is_hoi4dev(path):
+    return get_file_ext(path) in SUPPORTED_HOI4DEV_RESOURCES_SUFFIXES
 
 SUPPORTED_LANGUAGES = {
     'en': {'huggingface': 'en', 'nltk':    'english', 'hoi4':      'english', 'nl':            'English'},
@@ -67,6 +67,6 @@ DEFAULT_HOI4_MODS_PATH = pj("~", "Documents", "Paradox Interactive", "Hearts of 
 DEFAULT_HOI4_MODS_COMPILE_PATH = pj("~", "Documents", "Paradox Interactive", "Hearts of Iron IV", "mod")
 
 def get_hoi4dev_resource(path):
-    import importlib
-    with importlib.resources.files("hoi4dev").joinpath("resources", path).as_file() as path:
+    import importlib.resources
+    with importlib.resources.as_file(importlib.resources.files("hoi4dev").joinpath("resources", path)) as path:
         return str(path.resolve())

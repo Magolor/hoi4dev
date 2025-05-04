@@ -86,6 +86,7 @@ def ImageShow(img):
     '''
     display(img)
 
+import os
 STABLE_EXPORT = os.environ.get('HOI4DEV_STABLE_EXPORT',False)
 def ImageSave(img, path, format=None, flip_tga=True, compression='dxt3'):
     '''

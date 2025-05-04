@@ -1,4 +1,11 @@
 {
+    "paths": {
+        "hoi4_game_path": "<WHERE_YOUR_HOI4_IS>",
+        "hoi4_workshop_path": "<WHERE_YOUR_HOI4_WORKSHOP_IS>",
+        "hoi4_mods_path": "<WHERE_YOUR_HOI4_MODS_IS>",
+        "hoi4_mods_compile_path": "<WHERE_YOU_WANT_HOI4DEV_PUT_YOUR_MODS>",
+        "cache_path": "<WHERE_YOU_WANT_HOI4DEV_PUT_YOUR_CACHE>"
+    },
     "flag": {
         "default_scale_large": [82, 52],
         "default_scale_medium": [41, 26],
