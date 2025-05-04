@@ -1,0 +1,22 @@
+{
+    "flag": {
+        "default_scale_large": [82, 52],
+        "default_scale_medium": [41, 26],
+        "default_scale_small": [10, 7]
+    },
+    "idea": {
+        "default_scale": [74, 74]
+    },
+    "designer": {
+        "default_scale": [64, 64]
+    },
+    "ideology": {
+        "default_scale": [68, 68]
+    },
+    "national_focus": {
+        "default_scale": [104, 104]
+    },
+    "technology": {
+        "distance_x": 210
+    }
+}

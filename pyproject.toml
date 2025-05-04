@@ -1,3 +1,39 @@
+[project]
+name = "hoi4dev"
+version = "0.2.0.0"
+description = "HOI4DEV: Hearts of Iron IV Development Tool with GUI"
+readme = "README.md"
+authors = [
+    { name="Magolor", email="magolorcz@gmail.com" },
+]
+requires-python = "<4.0,>=3.9"
+license = { text="MIT" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[project.urls]
+"GitHub Repo" = "https://www.github.com/Magolor/HOI4DEV"
+"Issues" = "https://www.github.com/Magolor/HOI4DEV/issues"
+
 [build-system]
-requires = ["setuptools >= 64"]
+requires = [ "setuptools>=62.6" ]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies.dev = { file = ["requirements-dev.txt"] }
+optional-dependencies.gui = { file = ["requirements-gui.txt"] }
+
+[project.scripts]
+hoi4dev = "hoi4dev.cli.hoi4dev:cli"
+
+[project.gui-scripts]
+hoi4dev-gui = "hoi4dev.gui.hoi4dev:gui"

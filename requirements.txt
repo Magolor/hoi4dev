@@ -1,1 +1,8 @@
--e .
+click
+jsonlines
+numpy
+pandas
+openai
+pdoc
+pillow
+Wand

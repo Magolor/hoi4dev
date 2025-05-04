@@ -1,0 +1,4 @@
+matplotlib
+streamlit
+streamlit-image-coordinates
+watchdog
