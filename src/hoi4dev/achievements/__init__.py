@@ -47,5 +47,5 @@ def AddAchievement(unique_id, path, translate=True, force=True):
         X = ImageFind(F(pjoin("hoi4dev_settings", "imgs", "defaults", "X")), find_default=False)
         X = ImageZoom(X, w=int(icon.size[0]*0.9), h=int(icon.size[1]*0.9))
         not_eligible_icon.composite(X, gravity='center')
-        ImageSave(not_eligible_icon, pjoin(path, ".cache", "not_eligible"), format='dds')
+        ImageSave(not_eligible_icon, pjoin(path, ".cache", "not_eligible.dds"), format='dds')
     ImageSave(not_eligible_icon, F(pjoin("gfx","achievements",f"ACHIEVEMENT_{tag}_not_eligible")), format='dds')
