@@ -14,10 +14,11 @@ install_requires = [
     'pandas',
     'pdoc',
     'pillow',
-    'pyheaven>=0.1.6.5',
+    'pyheaven>=0.1.6.8',
     'send2trash',
     'setuptools>=61.0.0',
-    'Wand'
+    'Wand',
+    'opencv-python>=4.0.0',
 ]
 
 setup(

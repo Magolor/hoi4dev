@@ -6,6 +6,8 @@
         "loadingscreen": [1920,1080],
         "mainscreen": [1920,1440],
         "leader_portrait": [156,210],
+        "leader_animation_max_frames": 60,
+        "leader_animation_rate_fps": 12,
         "advisor_portrait": [65, 67],
         "flag_large": [82,52],
         "flag_medium": [41,26],
@@ -33,7 +35,6 @@
         "achievement": [64, 64],
         "modifier": [37, 47],
         "special_project": [161, 98],
-
         "technology_gui_distance": 210
     },
     "replace_paths": [

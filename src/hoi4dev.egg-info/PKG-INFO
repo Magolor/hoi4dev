@@ -23,10 +23,11 @@ Requires-Dist: openai
 Requires-Dist: pandas
 Requires-Dist: pdoc
 Requires-Dist: pillow
-Requires-Dist: pyheaven>=0.1.6.5
+Requires-Dist: pyheaven>=0.1.6.8
 Requires-Dist: send2trash
 Requires-Dist: setuptools>=61.0.0
 Requires-Dist: Wand
+Requires-Dist: opencv-python>=4.0.0
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier

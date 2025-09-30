@@ -1,6 +1,11 @@
 from .config import *
 import numpy as np
 
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+
 # TODO: For some reason, Wand/Imagemagick is glitchy when saving dds files, resulting in strange artifacts.
 
 try:
@@ -483,6 +488,155 @@ def CreateBlueprintImage(img, color='white', radius=10.0, bg_color='blue', thres
     bg.composite(lines, 0, 0)
     return bg
 
+
+def _select_evenly_spaced_indices(total_frames, max_frames):
+    '''
+    Determine which frame indices to extract when sampling GIF frames.
+    Ensures the first and last frames are included whenever possible.
+    '''
+    if total_frames <= 0:
+        return []
+
+    if max_frames is None:
+        return list(range(total_frames))
+
+    try:
+        target = int(max_frames)
+    except (TypeError, ValueError):
+        raise TypeError("max_frames must be None or an integer value")
+
+    if target <= 0 or target >= total_frames:
+        return list(range(total_frames))
+
+    if target == 1:
+        return [0]
+
+    step = (total_frames - 1) / (target - 1)
+    indices = []
+    last_index = -1
+    for i in range(target):
+        candidate = int(step * i + 0.5)
+        candidate = max(0, min(total_frames - 1, candidate))
+        if candidate <= last_index:
+            candidate = last_index + 1
+            candidate = min(candidate, total_frames - 1)
+        indices.append(candidate)
+        last_index = candidate
+
+    indices[0] = 0
+    indices[-1] = total_frames - 1
+    return indices
+
+
+def VideoToFrameStrip(video_path, num_frames, width, height):
+    '''
+    Convert an mp4 video into a horizontally concatenated strip image.
+
+    Args:
+        video_path: str. Path to the mp4 video to read.
+        num_frames: int or None. Number of evenly spaced frames to sample.
+        width: int. Target width passed to :func:`ImageZoom` for each frame.
+        height: int. Target height passed to :func:`ImageZoom` for each frame.
+
+    Returns:
+        image.Image. A wand image containing the sampled frames laid out horizontally.
+
+    Example:
+        >>> strip = VideoToFrameStrip("clip.mp4", num_frames=6, width=128, height=128)
+        >>> ImageSave(strip, "clip_strip.png")
+    '''
+    if cv2 is None:
+        raise ImportError("opencv-python is required to extract frames from video files")
+
+    if num_frames is not None:
+        try:
+            num_frames = int(num_frames)
+        except (TypeError, ValueError):
+            raise TypeError("num_frames must be None or an integer value")
+        if num_frames <= 0:
+            raise ValueError("num_frames must be greater than 0")
+
+    try:
+        width = int(width)
+        height = int(height)
+    except (TypeError, ValueError):
+        raise TypeError("width and height must be integer values")
+    if width <= 0 or height <= 0:
+        raise ValueError("width and height must be positive integers")
+
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise ValueError(f"Unable to open video file: {video_path}")
+
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    selected_frames = []
+
+    if frame_count > 0:
+        target_indices = _select_evenly_spaced_indices(frame_count, num_frames)
+        for idx in target_indices:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+            ret, frame = cap.read()
+            if not ret:
+                break
+            selected_frames.append(frame)
+        cap.release()
+        if len(selected_frames) != len(target_indices):
+            selected_frames = []
+    else:
+        cap.release()
+
+    if not selected_frames:
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            raise ValueError(f"Unable to reopen video file: {video_path}")
+        frames_cache = []
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            frames_cache.append(frame)
+        cap.release()
+        if not frames_cache:
+            raise ValueError(f"No frames could be read from video file: {video_path}")
+        target_indices = _select_evenly_spaced_indices(len(frames_cache), num_frames)
+        selected_frames = [frames_cache[i] for i in target_indices]
+
+    resized_frames = []
+    for frame in selected_frames:
+        if frame is None:
+            continue
+        if frame.ndim == 2:
+            frame_rgba = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGBA)
+        elif frame.shape[2] == 3:
+            frame_rgba = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        elif frame.shape[2] == 4:
+            frame_rgba = cv2.cvtColor(frame, cv2.COLOR_BGRA2RGBA)
+        else:
+            raise ValueError("Unsupported frame channel configuration")
+
+        with Image.from_array(frame_rgba) as wand_frame:
+            resized = ImageZoom(wand_frame, w=width, h=height)
+        resized_frames.append(resized)
+
+    if not resized_frames:
+        raise ValueError("No frames were successfully converted into images")
+
+    total_width = sum(frame.width for frame in resized_frames)
+    max_height = max(frame.height for frame in resized_frames)
+    strip = CreateBlankImage(total_width, max_height, color='transparent')
+
+    cursor_x = 0
+    for resized in resized_frames:
+        strip.composite(resized, left=cursor_x, top=0)
+        cursor_x += resized.width
+        resized.close()
+
+    strip.alpha_channel = 'set'
+    return strip
+
+
+
+
 def SetLoadingScreenImages(imgs, main=None):
     '''
     Set loading screen images.
@@ -533,3 +687,4 @@ def SetLoadingScreenImages(imgs, main=None):
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_ww")), format='dds')
     # Graveyard of Empires
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_goe")), format='dds')
+

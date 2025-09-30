@@ -1,6 +1,7 @@
 from ..utils import *
 from ..translation import AddLocalisation
 import numpy as np
+from wand import image as wand_image
 
 def AddCharacter(path, translate=True, force=True):
     '''
@@ -31,6 +32,11 @@ def AddCharacter(path, translate=True, force=True):
         },
         'gender': 'female'
     },LoadJson(pjoin(path,"info.json"))])
+    pause_on_loop = info.pop('pause_on_loop', [3.0, 6.0])
+    if isinstance(pause_on_loop, (int, float)):
+        pause_on_loop = [pause_on_loop, pause_on_loop]
+    rnd_pause_on_loop = pause_on_loop[0] + (pause_on_loop[1]-pause_on_loop[0])*np.random.rand()
+    seconds = info.pop('seconds', None)
     # name = info.pop('name', None)
     info['name'] = f"CHARACTER_{tag}_NAME"
     for key in dup_gen('country_leader'):
@@ -68,7 +74,16 @@ def AddCharacter(path, translate=True, force=True):
         if f.endswith('.png') or f.endswith('.jpg') or f.endswith('.dds'):
             portraits.append(f.split('.')[0])
     portraits = list(set(portraits))
-    
+
+    img_scales = get_mod_config('img_scales') or {}
+
+    leader_portrait_scale = img_scales.get('leader_portrait')
+    leader_animation_max_frames = img_scales.get('leader_animation_max_frames')
+    leader_animation_rate_fps = img_scales.get('leader_animation_rate_fps')
+    animation_zoom_spec = {
+        'w': leader_portrait_scale[0],
+        'h': leader_portrait_scale[1],
+    }
     spriteTypes = dict()
     for portrait_file in portraits:
         suffix = '' if portrait_file == 'default' else f"_{portrait_file}"
@@ -99,9 +114,45 @@ def AddCharacter(path, translate=True, force=True):
         spriteTypes = merge_dicts([spriteTypes, {
             'spriteType': {"name": f"GFX_CHARACTER_{tag}_portrait{suffix}_small", "texturefile": pjoin("gfx","leaders",f"CHARACTER_{tag}{suffix}_small.dds")}
         }], d=True)
+
+    # Add character animations
+    CreateFolder(pjoin(path,"animations"))
+    num_frames = int(seconds * leader_animation_rate_fps) if seconds is not None else leader_animation_max_frames
+    for f in ListFiles(pjoin(path,"animations")):
+        if f.endswith('.mp4'):
+            filename = f.split('.')[0]
+            video_path = pjoin(path, "animations", f)
+            strip_cache_dir = pjoin(path, "animations", ".cache")
+            strip_cache_path = pjoin(strip_cache_dir, f"{filename}_strip.dds")
+            strip_image = None
+            if force or not ExistFile(strip_cache_path):
+                strip_image = VideoToFrameStrip(
+                    video_path=video_path,
+                    num_frames=num_frames,
+                    width=animation_zoom_spec['w'],
+                    height=animation_zoom_spec['h'],
+                )
+                if strip_image is not None:
+                    CreateFolder(strip_cache_dir)
+                    ImageSave(strip_image, strip_cache_path)
+            if strip_image is None and ExistFile(strip_cache_path):
+                strip_image = ImageLoad(strip_cache_path)
+            if strip_image is not None:
+                ImageSave(strip_image, F(pjoin("gfx","leaders",f"CHARACTER_{tag}_ANIMATED_{filename}_strip")), format='dds')
+                spriteTypes = merge_dicts([spriteTypes, {
+                    'frameAnimatedSpriteType': {
+                        "name": f"GFX_CHARACTER_{tag}_ANIMATED_portrait",
+                        "texturefile": pjoin("gfx","leaders",f"CHARACTER_{tag}_ANIMATED_{filename}_strip.dds"),
+                        "noOfFrames": num_frames,
+                        "animation_rate_fps": leader_animation_rate_fps,
+                        "looping": True,
+                        "play_on_show": True,
+                        "pause_on_loop": rnd_pause_on_loop,
+                    }
+                }], d=True)
+
     Edit(F(pjoin("data","interface","portraits",f"CHARACTER_{tag}.json")), {'spriteTypes': spriteTypes})
 
-    # Add Gfx just in case one needs to change portraits
 
 def AddRandomCharacters(path, force=True):
     '''
