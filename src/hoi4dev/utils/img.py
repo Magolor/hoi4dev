@@ -687,4 +687,6 @@ def SetLoadingScreenImages(imgs, main=None):
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_ww")), format='dds')
     # Graveyard of Empires
     ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_goe")), format='dds')
-
+    # No Compromise, No Surrender
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_ncns_chi")), format='dds')
+    ImageSave(main_img, F(pjoin("gfx","loadingscreens","load_ncns_jap")), format='dds')

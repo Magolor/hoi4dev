@@ -1,8 +1,8 @@
 # HOI4DEV 钢4MOD开发工具
 
-版本：0.1.1.3
+版本：0.1.1.4
 
-适配钢4版本：~ 1.16.4
+适配钢4版本：~ 1.16.10
 
 ## 安装与配置
 
@@ -207,6 +207,10 @@ ImageSave(edited_img, output_file, compression=compression)
 <br/>
 
 ## 更新日志
+
+### v0.1.1.4
+
+- Mp4转为条幅图像序列
 
 ### v0.1.1.3
 

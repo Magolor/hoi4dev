@@ -1,8 +1,8 @@
 # HOI4DEV HOI4 MOD Development Tool
 
-Version: 0.1.1.3
+Version: 0.1.1.4
 
-Compatible with HOI4 Version: ~ 1.16.4
+Compatible with HOI4 Version: ~ 1.16.10
 
 ## Installation and Configuration
 
@@ -207,6 +207,10 @@ Complete mod development example project: PIHC (The Pony In The High Castle MOD)
 <br/>
 
 ## Changelog
+
+### v0.1.1.4
+
+- Mp4 to strip image sequence conversion
 
 ### v0.1.1.3
 
